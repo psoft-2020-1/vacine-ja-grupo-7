@@ -14,7 +14,7 @@ public class SwaggerConfig {
     public Docket vacinaJaAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ufcg.posft.vacinaja"))
+                .apis(RequestHandlerSelectors.basePackage("com.ufcg.psoft.vacinaja"))
                 .build();
     }
 }
