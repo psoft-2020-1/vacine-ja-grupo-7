@@ -1,5 +1,7 @@
 package com.ufcg.psoft.vacinaja.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
+import com.ufcg.psoft.vacinaja.model.Funcionario;
 import com.ufcg.psoft.vacinaja.service.FuncionarioService;
+import com.ufcg.psoft.vacinaja.util.ErroFuncionario;
 
 @RestController
 @RequestMapping("/api")
@@ -22,8 +26,19 @@ public class FuncionarioApiController {
 	
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarFuncionario(@RequestBody FuncionarioDTO funcionarioDTO) {
-		funcionarioService.cadastrarFuncionario(funcionarioDTO);
+		ResponseEntity<?> response;
 		
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		//Idealmente eu faria isso em outro lugar
+		Optional<Funcionario> optionalFuncionario = funcionarioService.findByCpf(funcionarioDTO.getCpfFuncionario());
+		if (optionalFuncionario.isPresent()) {
+			response = ErroFuncionario.erroFuncionarioJaCadastrado();
+		
+		} else {
+			funcionarioService.cadastrarFuncionario(funcionarioDTO);
+			
+			response = new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		
+		return response;
 	}
 }

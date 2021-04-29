@@ -1,5 +1,7 @@
 package com.ufcg.psoft.vacinaja.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +20,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		Funcionario novoFuncionario = new Funcionario(funcionarioDTO);
 		
 		this.funcionarioRepository.save(novoFuncionario);
+	}
+
+	@Override
+	public Optional<Funcionario> findByCpf(String cpfFuncionario) {
+		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(cpfFuncionario);
+		
+		return optionalFuncionario;
 	}
 }
