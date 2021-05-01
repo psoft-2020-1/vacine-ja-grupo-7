@@ -19,6 +19,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
 	@Override
 	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO) {
+		validaFuncionarioDTO(funcionarioDTO);
+		
 		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(funcionarioDTO.getCpfFuncionario());
 		
 		if (!optionalFuncionario.isPresent()) {

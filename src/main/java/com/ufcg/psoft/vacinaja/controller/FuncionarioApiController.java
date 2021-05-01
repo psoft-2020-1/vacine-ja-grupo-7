@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
+import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Funcionario;
 import com.ufcg.psoft.vacinaja.service.FuncionarioService;
 
 @RestController
@@ -25,10 +27,13 @@ public class FuncionarioApiController {
 		ResponseEntity<?> response;
 		
 		try {
-			funcionarioService.cadastrarFuncionario(funcionarioDTO);
+			Funcionario funcionarioCadastrado = funcionarioService.cadastrarFuncionario(funcionarioDTO);
 			
-			response = new ResponseEntity<>(HttpStatus.CREATED);
+			response = new ResponseEntity<Funcionario>(funcionarioCadastrado, HttpStatus.CREATED);
 		
+		} catch (FuncionarioInvalidoException fIE){
+            response = new ResponseEntity<>(fIE.getMessage(), HttpStatus.BAD_REQUEST);
+        
 		} catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
