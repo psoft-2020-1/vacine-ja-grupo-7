@@ -31,6 +31,9 @@ public class CidadaoServiceImpl implements  CidadaoService {
 
     @Override
     public Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO) {
+        if(cidadaoDTO == null){
+            throw new CidadaoInvalidoException("ErroAtualizaCidadao: Cidadão deve conter os dados obrigatórios.");
+        }
         Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cidadaoDTO.getCpf());
         if (optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
@@ -42,6 +45,9 @@ public class CidadaoServiceImpl implements  CidadaoService {
 
     @Override
     public Cidadao atualizarCidadao(CidadaoDTO cidadaoDTO) {
+        if(cidadaoDTO == null){
+            throw new CidadaoInvalidoException("ErroAtualizaCidadao: Cidadão deve conter os dados obrigatórios.");
+        }
         Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cidadaoDTO.getCpf());
         if (!optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão não cadastrado.");
@@ -66,9 +72,7 @@ public class CidadaoServiceImpl implements  CidadaoService {
     }
 
     private void validaCidadaoDTOComCpf(CidadaoDTO cidadaoDTO) {
-        if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
-            throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
-        }
+        this.validaCidadaoDTOSemCpf(cidadaoDTO);
         if(!cidadaoDTO.getCpf().matches(REGEX_VALIDATE_CPF)){
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
