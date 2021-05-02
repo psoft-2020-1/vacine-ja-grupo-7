@@ -60,6 +60,9 @@ public class ComorbidadeServiceImpl implements ComorbidadeService{
         if(idComorbidade == null){
             throw new ComorbidadeInvalidaException("ErroAtualizarComorbidade: Id não pode ser nulo.");
         }
+        if(comorbidadeDTO == null){
+            throw new ComorbidadeInvalidaException("ErroAtualizarComorbidade: Comorbidade deve conter os dados obrigatórios.");
+        }
         if(comorbidadeDTO.getNomeComorbidade() == null || comorbidadeDTO.getNomeComorbidade().equals("")){
             throw new ComorbidadeInvalidaException("ErroAtualizarComorbidade: Nome da comorbidade obrigatório.");
         }
