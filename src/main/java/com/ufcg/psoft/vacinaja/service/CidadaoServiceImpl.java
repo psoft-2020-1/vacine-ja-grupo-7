@@ -32,26 +32,30 @@ public class CidadaoServiceImpl implements  CidadaoService {
     @Override
     public Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO) {
         Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cidadaoDTO.getCpf());
-        if (!optionalCidadao.isPresent()) {
-            Cidadao cidadaoParaCadastro = this.criarCidadao(cidadaoDTO);
-            return cidadaoRepository.save(cidadaoParaCadastro);
-        }else {
+        if (optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
         }
+        Cidadao cidadaoParaCadastro = this.criarCidadao(cidadaoDTO);
+        return cidadaoRepository.save(cidadaoParaCadastro);
     }
 
     private Cidadao criarCidadao(CidadaoDTO cidadaoDTO) {
         validaCidadaoDTO(cidadaoDTO);
         List<Comorbidade> comorbidadeList = new ArrayList<Comorbidade>();
-        for (Long idComorbidade : cidadaoDTO.getComorbidades()) {
-            Optional<Comorbidade> optionalComorbidade = comorbidadeRepository.findById(idComorbidade);
-            comorbidadeList.add(optionalComorbidade.get());
+        if(cidadaoDTO.getComorbidades() != null){
+            for (Long idComorbidade : cidadaoDTO.getComorbidades()) {
+                Optional<Comorbidade> optionalComorbidade = comorbidadeRepository.findById(idComorbidade);
+                if(!optionalComorbidade.isPresent()){
+                    throw new CidadaoInvalidoException("ErroCriarCidadao: Todas as comorbidades devem estar cadastradas.");
+                }
+                comorbidadeList.add(optionalComorbidade.get());
+            }
         }
         return cidadaoRepository.save(new Cidadao(cidadaoDTO, comorbidadeList));
     }
 
     private void validaCidadaoDTO(CidadaoDTO cidadaoDTO) {
-        if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || cidadaoDTO.getComorbidades() == null || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
+        if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
         if(!cidadaoDTO.getCpf().matches(REGEX_VALIDATE_CPF)){

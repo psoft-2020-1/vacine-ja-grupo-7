@@ -1,9 +1,6 @@
 package com.ufcg.psoft.vacinaja.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +9,7 @@ public class Comorbidade {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
+    @Column(unique = true)
     private String nomeComorbidade;
 
     public Comorbidade(){

@@ -27,11 +27,10 @@ public class ComorbidadeServiceImpl implements ComorbidadeService{
             throw new ComorbidadeInvalidaException("ErroCadastroComorbidade: Nome da comorbidade obrigatório.");
         }
         Optional<Comorbidade> comorbidadeOptional = buscarComorbidadePeloNome(nomeComorbidade);
-        if(!comorbidadeOptional.isPresent()){
-            return comorbidadeRepository.save(new Comorbidade(nomeComorbidade));
-        }else {
+        if(comorbidadeOptional.isPresent()){
             throw new ComorbidadeInvalidaException("ErroCadastroComorbidade: Comorbidade já cadastrada.");
         }
+        return comorbidadeRepository.save(new Comorbidade(nomeComorbidade));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ComorbidadeServiceImpl implements ComorbidadeService{
             throw new ComorbidadeInvalidaException("ErroRemoverComorbidade: Id não pode ser nulo.");
         }
         Optional<Comorbidade> optionalComorbidade = this.buscarComorbidadePeloId(idComorbidade);
-        if(optionalComorbidade.get() == null){
+        if(!optionalComorbidade.isPresent()) {
             throw new ComorbidadeInvalidaException("ErroRemoverComorbidade: Comorbidade não cadastrada.");
         }
         comorbidadeRepository.delete(optionalComorbidade.get());
@@ -64,12 +63,11 @@ public class ComorbidadeServiceImpl implements ComorbidadeService{
         if(comorbidadeDTO.getNomeComorbidade() == null || comorbidadeDTO.getNomeComorbidade().equals("")){
             throw new ComorbidadeInvalidaException("ErroAtualizarComorbidade: Nome da comorbidade obrigatório.");
         }
-        Comorbidade optionalComorbidade = this.buscarComorbidadePeloId(idComorbidade).get();
-        if(optionalComorbidade == null){
+        Optional<Comorbidade> optionalComorbidade = this.buscarComorbidadePeloId(idComorbidade);
+        if(!optionalComorbidade.isPresent()){
             throw new ComorbidadeInvalidaException("ErroRemoverComorbidade: Comorbidade não cadastrada.");
         }
-        optionalComorbidade.setNomeComorbidade(comorbidadeDTO.getNomeComorbidade());
-        return comorbidadeRepository.save(optionalComorbidade);
+        optionalComorbidade.get().setNomeComorbidade(comorbidadeDTO.getNomeComorbidade());
+        return comorbidadeRepository.save(optionalComorbidade.get());
     }
-
 }

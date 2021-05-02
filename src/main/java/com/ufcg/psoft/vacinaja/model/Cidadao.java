@@ -4,7 +4,6 @@ import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -20,22 +19,21 @@ public class Cidadao {
     private Date dataNascimento;
     private String telefone;
     private String profissao;
-    @OneToMany
+    @ManyToMany
     private List<Comorbidade> comorbidades;
 
     public Cidadao(){
 
     }
 
-    public Cidadao (String nome, String endereco, String cpf, String numeroCartaoSus, Date dataNascimento, String telefone, String profissap, List<Comorbidade> comorbidades){
+    public Cidadao (String nome, String endereco, String cpf, String numeroCartaoSus, Date dataNascimento, String telefone, String profissao, List<Comorbidade> comorbidades){
         this.nome = nome;
         this.endereco = endereco;
         this.cpf = cpf;
         this.numeroCartaoSus = numeroCartaoSus;
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
-        this.telefone = telefone;
-        this.profissao = profissap;
+        this.profissao = profissao;
         this.comorbidades = comorbidades;
     }
 
@@ -46,8 +44,7 @@ public class Cidadao {
         this.numeroCartaoSus = cidadaoDTO.getNumeroCartaoSus();
         this.dataNascimento = cidadaoDTO.getDataNascimento();
         this.telefone = cidadaoDTO.getTelefone();
-        this.telefone = cidadaoDTO.getTelefone();
-        this.profissao = cidadaoDTO.getTelefone();
+        this.profissao = cidadaoDTO.getProfissao();
         this.comorbidades = comorbidades;
     }
 
