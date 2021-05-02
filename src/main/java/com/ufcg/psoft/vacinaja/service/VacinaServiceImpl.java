@@ -19,7 +19,8 @@ public class VacinaServiceImpl implements VacinaService {
     private final static String REGEX_VALIDA_TELEFONE = "^(?=(?:[0-9]){10}).*";
 
     private void validarVacina(VacinaDTO vacinaDTO) {
-        if(vacinaDTO.getNomeFabricante() == null ||
+        if(vacinaDTO == null ||
+                vacinaDTO.getNomeFabricante() == null ||
                 vacinaDTO.getNumeroDoses() == null ||
                 vacinaDTO.getTelefoneFabricante() == null ||
                 vacinaDTO.getNomeFabricante().equals("") ||
@@ -51,7 +52,6 @@ public class VacinaServiceImpl implements VacinaService {
             throw new VacinaInvalidaException("ErroEditarVacina: Vacina não existe.");
         }
         validarVacina(vacinaDTO);
-
         Vacina vacina = vacinaCadastrada.get();
         vacina.setNomeFabricante(vacinaDTO.getNomeFabricante());
         vacina.setTelefoneFabricante(vacinaDTO.getTelefoneFabricante());
@@ -73,10 +73,10 @@ public class VacinaServiceImpl implements VacinaService {
     @Override
     public Vacina getVacina(Long vacinaId) {
         Optional<Vacina> vacina = vacinaRepository.findById(vacinaId);
-        if(vacina.isPresent()) {
-            return vacina.get();
+        if(!vacina.isPresent()) {
+            throw new VacinaInvalidaException("ErroGetVacina: Vacina não existe.");
         }
-        throw new VacinaInvalidaException("ErroGetVacina: Vacina não existe.");
+        return vacina.get();
     }
 
     @Override
