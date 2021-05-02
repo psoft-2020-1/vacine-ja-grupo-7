@@ -22,7 +22,8 @@ public class VacinaServiceImpl implements VacinaService {
         if(vacinaDTO.getNomeFabricante() == null ||
                 vacinaDTO.getNumeroDoses() == null ||
                 vacinaDTO.getTelefoneFabricante() == null ||
-                vacinaDTO.getNomeFabricante() == "") {
+                vacinaDTO.getNomeFabricante().equals("") ||
+                vacinaDTO.getTelefoneFabricante().equals("")) {
             throw new VacinaInvalidaException("ErroValidarVacina: Atributos ínvalidos.");
         }
         if(vacinaDTO.getTelefoneFabricante().length() != 10 ||
@@ -45,11 +46,11 @@ public class VacinaServiceImpl implements VacinaService {
 
     @Override
     public Vacina editarVacina(VacinaDTO vacinaDTO, Long vacinaId) {
-        validarVacina(vacinaDTO);
         Optional<Vacina> vacinaCadastrada = vacinaRepository.findById(vacinaId);
         if(!vacinaCadastrada.isPresent()) {
             throw new VacinaInvalidaException("ErroEditarVacina: Vacina não existe.");
         }
+        validarVacina(vacinaDTO);
 
         Vacina vacina = vacinaCadastrada.get();
         vacina.setNomeFabricante(vacinaDTO.getNomeFabricante());

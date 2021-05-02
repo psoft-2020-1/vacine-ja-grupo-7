@@ -42,7 +42,7 @@ public class VacinaApiController {
             response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return response;
@@ -64,7 +64,7 @@ public class VacinaApiController {
             response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return response;
@@ -85,7 +85,7 @@ public class VacinaApiController {
             response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return response;
@@ -113,7 +113,7 @@ public class VacinaApiController {
             response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return response;
