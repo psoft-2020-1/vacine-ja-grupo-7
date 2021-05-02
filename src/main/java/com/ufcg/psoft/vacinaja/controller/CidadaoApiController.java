@@ -48,7 +48,7 @@ public class CidadaoApiController {
      * @return cidadao atualizada.
      */
     @RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizarComorbidade(@RequestBody CidadaoDTO cidadaoDTO) {
+    public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoDTO cidadaoDTO) {
         ResponseEntity response;
         try {
             Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoDTO);
