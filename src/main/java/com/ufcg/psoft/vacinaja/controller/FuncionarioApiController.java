@@ -22,6 +22,16 @@ public class FuncionarioApiController {
 	@Autowired
 	private FuncionarioService funcionarioService;
 	
+	/**
+     * Cadastra uma funcionário a partir de:
+     *   Cpf do funcionário;
+     *   Cargo do funcionário;
+     *   Local de trabalho do funcionário.
+     *   
+     * @param funcionarioDTO carrega as informações de cadastro do funcionário.
+     * 
+     * @return É retornado o funcionário cadastrado no banco de dados e o status da requisição.
+     */
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarFuncionario(@RequestBody FuncionarioDTO funcionarioDTO) {
 		ResponseEntity<?> response;
