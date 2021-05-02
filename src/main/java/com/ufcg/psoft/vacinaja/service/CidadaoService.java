@@ -11,4 +11,6 @@ public interface CidadaoService {
 
     public Cidadao cadastrarCidadao(CidadaoDTO cidadao);
 
+    public Cidadao atualizarCidadao(CidadaoDTO cidadao);
+
 }

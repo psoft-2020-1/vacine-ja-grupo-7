@@ -35,12 +35,23 @@ public class CidadaoServiceImpl implements  CidadaoService {
         if (optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
         }
+        validaCidadaoDTOComCpf(cidadaoDTO);
         Cidadao cidadaoParaCadastro = this.criarCidadao(cidadaoDTO);
         return cidadaoRepository.save(cidadaoParaCadastro);
     }
 
+    @Override
+    public Cidadao atualizarCidadao(CidadaoDTO cidadaoDTO) {
+        Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cidadaoDTO.getCpf());
+        if (!optionalCidadao.isPresent()) {
+            throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão não cadastrado.");
+        }
+        validaCidadaoDTOSemCpf(cidadaoDTO);
+        Cidadao cidadaoAtualizado =  criarCidadao(cidadaoDTO);
+        return cidadaoRepository.save(cidadaoAtualizado);
+    }
+
     private Cidadao criarCidadao(CidadaoDTO cidadaoDTO) {
-        validaCidadaoDTO(cidadaoDTO);
         List<Comorbidade> comorbidadeList = new ArrayList<Comorbidade>();
         if(cidadaoDTO.getComorbidades() != null){
             for (Long idComorbidade : cidadaoDTO.getComorbidades()) {
@@ -54,12 +65,18 @@ public class CidadaoServiceImpl implements  CidadaoService {
         return cidadaoRepository.save(new Cidadao(cidadaoDTO, comorbidadeList));
     }
 
-    private void validaCidadaoDTO(CidadaoDTO cidadaoDTO) {
+    private void validaCidadaoDTOComCpf(CidadaoDTO cidadaoDTO) {
         if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
         if(!cidadaoDTO.getCpf().matches(REGEX_VALIDATE_CPF)){
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
+        }
+    }
+
+    private void validaCidadaoDTOSemCpf(CidadaoDTO cidadaoDTO) {
+        if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
+            throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
     }
 }
