@@ -23,9 +23,10 @@ public class Funcionario {
 	}
 
 	public Funcionario(FuncionarioDTO funcionarioDTO) {
-		this.cpf = funcionarioDTO.getCpfFuncionario();
-		this.cargo = funcionarioDTO.getCargoFuncionario();
-		this.localDeTrabalho = funcionarioDTO.getLocalDeTrabalhoFuncionario();
+		this(funcionarioDTO.getCpfFuncionario(), 
+				funcionarioDTO.getCargoFuncionario(), 
+				funcionarioDTO.getLocalDeTrabalhoFuncionario());
+	
 	}
 
 	public String getCpf() {

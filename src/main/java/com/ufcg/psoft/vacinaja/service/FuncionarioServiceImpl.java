@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
 import com.ufcg.psoft.vacinaja.model.Funcionario;
 import com.ufcg.psoft.vacinaja.repository.FuncionarioRepository;
-
+import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
 
 @Service
@@ -16,6 +16,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
+	
+	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
 	@Override
 	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO) {
@@ -32,16 +34,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			throw new FuncionarioInvalidoException("ErroCadastroFuncionário: Funcionário já cadastrado.");
 		}
 	}
-
-	@Override
-	public Optional<Funcionario> findByCpf(String cpfFuncionario) {
-		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(cpfFuncionario);
-		
-		return optionalFuncionario;
-	}
 	
 	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {
-		if ((funcionarioDTO.getCpfFuncionario() == null) || 
+		if ((funcionarioDTO == null) ||
+			(funcionarioDTO.getCpfFuncionario() == null) || 
 			(funcionarioDTO.getCargoFuncionario() == null) || 
 			(funcionarioDTO.getLocalDeTrabalhoFuncionario() == null) ||
 			(funcionarioDTO.getCpfFuncionario().trim().equals("")) ||
@@ -50,5 +46,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			
 			throw new FuncionarioInvalidoException("ErroValidaFuncionário: Todos os campos devem ser preenchidos.");
 		}
+		
+		if (!funcionarioDTO.getCpfFuncionario().matches(REGEX_VALIDATE_CPF)){
+            throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
+        }
 	}
 }

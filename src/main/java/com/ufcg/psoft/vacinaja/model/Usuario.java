@@ -75,33 +75,30 @@ public class Usuario {
 	private void validaCadastroFuncionario(Funcionario funcionario) {
 		if (!possuiCadastroDeCidadao()) {
 			throw new UsuarioInvalidoException("Não há um cadastro de cidadão para esse usuário!");
+		} 
 		
-		} else if (!funcionario.getCpf().equals(cadastroCidadao.getCpf())) {
+		if (!funcionario.getCpf().equals(cadastroCidadao.getCpf())) {
 			throw new UsuarioInvalidoException("O cpf do funcionário é inconsistente!");
 		}
 	}
 	
 	private boolean possuiCadastroDeCidadao() {
-		boolean res;
+		boolean res = false;
 		
-		if (cadastroCidadao == null) {
-			res = false;
-		
-		} else {
+		if (cadastroCidadao != null) {
 			res = true;
+		
 		}
 		
 		return res;
 	}
 	
 	private boolean possuiCadastroDeFuncionario() {
-		boolean res;
+		boolean res = false;
 		
-		if (cadastroFuncionario == null) {
-			res = false;
-		
-		} else {
+		if (cadastroFuncionario != null) {
 			res = true;
+		
 		}
 		
 		return res;

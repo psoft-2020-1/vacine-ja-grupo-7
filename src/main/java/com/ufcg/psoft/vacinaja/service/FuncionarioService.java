@@ -9,6 +9,4 @@ public interface FuncionarioService {
 
 	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO);
 
-	public Optional<Funcionario> findByCpf(String cpfFuncionario);
-
 }
