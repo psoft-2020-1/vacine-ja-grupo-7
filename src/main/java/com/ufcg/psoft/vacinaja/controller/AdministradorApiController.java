@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.exceptions.AdministradorInvalidoException;
-import com.ufcg.psoft.vacinaja.model.Administrador;
 import com.ufcg.psoft.vacinaja.service.AdministradorService;
 
 @RestController
@@ -39,8 +38,10 @@ public class AdministradorApiController {
 		return response;
 	}
 	
-	//@RequestMapping(value = "/Administrador/{CPF}", method = RequestMethod.POST)
-	//public ResponseEntity<?> aprovarFuncionario(@PathVariable ("CPF")String cpf ) {
-		
-	//}
+	@RequestMapping(value = "/Administrador/{CPF}", method = RequestMethod.POST)
+	public ResponseEntity<?> aprovarFuncionario(@PathVariable ("CPF")String cpf ) {
+		try {
+			
+		} catch ()
+	}
 }

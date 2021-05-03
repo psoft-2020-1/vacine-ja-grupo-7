@@ -5,7 +5,8 @@ import com.ufcg.psoft.vacinaja.model.Administrador;
 
 public interface AdministradorService {
 	
-	public Administrador cadastrarAdministrador(String loginAdmin);
 	public Optional<Administrador> findByLogin(String loginAdmin);
+	public Administrador cadastrarAdministrador(String loginAdmin)
+	public void aprovaFuncionario(String cpf);
 
 }

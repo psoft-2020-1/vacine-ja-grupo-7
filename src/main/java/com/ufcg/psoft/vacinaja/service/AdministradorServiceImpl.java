@@ -11,35 +11,41 @@ import com.ufcg.psoft.vacinaja.repository.AdministradorRepository;
 public class AdministradorServiceImpl implements AdministradorService {
 
 	@Autowired
-	private AdministradorRepository administradorRepository;
-	
-	
-	@Override
-	public Optional<Administrador> findByLogin(String loginAdmin) {
-		Optional<Administrador> optionalAdministrador = administradorRepository.findById(loginAdmin);
-		
-		return optionalAdministrador;
-	}
+	private UsuarioRepository UsuarioRepository;
 
 
 	@Override
 	public Administrador cadastrarAdministrador(String loginAdmin) {
-		this.validaAdministrador(loginAdmin);
+		this.validaString(loginAdmin);
 		
-		Optional<Administrador> optionalAdministrador = administradorRepository.findById(loginAdmin);
+		Optional<Usuario> optionalAdministrador = loginRepository.findById(loginAdmin);
 		
 		if(!optionalAdministrador.isPresent()) {
-			Administrador novoAdministrador = new Administrador(loginAdmin);
-			return this.administradorRepository.save(novoAdministrador);
+			Usuario novoAdministrador = this.UsuarioRepository.get(loginAdmin);
+			return this.UsuarioRepository.save(loginAdmin);
 		} else {
 			throw new AdministradorInvalidoException("Login já cadastrado como administrador");
 		}
 	}
 	
-	private void validaAdministrador(String login) {
-		if ((login == null) || login.trim().equals("")) {
+	private void validaString(String entrada) {
+		if ((entrada == null) || entrada.trim().equals("")) {
 			throw new AdministradorInvalidoException("Login inválido");
 		}
+	}
+
+
+	@Override
+	public void aprovaFuncionario(String login) {
+		this.validaString(login);
+		
+		Optional<Usuario> optionalUsuario = this.UsuarioRepository.findById(login);
+		if(!optionalUsuario.isPresent) {
+			
+		} else {
+			throw new FuncionarioInvalidoException("ErroAprovaFuncionário: Funcionário não cadastrado.");
+		}
+		
 	}
 
 }
