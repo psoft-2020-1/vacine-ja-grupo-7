@@ -47,7 +47,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			throw new FuncionarioInvalidoException("ErroValidaFuncionário: Todos os campos devem ser preenchidos.");
 		}
 		
-		if (!funcionarioDTO.getCpfFuncionario().matches(REGEX_VALIDATE_CPF)){
+		if ((!funcionarioDTO.getCpfFuncionario().matches(REGEX_VALIDATE_CPF)) ||
+			(funcionarioDTO.getCpfFuncionario().length() != 11)) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
 	}
