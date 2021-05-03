@@ -9,6 +9,8 @@ import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
 import com.ufcg.psoft.vacinaja.model.Funcionario;
 import com.ufcg.psoft.vacinaja.repository.FuncionarioRepository;
 
+import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
+
 @Service
 public class FuncionarioServiceImpl implements FuncionarioService {
 	
@@ -16,10 +18,19 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private FuncionarioRepository funcionarioRepository;
 
 	@Override
-	public void cadastrarFuncionario(FuncionarioDTO funcionarioDTO) {
-		Funcionario novoFuncionario = new Funcionario(funcionarioDTO);
+	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO) {
+		validaFuncionarioDTO(funcionarioDTO);
 		
-		this.funcionarioRepository.save(novoFuncionario);
+		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(funcionarioDTO.getCpfFuncionario());
+		
+		if (!optionalFuncionario.isPresent()) {
+			Funcionario novoFuncionario = new Funcionario(funcionarioDTO);
+		
+			return this.funcionarioRepository.save(novoFuncionario);
+		
+		} else {
+			throw new FuncionarioInvalidoException("ErroCadastroFuncionário: Funcionário já cadastrado.");
+		}
 	}
 
 	@Override
@@ -27,5 +38,17 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(cpfFuncionario);
 		
 		return optionalFuncionario;
+	}
+	
+	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {
+		if ((funcionarioDTO.getCpfFuncionario() == null) || 
+			(funcionarioDTO.getCargoFuncionario() == null) || 
+			(funcionarioDTO.getLocalDeTrabalhoFuncionario() == null) ||
+			(funcionarioDTO.getCpfFuncionario().trim().equals("")) ||
+			(funcionarioDTO.getCargoFuncionario().trim().equals("")) ||
+			(funcionarioDTO.getLocalDeTrabalhoFuncionario().trim().equals(""))) {
+			
+			throw new FuncionarioInvalidoException("ErroValidaFuncionário: Todos os campos devem ser preenchidos.");
+		}
 	}
 }
