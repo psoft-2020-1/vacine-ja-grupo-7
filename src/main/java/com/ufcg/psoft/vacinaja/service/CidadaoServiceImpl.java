@@ -68,7 +68,7 @@ public class CidadaoServiceImpl implements  CidadaoService {
                 comorbidadeList.add(optionalComorbidade.get());
             }
         }
-        return cidadaoRepository.save(new Cidadao(cidadaoDTO, comorbidadeList));
+        return new Cidadao(cidadaoDTO, comorbidadeList);
     }
 
     private void validaCidadaoDTOComCpf(CidadaoDTO cidadaoDTO) {
