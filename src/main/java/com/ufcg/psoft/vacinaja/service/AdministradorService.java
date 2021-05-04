@@ -1,12 +1,10 @@
 package com.ufcg.psoft.vacinaja.service;
 
-import java.util.Optional;
-import com.ufcg.psoft.vacinaja.model.Administrador;
+import com.ufcg.psoft.vacinaja.model.Usuario;
 
 public interface AdministradorService {
 	
-	public Optional<Administrador> findByLogin(String loginAdmin);
-	public Administrador cadastrarAdministrador(String loginAdmin)
-	public void aprovaFuncionario(String cpf);
+	public Usuario cadastrarAdministrador(String loginAdmin);
+	public Usuario aprovaFuncionario(String login);
 
 }

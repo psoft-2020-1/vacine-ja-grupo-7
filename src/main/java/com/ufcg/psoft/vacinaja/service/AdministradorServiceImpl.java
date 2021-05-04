@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ufcg.psoft.vacinaja.exceptions.AdministradorInvalidoException;
-import com.ufcg.psoft.vacinaja.model.Administrador;
-import com.ufcg.psoft.vacinaja.repository.AdministradorRepository;
+import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Usuario;
+import com.ufcg.psoft.vacinaja.repository.UsuarioRepository;
 
 public class AdministradorServiceImpl implements AdministradorService {
 
@@ -15,16 +16,17 @@ public class AdministradorServiceImpl implements AdministradorService {
 
 
 	@Override
-	public Administrador cadastrarAdministrador(String loginAdmin) {
+	public Usuario cadastrarAdministrador(String loginAdmin) {
 		this.validaString(loginAdmin);
 		
-		Optional<Usuario> optionalAdministrador = loginRepository.findById(loginAdmin);
+		Optional<Usuario> optionalAdministrador = UsuarioRepository.findById(loginAdmin);
 		
-		if(!optionalAdministrador.isPresent()) {
-			Usuario novoAdministrador = this.UsuarioRepository.get(loginAdmin);
-			return this.UsuarioRepository.save(loginAdmin);
+		if(!optionalAdministrador.isEmpty()) {
+			Usuario novoAdministrador = UsuarioRepository.getOne(loginAdmin);
+			novoAdministrador.adicionaPermissaoAdministrador();
+			return this.UsuarioRepository.save(novoAdministrador);
 		} else {
-			throw new AdministradorInvalidoException("Login já cadastrado como administrador");
+			throw new AdministradorInvalidoException("Login inexistente");
 		}
 	}
 	
@@ -36,14 +38,16 @@ public class AdministradorServiceImpl implements AdministradorService {
 
 
 	@Override
-	public void aprovaFuncionario(String login) {
+	public Usuario aprovaFuncionario(String login) {
 		this.validaString(login);
 		
 		Optional<Usuario> optionalUsuario = this.UsuarioRepository.findById(login);
-		if(!optionalUsuario.isPresent) {
-			
+		if(!optionalUsuario.isEmpty()) {
+			Usuario novoFuncionario = UsuarioRepository.getOne(login);
+			novoFuncionario.adicionaPermissaoFuncionario();
+			return this.UsuarioRepository.save(novoFuncionario);
 		} else {
-			throw new FuncionarioInvalidoException("ErroAprovaFuncionário: Funcionário não cadastrado.");
+			throw new FuncionarioInvalidoException("ErroAprovaFuncionário: Usuário não cadastrado.");
 		}
 		
 	}

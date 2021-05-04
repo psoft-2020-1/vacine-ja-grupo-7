@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.exceptions.AdministradorInvalidoException;
+import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.AdministradorService;
 
 @RestController
@@ -24,11 +26,11 @@ public class AdministradorApiController {
 	public ResponseEntity<?> cadastrarAdministrador(@PathVariable ("login")String login ) {
 		ResponseEntity<?> response;
 		try {
-			Administrador administradorCadastrado = this.administradorService.cadastrarAdministrador(login);
+			Usuario administradorCadastrado = this.administradorService.cadastrarAdministrador(login);
 			
-			response = new ResponseEntity<Administrador>(administradorCadastrado, HttpStatus.CREATED);
+			response = new ResponseEntity<Usuario>(administradorCadastrado, HttpStatus.CREATED);
 			
-		}catch (AdministradorInvalidoException adminInvalido) {
+		} catch (AdministradorInvalidoException adminInvalido) {
 			 response = new ResponseEntity<>(adminInvalido.getMessage(), HttpStatus.BAD_REQUEST);
 			 
 		} catch (Exception e) {
@@ -38,10 +40,19 @@ public class AdministradorApiController {
 		return response;
 	}
 	
-	@RequestMapping(value = "/Administrador/{CPF}", method = RequestMethod.POST)
-	public ResponseEntity<?> aprovarFuncionario(@PathVariable ("CPF")String cpf ) {
+	@RequestMapping(value = "/Administrador/{funcionario}", method = RequestMethod.POST)
+	public ResponseEntity<?> aprovarFuncionario(@PathVariable ("funcionario")String funcionario ) {
+		ResponseEntity<?> response;
 		try {
+			Usuario funcionarioAprovado = this.administradorService.aprovaFuncionario(funcionario);
+			response = new ResponseEntity<Usuario>(funcionarioAprovado, HttpStatus.CREATED);
+		} catch (FuncionarioInvalidoException funcionarioInvalido) {
+			response = new ResponseEntity<>(funcionarioInvalido.getMessage(), HttpStatus.BAD_REQUEST);
 			
-		} catch ()
+		} catch(Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}
+		return response;
 	}
 }
