@@ -1,5 +1,6 @@
 package com.ufcg.psoft.vacinaja.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,10 @@ public class LoteServiceImpl implements LoteService {
 			throw new LoteInvalidoException("ErroValidaLote: Número de doses inválido.");
 		}
 		
-		//Não deve ser possível cadastrar um lote vencido.
+		Date dataAtual = new Date();
+		if (loteDTO.getDataDeValidade().compareTo(dataAtual) < 0) {
+			throw new LoteInvalidoException("ErroValidaLote: O lote já está vencido.");
+		}
 		
 		Optional<Vacina> optionalVacina = vacinaRepository.findById(loteDTO.getIdVacina());
 		
