@@ -22,6 +22,12 @@ public class AdministradorApiController {
 	@Autowired
 	private AdministradorService administradorService;
 	
+	/**
+	 * Api para realizar um cadastro de um administrador.
+	 * 
+	 * @param login o login do usuário que passará a possuir direitos de administrador no sistema.
+	 * @return o usuario cadastrado como administrador.
+	 */
 	@RequestMapping(value = "/Administrador/{login}", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarAdministrador(@PathVariable ("login")String login ) {
 		ResponseEntity<?> response;
@@ -40,6 +46,12 @@ public class AdministradorApiController {
 		return response;
 	}
 	
+	/**
+	 * Api para realizar a aprovação de um funcionário cadastrado.
+	 * 
+	 * @param funcionario login do funcionário que será aprovado.
+	 * @return o usuario que agora possui direitos de um funcionario no sistema.
+	 */
 	@RequestMapping(value = "/Administrador/{funcionario}", method = RequestMethod.POST)
 	public ResponseEntity<?> aprovarFuncionario(@PathVariable ("funcionario")String funcionario ) {
 		ResponseEntity<?> response;
