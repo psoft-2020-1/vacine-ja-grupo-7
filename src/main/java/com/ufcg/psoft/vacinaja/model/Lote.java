@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.ufcg.psoft.vacinaja.dto.LoteDTO;
 
@@ -19,20 +20,15 @@ public class Lote {
 	
 	private Long numeroDeDoses;
 	
-	private String tipoDaVacina;
+	@ManyToOne
+	private Vacina vacina;
 
 	public Lote() {}
 	
-	public Lote(Date dataDeValidade, Long numeroDeDoses, String tipoDeVacina) {
+	public Lote(Date dataDeValidade, Long numeroDeDoses, Vacina vacina) {
 		this.dataDeValidade = dataDeValidade;
 		this.numeroDeDoses = numeroDeDoses;
-		this.tipoDaVacina = tipoDeVacina;
-	}
-	
-	public Lote(LoteDTO loteDTO) {
-		this.dataDeValidade = loteDTO.getDataDeValidade();
-		this.numeroDeDoses = loteDTO.getNumeroDeDoses();
-		this.tipoDaVacina = loteDTO.getTipoDaVacina();
+		this.vacina = vacina;
 	}
 
 	public Long getId() {
@@ -55,11 +51,11 @@ public class Lote {
 		this.numeroDeDoses = numeroDeDoses;
 	}
 
-	public String getTipoDaVacina() {
-		return tipoDaVacina;
+	public Vacina getVacina() {
+		return vacina;
 	}
 
-	public void setTipoDaVacina(String tipoDaVacina) {
-		this.tipoDaVacina = tipoDaVacina;
+	public void setVacina(Vacina vacina) {
+		this.vacina = vacina;
 	}
 }

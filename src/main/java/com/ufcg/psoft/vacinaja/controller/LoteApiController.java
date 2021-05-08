@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.LoteDTO;
+import com.ufcg.psoft.vacinaja.exceptions.LoteInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Lote;
 import com.ufcg.psoft.vacinaja.service.LoteService;
 
@@ -23,8 +24,20 @@ public class LoteApiController {
 	
 	@RequestMapping(value = "/lote/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarLote(@RequestBody LoteDTO loteDTO) {
-		Lote loteCadastrado = loteService.cadastrarLote(loteDTO);
+		ResponseEntity<?> response;
 		
-		return new ResponseEntity<Lote>(loteCadastrado, HttpStatus.CREATED);
+		try {
+			Lote loteCadastrado = loteService.cadastrarLote(loteDTO);
+			
+			response = new  ResponseEntity<Lote>(loteCadastrado, HttpStatus.CREATED);
+			
+		} catch (LoteInvalidoException lIE) {
+			 response = new ResponseEntity<>(lIE.getMessage(), HttpStatus.BAD_REQUEST);
+			
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return response;
 	}
 }
