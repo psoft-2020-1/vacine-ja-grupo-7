@@ -35,6 +35,10 @@ public class Usuario {
 
 	}
 	
+	public Usuario() {
+		
+	}
+	
 	public Usuario(String email, String senha) {
 		this.email = email;
 		this.senha = senha;
@@ -44,6 +48,51 @@ public class Usuario {
 		this.permissaoFuncionario = false;
 	}
 	
+	public Usuario(String email, String senha, boolean permissaoAdministrador, boolean permissaoCidadao,
+			boolean permissaoFuncionario) {
+		this.email = email;
+		this.senha = senha;
+		this.permissaoAdministrador = permissaoAdministrador;
+		this.permissaoCidadao = permissaoCidadao;
+		this.permissaoFuncionario = permissaoFuncionario;
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public boolean isPermissaoAdministrador() {
+		return permissaoAdministrador;
+	}
+
+	public void setPermissaoAdministrador(boolean permissaoAdministrador) {
+		this.permissaoAdministrador = permissaoAdministrador;
+	}
+
+	public boolean isPermissaoCidadao() {
+		return permissaoCidadao;
+	}
+
+	public void setPermissaoCidadao(boolean permissaoCidadao) {
+		this.permissaoCidadao = permissaoCidadao;
+	}
+
+	public boolean isPermissaoFuncionario() {
+		return permissaoFuncionario;
+	}
+
+	public void setPermissaoFuncionario(boolean permissaoFuncionario) {
+		this.permissaoFuncionario = permissaoFuncionario;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
 	public void adicionaPermissaoAdministrador() {
 		this.permissaoAdministrador = true;
 	}
@@ -87,24 +136,10 @@ public class Usuario {
 	}
 	
 	private boolean possuiCadastroDeCidadao() {
-		boolean res = false;
-		
-		if (cadastroCidadao != null) {
-			res = true;
-		
-		}
-		
-		return res;
+		return cadastroCidadao != null;
 	}
 	
 	private boolean possuiCadastroDeFuncionario() {
-		boolean res = false;
-		
-		if (cadastroFuncionario != null) {
-			res = true;
-		
-		}
-		
-		return res;
+		return cadastroFuncionario != null;
 	}
 }

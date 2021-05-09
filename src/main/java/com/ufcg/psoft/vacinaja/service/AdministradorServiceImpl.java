@@ -3,12 +3,14 @@ package com.ufcg.psoft.vacinaja.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ufcg.psoft.vacinaja.exceptions.AdministradorInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.repository.UsuarioRepository;
 
+@Service
 public class AdministradorServiceImpl implements AdministradorService {
 
 	@Autowired
@@ -21,7 +23,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 		
 		Optional<Usuario> optionalAdministrador = UsuarioRepository.findById(loginAdmin);
 		
-		if(!optionalAdministrador.isEmpty()) {
+		if(optionalAdministrador.isPresent()) {
 			Usuario novoAdministrador = UsuarioRepository.getOne(loginAdmin);
 			novoAdministrador.adicionaPermissaoAdministrador();
 			return this.UsuarioRepository.save(novoAdministrador);
@@ -42,7 +44,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 		this.validaString(login);
 		
 		Optional<Usuario> optionalUsuario = this.UsuarioRepository.findById(login);
-		if(!optionalUsuario.isEmpty()) {
+		if(optionalUsuario.isPresent()) {
 			Usuario novoFuncionario = UsuarioRepository.getOne(login);
 			novoFuncionario.adicionaPermissaoFuncionario();
 			return this.UsuarioRepository.save(novoFuncionario);
