@@ -29,7 +29,7 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     }
 
     @Override
-    public void vacina(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         if(!registroVacinacao.getVacina().equals(vacina)) {
             throw new VacinaInvalidaException("ErroVacinaCidadao: O cidadão só está habilitada a tomar a segunda" +
                     "dose do mesmo tipo de vacina da primeira dose.");

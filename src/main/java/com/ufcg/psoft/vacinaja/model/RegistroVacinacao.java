@@ -40,8 +40,8 @@ public class RegistroVacinacao {
         this.estadoVacinacao.atualizarEstado(this);
     }
 
-    public RegistroVacinacao vacina(Vacina vacina) {
-        estadoVacinacao.vacina(this, vacina);
+    public RegistroVacinacao vacinar(Vacina vacina) {
+        estadoVacinacao.vacinar(this, vacina);
         return this;
     }
 

@@ -32,7 +32,7 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
     }
 
     @Override
-    public void vacina(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         registroVacinacao.setDataVacinacaoPrimeiraDose(LocalDate.now());
         registroVacinacao.setVacina(vacina);
         // TODO: DECREMENTAR NÚMERO DE VACINAS NO LOTE.

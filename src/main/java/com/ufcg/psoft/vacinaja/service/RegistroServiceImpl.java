@@ -27,27 +27,27 @@ public class RegistroServiceImpl implements RegistroService {
     private RegistroRepository registroRepository;
 
     @Override
-    public RegistroVacinacao vacina(String pessoaId, Long vacinaId) {
-        Optional<Cidadao> cidadao = cidadaoRepository.findCidadaoByCpf(pessoaId);
-        if(!cidadao.isPresent()) {
+    public RegistroVacinacao vacinar(String cpfCidadao, Long vacinaId) {
+        Optional<Cidadao> cidadaoOptional = cidadaoRepository.findCidadaoByCpf(cpfCidadao);
+        if(!cidadaoOptional.isPresent()) {
             throw new CidadaoInvalidoException("ErroVacinaCidadao: Cidadão não cadastrado.");
         }
-        Optional<Vacina> vacina = vacinaRepository.findById(vacinaId);
-        if(!vacina.isPresent()) {
+        Optional<Vacina> vacinaOptional = vacinaRepository.findById(vacinaId);
+        if(!vacinaOptional.isPresent()) {
             throw new VacinaInvalidaException("ErroVacinaCidadao: Vacina não cadastrado.");
         }
-        Optional<RegistroVacinacao> registro = registroRepository.findById(cidadao.get().getNumeroCartaoSus());
-        if(!registro.isPresent()) {
+        Optional<RegistroVacinacao> registroOptional = registroRepository.findById(cidadaoOptional.get().getNumeroCartaoSus());
+        if(!registroOptional.isPresent()) {
             throw new RegistroInvalidoException("ErroVacinaCidadao: Número de cartão do SUS presente no cidadão é inválido.");
         }
 
-        RegistroVacinacao registroRetorno = registro.get().vacina(vacina.get());
+        RegistroVacinacao registroRetorno = registroOptional.get().vacinar(vacinaOptional.get());
         return registroRepository.save(registroRetorno);
     }
 
     @Override
-    public void deletarRegistro(String pessoaId) {
-        Optional<Cidadao> cidadao = cidadaoRepository.findCidadaoByCpf(pessoaId);
+    public void deletarRegistro(String cpfCidadao) {
+        Optional<Cidadao> cidadao = cidadaoRepository.findCidadaoByCpf(cpfCidadao);
         if(!cidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroVacinaCidadao: CPF de cidadão não cadastrado.");
         }

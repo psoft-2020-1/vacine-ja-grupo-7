@@ -15,7 +15,7 @@ public class NaoHabilitadoState extends VacinacaoState {
     private Long id;
 
     public NaoHabilitadoState() {
-        this.id = 0L;
+
     }
 
     @Override

@@ -19,46 +19,30 @@ public class RegistroApiController {
     @Autowired
     private RegistroService registroService;
 
-    @RequestMapping(value = "/registro-vacinacao/{pessoaId}", method = RequestMethod.POST)
-    public ResponseEntity<?> vacina(@PathVariable("pessoaId") String pessoaId, @RequestBody IdDTO vacinaIdDTO) {
+    @RequestMapping(value = "/registro-vacinacao/{cpfCidadao}", method = RequestMethod.POST)
+    public ResponseEntity<?> vacinar(@PathVariable("cpfCidadao") String cpfCidadao, @RequestBody IdDTO vacinaIdDTO) {
         ResponseEntity<?> response;
         try {
-            RegistroVacinacao registro = registroService.vacina(pessoaId, vacinaIdDTO.getId());
+            RegistroVacinacao registro = registroService.vacinar(cpfCidadao, vacinaIdDTO.getId());
             response = new ResponseEntity<>(registro, HttpStatus.OK);
-        } catch (CidadaoInvalidoException cie) {
-            System.out.println(cie.getMessage());
-            response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (VacinaInvalidaException vie) {
-            System.out.println(vie.getMessage());
-            response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (RegistroInvalidoException rie) {
-            System.out.println(rie.getMessage());
-            response = new ResponseEntity<>(rie.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (CidadaoInvalidoException | VacinaInvalidaException | RegistroInvalidoException e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return response;
     }
 
-    @RequestMapping(value = "/registro-vacinacao/{pessoaId}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletarRegistro(@PathVariable("pessoaId") String pessoaId) {
+    @RequestMapping(value = "/registro-vacinacao/{cpfCidadao}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletarRegistro(@PathVariable("cpfCidadao") String cpfCidadao) {
         ResponseEntity<?> response;
         try {
-            registroService.deletarRegistro(pessoaId);
+            registroService.deletarRegistro(cpfCidadao);
             response = new ResponseEntity<>(HttpStatus.OK);
-        } catch (CidadaoInvalidoException cie) {
-            System.out.println(cie.getMessage());
-            response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (VacinaInvalidaException vie) {
-            System.out.println(vie.getMessage());
-            response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (RegistroInvalidoException rie) {
-            System.out.println(rie.getMessage());
-            response = new ResponseEntity<>(rie.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (CidadaoInvalidoException | VacinaInvalidaException | RegistroInvalidoException e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

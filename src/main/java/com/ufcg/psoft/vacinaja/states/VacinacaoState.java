@@ -22,7 +22,7 @@ public abstract class VacinacaoState {
 
     public abstract void atualizarEstado(RegistroVacinacao registroVacinacao);
 
-    public void vacina(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         throw new VacinaInvalidaException("ErroVacinaCidadao: Cidadão não está habilitado a ser vacinado.");
     }
 
