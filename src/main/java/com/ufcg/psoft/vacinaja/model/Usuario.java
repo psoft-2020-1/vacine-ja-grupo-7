@@ -30,6 +30,10 @@ public class Usuario {
 	
 	@OneToOne
 	private Funcionario cadastroFuncionario;
+
+	public Usuario() {
+
+	}
 	
 	public Usuario(String email, String senha) {
 		this.email = email;

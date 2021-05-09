@@ -4,8 +4,10 @@ import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.Comorbidade;
+import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
 import com.ufcg.psoft.vacinaja.repository.ComorbidadeRepository;
+import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,19 @@ public class CidadaoServiceImpl implements  CidadaoService {
     @Autowired
     private ComorbidadeRepository comorbidadeRepository;
 
+    @Autowired
+    private RegistroRepository registroRepository;
+
     private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
     @Override
     public Optional<Cidadao> buscarCidadaoPeloCpf(String cpf) {
         return cidadaoRepository.findCidadaoByCpf(cpf);
+    }
+
+    private void cadastraRegistroVacinacao(Cidadao cidadao) {
+        RegistroVacinacao registroVacinacao = new RegistroVacinacao(cidadao);
+        registroRepository.save(registroVacinacao);
     }
 
     @Override
@@ -39,8 +49,10 @@ public class CidadaoServiceImpl implements  CidadaoService {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
         }
         validaCidadaoDTOComCpf(cidadaoDTO);
-        Cidadao cidadaoParaCadastro = this.criarCidadao(cidadaoDTO);
-        return cidadaoRepository.save(cidadaoParaCadastro);
+
+        Cidadao cidadaoCadastrado = cidadaoRepository.save(this.criarCidadao(cidadaoDTO));
+        cadastraRegistroVacinacao(cidadaoCadastrado);
+        return cidadaoCadastrado;
     }
 
     @Override

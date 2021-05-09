@@ -27,7 +27,7 @@ public class VacinaServiceImpl implements VacinaService {
                 vacinaDTO.getTelefoneFabricante().equals("")) {
             throw new VacinaInvalidaException("ErroValidarVacina: Atributos ínvalidos.");
         }
-        if(vacinaDTO.getTelefoneFabricante().length() != 10 ||
+        if(vacinaDTO.getTelefoneFabricante().length() != 11 ||
                 !vacinaDTO.getTelefoneFabricante().matches(REGEX_VALIDA_TELEFONE)){
             throw new VacinaInvalidaException("ErroValidarVacina: Número de telefone inválido.");
         }
