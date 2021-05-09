@@ -2,7 +2,7 @@ package com.ufcg.psoft.vacinaja.enuns;
 
 public enum PermissaoLogin {
 	
-	CIDADAO("cidadao"), FUNCIONARIO("Funcionario"), ADMINISTRADOR("Administrador");
+	CIDADAO("Cidadao"), FUNCIONARIO("Funcionario"), ADMINISTRADOR("Administrador");
 	
 	private String value;
 	

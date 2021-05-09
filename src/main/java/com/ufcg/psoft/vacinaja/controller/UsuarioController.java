@@ -27,9 +27,9 @@ public class UsuarioController {
 
 	@RequestMapping(value = "/cadastrarUsuario", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarUsuario(@RequestBody CadastroDTO cadastroDTO) {
-		Usuario usuario = CadastroDTO.toUsuario(cadastroDTO);
+		Usuario usuario;
 		try {
-			usuarioService.cadastrarUsuario(usuario);
+			usuario = usuarioService.cadastrarUsuario(CadastroDTO.toUsuario(cadastroDTO));
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.CONFLICT);
 		}
@@ -55,16 +55,15 @@ public class UsuarioController {
 	@RequestMapping(value = "/usuario/{idUsuario}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removerUsuario(@PathVariable String idUsuario,
 			@RequestHeader("Authorization") String header) {
-		Usuario usuario;
 		try {
-			usuario = usuarioService.removerUsuario(idUsuario, header);
+			usuarioService.removerUsuario(idUsuario, header);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (ServletException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 
-		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+		return new ResponseEntity<Usuario>(HttpStatus.OK);
 	}
 
 }
