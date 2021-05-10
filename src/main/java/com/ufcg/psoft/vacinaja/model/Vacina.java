@@ -38,6 +38,10 @@ public class Vacina {
              vacinaDTO.getNumeroDoses(),
              vacinaDTO.getTempoEntreDoses());
     }
+    
+    public boolean ehDoseDupla() {
+		return numeroDoses == 2;
+	}
 
     public String getNomeFabricante() {
         return nomeFabricante;
