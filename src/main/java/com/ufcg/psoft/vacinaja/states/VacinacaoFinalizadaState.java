@@ -19,7 +19,7 @@ public class VacinacaoFinalizadaState extends VacinacaoState {
     }
 
     @Override
-    public void atualizarEstado(RegistroVacinacao registroVacinacao) {
+    public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
 
     }
 

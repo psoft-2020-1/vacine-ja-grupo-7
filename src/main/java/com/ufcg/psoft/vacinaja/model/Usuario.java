@@ -35,10 +35,6 @@ public class Usuario {
 
 	}
 	
-	public Usuario() {
-		
-	}
-	
 	public Usuario(String email, String senha) {
 		this.email = email;
 		this.senha = senha;

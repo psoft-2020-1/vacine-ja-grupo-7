@@ -33,15 +33,16 @@ public class RegistroVacinacao {
     public RegistroVacinacao(Cidadao cidadao) {
         this.numeroCartaoSus = cidadao.getNumeroCartaoSus();
         this.cidadao = cidadao;
-        this.estadoVacinacao = new NaoHabilitadoState();
+        this.estadoVacinacao = new HabilitadoPrimeiraDoseState();
     }
 
-    public void atualizarEstadoVacinacao() {
-        this.estadoVacinacao.atualizarEstado(this);
+    public void atualizarEstadoVacinacao(String email) {
+        this.estadoVacinacao.atualizarEstado(this, email);
     }
 
-    public RegistroVacinacao vacinar(Vacina vacina) {
+    public RegistroVacinacao vacinar(Vacina vacina, String email) {
         estadoVacinacao.vacinar(this, vacina);
+        estadoVacinacao.atualizarEstado(this, email);
         return this;
     }
 

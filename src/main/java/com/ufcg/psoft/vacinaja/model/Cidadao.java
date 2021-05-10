@@ -2,8 +2,10 @@ package com.ufcg.psoft.vacinaja.model;
 
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -112,4 +114,16 @@ public class Cidadao {
         this.comorbidades = comorbidades;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cidadao cidadao = (Cidadao) o;
+        return Objects.equals(cpf, cidadao.cpf) && Objects.equals(nome, cidadao.nome) && Objects.equals(endereco, cidadao.endereco) && Objects.equals(numeroCartaoSus, cidadao.numeroCartaoSus) && Objects.equals(dataNascimento, cidadao.dataNascimento) && Objects.equals(telefone, cidadao.telefone) && Objects.equals(profissao, cidadao.profissao) && Objects.equals(comorbidades, cidadao.comorbidades);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf, nome, endereco, numeroCartaoSus, dataNascimento, telefone, profissao, comorbidades);
+    }
 }

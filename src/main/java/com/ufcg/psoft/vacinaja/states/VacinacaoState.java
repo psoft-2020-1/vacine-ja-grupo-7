@@ -20,10 +20,14 @@ public abstract class VacinacaoState {
 
     }
 
-    public abstract void atualizarEstado(RegistroVacinacao registroVacinacao);
+    public abstract void atualizarEstado(RegistroVacinacao registroVacinacao, String email);
 
     public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         throw new VacinaInvalidaException("ErroVacinaCidadao: Cidadão não está habilitado a ser vacinado.");
+    }
+
+    public void notificar(String email) throws Exception {
+        throw new Exception("NotificacaoCidadao: Notificação inválida.");
     }
 
     public Long getId() {

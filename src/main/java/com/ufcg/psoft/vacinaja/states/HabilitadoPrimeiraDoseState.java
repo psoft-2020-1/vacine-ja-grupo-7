@@ -2,6 +2,7 @@ package com.ufcg.psoft.vacinaja.states;
 
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
+import com.ufcg.psoft.vacinaja.utils.EmailUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
     }
 
     @Override
-    public void atualizarEstado(RegistroVacinacao registroVacinacao) {
+    public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         if(registroVacinacao.getDataVacinacaoPrimeiraDose() != null) {
             if(registroVacinacao.getVacina().getNumeroDoses() == 1) {
                 registroVacinacao.setEstadoVacinacao(new EsperandoSegundaDoseState());
@@ -35,8 +36,6 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
     public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         registroVacinacao.setDataVacinacaoPrimeiraDose(LocalDate.now());
         registroVacinacao.setVacina(vacina);
-        // TODO: DECREMENTAR NÚMERO DE VACINAS NO LOTE.
-        atualizarEstado(registroVacinacao);
     }
 
     public Long getId() {
