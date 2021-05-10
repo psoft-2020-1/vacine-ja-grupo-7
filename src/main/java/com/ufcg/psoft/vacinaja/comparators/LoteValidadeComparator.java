@@ -4,6 +4,9 @@ import java.util.Comparator;
 
 import com.ufcg.psoft.vacinaja.model.Lote;
 
+/**
+ * Compara dois lotes com base nas datas de validade.
+ */
 public class LoteValidadeComparator implements Comparator<Lote> {
 
 	@Override
