@@ -1,7 +1,5 @@
 package com.ufcg.psoft.vacinaja.controller;
 
-import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.CadastroDTO;
+import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.UsuarioService;
 
@@ -45,7 +44,7 @@ public class UsuarioController {
 			usuario = usuarioService.alterarSenha(idUsuario, novaSenha, header);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-		} catch (ServletException e) {
+		} catch (ValidacaoTokenException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 
@@ -59,7 +58,7 @@ public class UsuarioController {
 			usuarioService.removerUsuario(idUsuario, header);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
-		} catch (ServletException e) {
+		} catch (ValidacaoTokenException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 
