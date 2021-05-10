@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-public class ComorbidadeController {
+public class ComorbidadeApiController {
 
     @Autowired
     ComorbidadeService comorbidadeService;
