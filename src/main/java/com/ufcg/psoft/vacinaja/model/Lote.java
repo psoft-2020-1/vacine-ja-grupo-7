@@ -8,6 +8,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+/**
+ * Entidade que representa um lote de vacinas no sistema.
+ * O lote possui uma data de validade, um número total de doses e uma vacina associada.
+ * Internamente, o lote reserva as doses para primeira e segunda aplicação, caso a vacina possua essa característica.
+ * 
+ * Então na prática, um lote com dez unidades de uma vacina de duas doses, é capaz de vacinar cinco pessoas.
+ *
+ * Em lotes associados a vacinas de apenas uma aplicação, há sempre zero doses reservadas para a segunda aplicação.
+ * 
+ */
 @Entity
 public class Lote {
 	@Id

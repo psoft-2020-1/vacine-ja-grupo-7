@@ -11,6 +11,13 @@ import com.ufcg.psoft.vacinaja.model.Vacina;
 
 public interface LoteRepository extends JpaRepository<Lote, Long> {
 	
+	/**
+	 * Busca, entre os lotes associados a uma vacina específica, 
+	 * aquele que contém unidades reservadas para a primeira aplicação e está mais próximo do vencimento.
+	 * 
+	 * @param vacina A vacina usada como parâmetro de busca.
+	 * @return Um Optional, que fica vazio quando nenhum lote válido é encontrado.
+	 */
 	default Optional<Lote> proximoLotePrimeiraDose(Vacina vacina) {
 		Optional<Lote> optionalLote = Optional.empty();
 		
@@ -29,6 +36,13 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
 		return optionalLote;
 	}
 	
+	/**
+	 * Busca, entre os lotes associados a uma vacina específica, 
+	 * aquele que contém unidades reservadas para a segunda aplicação e está mais próximo do vencimento.
+	 * 
+	 * @param vacina A vacina usada como parâmetro de busca.
+	 * @return Um Optional, que fica vazio quando nenhum lote válido é encontrado.
+	 */
 	default Optional<Lote> proximoLoteSegundaDose(Vacina vacina) {
 		Optional<Lote> optionalLote = Optional.empty();
 		
