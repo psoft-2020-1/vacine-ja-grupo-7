@@ -1,7 +1,5 @@
 package com.ufcg.psoft.vacinaja.controller;
 
-import javax.servlet.ServletException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufcg.psoft.vacinaja.exceptions.LoginException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.JWTService;
 
@@ -23,11 +22,11 @@ public class LoginController {
 	private JWTService jwtService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<?> login(@RequestBody Usuario usuario) throws ServletException {
+	public ResponseEntity<?> login(@RequestBody Usuario usuario) {
 		try {
 			return new ResponseEntity<String>(jwtService.autenticar(usuario), HttpStatus.OK);
-		} catch(IllegalArgumentException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch(LoginException e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
