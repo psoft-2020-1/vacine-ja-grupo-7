@@ -6,5 +6,6 @@ import com.ufcg.psoft.vacinaja.model.Funcionario;
 public interface FuncionarioService {
 
 	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO);
+	public String listarVacinas();
 
 }
