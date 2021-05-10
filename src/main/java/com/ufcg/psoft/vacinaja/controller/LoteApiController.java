@@ -22,6 +22,16 @@ public class LoteApiController {
 	@Autowired
 	private LoteService loteService;
 	
+	/**
+	 * Cadastra um lote de vacinas a partir de:
+	 * 	 ID da vacina;
+	 * 	 Data de validade do lote;
+	 * 	 Número de doses da vacina no lote;
+	 * 
+	 * @param loteDTO Contém as informações relativas ao lote.
+	 * 
+	 * @return O lote cadastrado e o status da requisição.
+	 */
 	@RequestMapping(value = "/lote/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarLote(@RequestBody LoteDTO loteDTO) {
 		ResponseEntity<?> response;
