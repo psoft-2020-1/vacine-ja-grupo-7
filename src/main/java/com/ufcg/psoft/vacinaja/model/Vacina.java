@@ -3,6 +3,7 @@ package com.ufcg.psoft.vacinaja.model;
 import com.ufcg.psoft.vacinaja.dto.VacinaDTO;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Vacina {
@@ -80,5 +81,19 @@ public class Vacina {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vacina vacina = (Vacina) o;
+        return Objects.equals(id, vacina.id) && nomeFabricante.equals(vacina.nomeFabricante) &&
+                numeroDoses.equals(vacina.numeroDoses) && tempoEntreDoses.equals(vacina.tempoEntreDoses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nomeFabricante, numeroDoses, tempoEntreDoses);
     }
 }
