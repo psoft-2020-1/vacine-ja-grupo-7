@@ -1,7 +1,14 @@
 package com.ufcg.psoft.vacinaja.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoDTO;
+import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Comorbidade;
+import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
+import com.ufcg.psoft.vacinaja.repository.ComorbidadeRepository;
+import com.ufcg.psoft.vacinaja.repository.PerfilVacinacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +23,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	
 	@Autowired
 	private FuncionarioRepository funcionarioRepository;
+
+	@Autowired
+	private PerfilVacinacaoRepository perfilVacinacaoRepository;
+
+	@Autowired
+	private ComorbidadeRepository comorbidadeRepository;
 	
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
@@ -34,7 +47,39 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			throw new FuncionarioInvalidoException("ErroCadastroFuncionário: Funcionário já cadastrado.");
 		}
 	}
-	
+
+	@Override
+	public PerfilVacinacao definirPerfilVacinacao(PerfilVacinacaoDTO perfilVacinacaoDTO) {
+		this.validaPerfilVacinacaoDTO(perfilVacinacaoDTO);
+		Optional<Comorbidade> comorbidadeOptional = comorbidadeRepository.findById(perfilVacinacaoDTO.getIdComorbidade());
+		if(!comorbidadeOptional.isPresent()){
+			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: Comirbidade inválida.");
+		}
+		List<PerfilVacinacao> perfilVacinacaoCadastrada = perfilVacinacaoRepository.findAll();
+		PerfilVacinacao perfilVacinacao;
+		if(perfilVacinacaoCadastrada.isEmpty()){
+			perfilVacinacao = new PerfilVacinacao(perfilVacinacaoDTO, comorbidadeOptional.get());
+		}else{
+			perfilVacinacao = perfilVacinacaoCadastrada.get(0);
+			perfilVacinacao.updatePerfilVacinacao(perfilVacinacaoDTO, comorbidadeOptional.get());
+		}
+		return perfilVacinacaoRepository.save(perfilVacinacao);
+	}
+
+	@Override
+	public List<PerfilVacinacao> listarPerfilVacinacao() {
+		return perfilVacinacaoRepository.findAll();
+	}
+
+
+	private void validaPerfilVacinacaoDTO(PerfilVacinacaoDTO perfilVacinacaoDTO){
+		if(perfilVacinacaoDTO.getIdComorbidade() == null && perfilVacinacaoDTO.getIdadeMinima() == null && perfilVacinacaoDTO.getProfissao() == null){
+			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: O perfil deve conter alguma restrição.");
+		}if(perfilVacinacaoDTO.getIdadeMinima() < 0){
+			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: A idade mínima tem que ser maior que 0.");
+		}
+	}
+
 	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {
 		if ((funcionarioDTO == null) ||
 			(funcionarioDTO.getCpfFuncionario() == null) || 
@@ -52,4 +97,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
 	}
+
+
 }

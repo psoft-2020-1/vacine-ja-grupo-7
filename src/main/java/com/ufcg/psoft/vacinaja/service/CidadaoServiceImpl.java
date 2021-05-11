@@ -1,6 +1,8 @@
 package com.ufcg.psoft.vacinaja.service;
 
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
+import com.ufcg.psoft.vacinaja.dto.CpfDTO;
+import com.ufcg.psoft.vacinaja.dto.IdDTO;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.Comorbidade;
@@ -34,9 +36,9 @@ public class CidadaoServiceImpl implements  CidadaoService {
         return cidadaoRepository.findCidadaoByCpf(cpf);
     }
 
-    private void cadastraRegistroVacinacao(Cidadao cidadao) {
+    private RegistroVacinacao cadastraRegistroVacinacao(Cidadao cidadao) {
         RegistroVacinacao registroVacinacao = new RegistroVacinacao(cidadao);
-        registroRepository.save(registroVacinacao);
+        return registroRepository.save(registroVacinacao);
     }
 
     @Override
@@ -51,9 +53,16 @@ public class CidadaoServiceImpl implements  CidadaoService {
         validaCidadaoDTOComCpf(cidadaoDTO);
 
         Cidadao cidadaoCadastrado = cidadaoRepository.save(this.criarCidadao(cidadaoDTO));
-        cadastraRegistroVacinacao(cidadaoCadastrado);
+        RegistroVacinacao registroVacinacao = cadastraRegistroVacinacao(cidadaoCadastrado);
+        registroVacinacao.atualizarEstadoVacinacao();
         return cidadaoCadastrado;
     }
+
+    private void atualizarEstadosCidadaos(){
+        List<RegistroVacinacao> registroVacinacaoList = registroRepository.findAll();
+
+    }
+
 
     @Override
     public Cidadao atualizarCidadao(CidadaoDTO cidadaoDTO) {
@@ -67,6 +76,26 @@ public class CidadaoServiceImpl implements  CidadaoService {
         validaCidadaoDTOSemCpf(cidadaoDTO);
         Cidadao cidadaoAtualizado =  criarCidadao(cidadaoDTO);
         return cidadaoRepository.save(cidadaoAtualizado);
+    }
+
+
+
+    @Override
+    public Cidadao listarCidadao(CpfDTO cpfDTO) {
+        Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cpfDTO.getCpf());
+        if(!optionalCidadao.isPresent()){
+            throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
+        }
+        return optionalCidadao.get();
+    }
+
+    @Override
+    public void deletarCidadao(CpfDTO cpfDTO) {
+        Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cpfDTO.getCpf());
+        if(!optionalCidadao.isPresent()){
+            throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
+        }
+        cidadaoRepository.delete(optionalCidadao.get());
     }
 
     private Cidadao criarCidadao(CidadaoDTO cidadaoDTO) {
