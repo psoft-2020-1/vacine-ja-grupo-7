@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -30,7 +32,7 @@ public class TokenFilter extends GenericFilterBean {
 		String header = req.getHeader("Authorization");
 
 		if (header == null || !header.startsWith("Bearer ")) {
-			throw new ServletException("Token inexistente ou mal formatado!");
+			throw new ValidacaoTokenException("ErroValidaçãoToken: Token inexistente ou mal formatado!");
 		}
 
 		String token = header.substring(TOKEN_INDEX);
