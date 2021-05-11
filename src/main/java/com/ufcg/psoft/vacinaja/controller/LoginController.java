@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufcg.psoft.vacinaja.dto.LoginDTO;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.JWTService;
@@ -22,9 +23,9 @@ public class LoginController {
 	private JWTService jwtService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<?> login(@RequestBody Usuario usuario) {
+	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 		try {
-			return new ResponseEntity<String>(jwtService.autenticar(usuario), HttpStatus.OK);
+			return new ResponseEntity<String>(jwtService.autenticar(loginDTO.getUsuario()), HttpStatus.OK);
 		} catch(LoginException e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}

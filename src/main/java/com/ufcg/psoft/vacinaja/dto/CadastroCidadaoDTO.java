@@ -3,8 +3,11 @@ package com.ufcg.psoft.vacinaja.dto;
 import java.util.Date;
 import java.util.List;
 
-public class CidadaoDTO {
+import com.ufcg.psoft.vacinaja.model.Usuario;
 
+public class CadastroCidadaoDTO {
+	private String emailUsuario;
+	private String senhaUsuario;
 	private String nome;
 	private String endereco;
 	private String cpf;
@@ -14,8 +17,10 @@ public class CidadaoDTO {
 	private String profissao;
 	private List<Long> comorbidades;
 
-	public CidadaoDTO(String nome, String endereco, String cpf, String numeroCartaoSus,
+	public CadastroCidadaoDTO(String emailUsuario, String senhaUsuario, String nome, String endereco, String cpf, String numeroCartaoSus,
 			Date dataNascimento, String telefone, String profissao, List<Long> comorbidades) {
+		this.emailUsuario = emailUsuario;
+		this.senhaUsuario = senhaUsuario;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.cpf = cpf;
@@ -25,6 +30,14 @@ public class CidadaoDTO {
 		this.telefone = telefone;
 		this.profissao = profissao;
 		this.comorbidades = comorbidades;
+	}
+
+	public String getEmailUsuario() {
+		return emailUsuario;
+	}
+	
+	public String getSenhaUsuario() {
+		return senhaUsuario;
 	}
 	
 	public String getNome() {
@@ -57,5 +70,13 @@ public class CidadaoDTO {
 
 	public List<Long> getComorbidades() {
 		return comorbidades;
+	}
+	
+	public CidadaoDTO getCidadaoDTO() {
+		return new CidadaoDTO(nome, endereco, cpf, numeroCartaoSus, dataNascimento, telefone, profissao, comorbidades);
+	}
+	
+	public Usuario getUsuario() {
+		return new Usuario(emailUsuario, senhaUsuario, false, true, false);
 	}
 }

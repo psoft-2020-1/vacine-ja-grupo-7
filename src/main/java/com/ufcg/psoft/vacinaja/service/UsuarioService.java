@@ -2,7 +2,6 @@ package com.ufcg.psoft.vacinaja.service;
 
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,15 +57,28 @@ public class UsuarioService {
 		throw new ValidacaoTokenException("ErroValidacaoToken: Usuario nao tem permissao");
 	}
 
-	public boolean validarUsuarioSenhaPermissao(Usuario usuario) {
+	public void validarUsuarioSenhaPermissao(Usuario usuario) {
 		Usuario usuarioConsulta = getUsuario(usuario.getEmail());
-		if (usuarioConsulta.getSenha().equals(usuario.getSenha())) {
-			if ((usuario.isPermissaoAdministrador() && !usuarioConsulta.isPermissaoAdministrador())
-					|| (usuario.isPermissaoFuncionario() && !usuarioConsulta.isPermissaoFuncionario())
-					|| (usuario.isPermissaoCidadao() && !usuarioConsulta.isPermissaoCidadao()))
-				throw new LoginException("ErroLogin: Permissão solicitada não autorizada");
-			return true;
+
+		if (!usuarioConsulta.getSenha().equals(usuario.getSenha()))
+			throw new LoginException("ErroLogin: Usuario ou senha invalodos");
+
+		if ((usuario.isPermissaoAdministrador() && !usuarioConsulta.isPermissaoAdministrador())
+				|| (usuario.isPermissaoFuncionario() && !usuarioConsulta.isPermissaoFuncionario())
+				|| (usuario.isPermissaoCidadao() && !usuarioConsulta.isPermissaoCidadao()))
+			throw new LoginException("ErroLogin: Permissão solicitada não autorizada");
+	}
+
+	public void verificaDisponibilidadeEmail(String email) {
+		if (usuarioRepository.findById(email).isPresent())
+			throw new UsuarioInvalidoException("ErroCadastroUsuario: email já em uso.");
+	}
+
+	public void verificaPermissaoCidadao(String cpf, String header) {
+		String email = jwtService.getEmailToken(header);
+		Usuario usuario = getUsuario(email);
+		if (!usuario.getCadastroCidadao().getCpf().equals(cpf)) {
+			throw new UsuarioInvalidoException("ErroPermissaoUsuarioCidadao: O usuario logado não possui permissão sobre o cidadão informado");
 		}
-		throw new LoginException("ErroLogin: Usuario ou senha invalodos");
 	}
 }

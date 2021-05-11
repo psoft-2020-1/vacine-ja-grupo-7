@@ -30,10 +30,6 @@ public class Usuario {
 	
 	@OneToOne
 	private Funcionario cadastroFuncionario;
-
-	public Usuario() {
-
-	}
 	
 	public Usuario() {
 		
@@ -91,6 +87,10 @@ public class Usuario {
 
 	public String getEmail() {
 		return email;
+	}
+	
+	public Cidadao getCadastroCidadao() {
+		return cadastroCidadao;
 	}
 
 	public void adicionaPermissaoAdministrador() {
