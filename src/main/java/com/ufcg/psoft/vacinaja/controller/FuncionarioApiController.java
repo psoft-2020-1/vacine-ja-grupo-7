@@ -50,4 +50,21 @@ public class FuncionarioApiController {
 		
 		return response;
 	}
+	
+	/**
+	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes associados.
+	 * 
+	 * @return retorna o toString de todos os lotes e paras as vacinas sem lote, somente o toString da vacina.
+	 */
+	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
+	public ResponseEntity<?> listarVacinas() {
+		ResponseEntity<?> response;
+		try {
+			String vacinas = funcionarioService.listarVacinas();
+			response = new ResponseEntity<String>(vacinas, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 }
