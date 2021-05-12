@@ -38,7 +38,7 @@ public class CidadaoApiController {
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
-		ResponseEntity response;
+		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaDisponibilidadeEmail(cadastroCidadaoDTO.getEmailUsuario());
 			Cidadao cidadaoCadastrado = cidadaoService.cadastrarCidadao(cadastroCidadaoDTO.getCidadaoDTO());
@@ -47,11 +47,11 @@ public class CidadaoApiController {
 			Usuario usuarioCadastrado = usuarioService.cadastrarUsuario(usuario);
 			response = new ResponseEntity<Usuario>(usuarioCadastrado, HttpStatus.CREATED);
 		} catch (CidadaoInvalidoException cie) {
-			response = new ResponseEntity(cie.getMessage(), HttpStatus.BAD_REQUEST);
+			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (UsuarioInvalidoException e) {
-			response = new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		} catch (Exception e) {
-			response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
@@ -65,43 +65,47 @@ public class CidadaoApiController {
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
 	public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoDTO cidadaoDTO,
 			@RequestHeader("Authorization") String header) {
-		ResponseEntity response;
+		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaPermissaoCidadao(cidadaoDTO.getCpf(), header);
 			Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoDTO);
 			response = new ResponseEntity<>(cidadaoAtualizado, HttpStatus.OK);
 		} catch (CidadaoInvalidoException cie) {
-			response = new ResponseEntity(cie.getMessage(), HttpStatus.BAD_REQUEST);
+			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (UsuarioInvalidoException e) {
-			response = new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
-			response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
 
-    @RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.GET)
-    public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO) {
-        ResponseEntity response;
-        try {
-            Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO);
-            response =  new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
-    }
+	@RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.GET)
+	public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+		ResponseEntity<?> response;
+		try {
+			Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO, header);
+			response = new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
+		} catch (UsuarioInvalidoException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 
-    @RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO) {
-        ResponseEntity response;
-        try {
-            cidadaoService.deletarCidadao(cpfDTO);
-            response = new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
-    }
+	@RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+		ResponseEntity<?> response;
+		try {
+			cidadaoService.deletarCidadao(cpfDTO, header);
+			response = new ResponseEntity<>(HttpStatus.OK);
+		} catch (UsuarioInvalidoException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 
 }
