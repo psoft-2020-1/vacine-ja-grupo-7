@@ -20,7 +20,7 @@ public class NaoHabilitadoState extends VacinacaoState {
 
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao) {
-        // TODO: IMPLEMENTAR LÓGICA COM A LISTA DE COMORBIDADES DO SISTEMA
+        registroVacinacao.setEstadoVacinacao(new HabilitadoPrimeiraDoseState());
     }
 
     public Long getId() {

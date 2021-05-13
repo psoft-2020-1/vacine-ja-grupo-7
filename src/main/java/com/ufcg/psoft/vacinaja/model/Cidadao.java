@@ -2,10 +2,12 @@ package com.ufcg.psoft.vacinaja.model;
 
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
+import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoCidadaoDTO;
 import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -23,12 +25,13 @@ public class Cidadao {
     private ProfissaoEnum profissao;
     @ManyToMany
     private List<Comorbidade> comorbidades;
+    private Long idade;
 
     public Cidadao(){
 
     }
 
-    public Cidadao (String nome, String endereco, String cpf, RegistroVacinacao registroVacinacao, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<Comorbidade> comorbidades){
+    public Cidadao (String nome, String endereco, String cpf, RegistroVacinacao registroVacinacao, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<Comorbidade> comorbidades, Long idade){
         this.nome = nome;
         this.endereco = endereco;
         this.cpf = cpf;
@@ -37,6 +40,7 @@ public class Cidadao {
         this.telefone = telefone;
         this.profissao = profissao;
         this.comorbidades = comorbidades;
+        this.idade = idade;
     }
 
     public Cidadao (CidadaoDTO cidadaoDTO, List<Comorbidade> comorbidades, RegistroVacinacao registroVacinacao){
@@ -48,6 +52,7 @@ public class Cidadao {
         this.profissao = cidadaoDTO.getProfissao();
         this.comorbidades = comorbidades;
         this.registroVacinacao = registroVacinacao;
+        this.idade = cidadaoDTO.getIdade();
     }
 
     public Cidadao (CidadaoUpdateDTO cidadaoUpdateDTO, List<Comorbidade> comorbidades, RegistroVacinacao registroVacinacao){
@@ -59,6 +64,7 @@ public class Cidadao {
         this.profissao = cidadaoUpdateDTO.getProfissao();
         this.comorbidades = comorbidades;
         this.registroVacinacao = registroVacinacao;
+        this.idade = cidadaoUpdateDTO.getIdade();
     }
 
     public String getNome() {
@@ -123,5 +129,30 @@ public class Cidadao {
 
     public void setRegistroVacinacao(RegistroVacinacao registroVacinacao) {
         this.registroVacinacao = registroVacinacao;
+    }
+
+    public PerfilVacinacaoCidadaoDTO geraPerfilVacinacao() {
+        return new PerfilVacinacaoCidadaoDTO(this.idade, this.comorbidades, this.profissao.getValue());
+    }
+
+    public Long getIdade() {
+        return idade;
+    }
+
+    public void setIdade(Long idade) {
+        this.idade = idade;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cidadao cidadao = (Cidadao) o;
+        return Objects.equals(cpf, cidadao.cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);
     }
 }

@@ -1,13 +1,17 @@
 package com.ufcg.psoft.vacinaja.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
-import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoDTO;
-import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
-import com.ufcg.psoft.vacinaja.model.Comorbidade;
+import com.ufcg.psoft.vacinaja.comparators.ComparatorCidadao;
+import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
+import com.ufcg.psoft.vacinaja.model.Cidadao;
+import com.ufcg.psoft.vacinaja.model.Lote;
 import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
-import com.ufcg.psoft.vacinaja.repository.ComorbidadeRepository;
+import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
+import com.ufcg.psoft.vacinaja.repository.LoteRepository;
 import com.ufcg.psoft.vacinaja.repository.PerfilVacinacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +29,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private FuncionarioRepository funcionarioRepository;
 
 	@Autowired
-	private PerfilVacinacaoRepository perfilVacinacaoRepository;
+	private CidadaoRepository cidadaoRepository;
 
 	@Autowired
-	private ComorbidadeRepository comorbidadeRepository;
+	private LoteRepository loteRepository;
+
+	@Autowired
+	private PerfilVacinacaoRepository perfilVacinacaoRepository;
+
 	
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
@@ -49,35 +57,34 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	}
 
 	@Override
-	public PerfilVacinacao definirPerfilVacinacao(PerfilVacinacaoDTO perfilVacinacaoDTO) {
-		this.validaPerfilVacinacaoDTO(perfilVacinacaoDTO);
-		Optional<Comorbidade> comorbidadeOptional = comorbidadeRepository.findById(perfilVacinacaoDTO.getIdComorbidade());
-		if(!comorbidadeOptional.isPresent()){
-			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: Comirbidade inválida.");
+	public List<Cidadao> habilitarPerfilVacinacao(PerfilGovernoEnum perfilGovernoEnum) {
+		List<Cidadao> cidadaosCadastrados = cidadaoRepository.findAll();
+		PriorityQueue<Cidadao> filaPrioridadeHabilitados = new PriorityQueue<>(new ComparatorCidadao(perfilGovernoEnum));
+		for(Cidadao cidadao : cidadaosCadastrados) {
+			if(cidadao.getRegistroVacinacao().getDataVacinacaoPrimeiraDose() == null){
+				filaPrioridadeHabilitados.add(cidadao);
+			}
 		}
-		List<PerfilVacinacao> perfilVacinacaoCadastrada = perfilVacinacaoRepository.findAll();
-		PerfilVacinacao perfilVacinacao;
-		if(perfilVacinacaoCadastrada.isEmpty()){
-			perfilVacinacao = new PerfilVacinacao(perfilVacinacaoDTO, comorbidadeOptional.get());
-		}else{
-			perfilVacinacao = perfilVacinacaoCadastrada.get(0);
-			perfilVacinacao.updatePerfilVacinacao(perfilVacinacaoDTO, comorbidadeOptional.get());
+
+		List<Lote> loteList = loteRepository.findAll();
+		Long qtdVacinasDisponiveis = 0L;
+		for(Lote lote : loteList){
+			qtdVacinasDisponiveis += lote.getQuantidadePessoasVacinaveis();
 		}
-		return perfilVacinacaoRepository.save(perfilVacinacao);
+
+		List<Cidadao> cidadaosHabilitados = new ArrayList<>();
+
+		for(int i = 0; i < qtdVacinasDisponiveis; i++) {
+			Cidadao cidadao = filaPrioridadeHabilitados.remove();
+			cidadao.getRegistroVacinacao().atualizarEstadoVacinacao();
+			cidadaosHabilitados.add(cidadao);
+		}
+		return cidadaosHabilitados;
 	}
 
 	@Override
 	public List<PerfilVacinacao> listarPerfilVacinacao() {
 		return perfilVacinacaoRepository.findAll();
-	}
-
-
-	private void validaPerfilVacinacaoDTO(PerfilVacinacaoDTO perfilVacinacaoDTO){
-		if(perfilVacinacaoDTO.getIdComorbidade() == null && perfilVacinacaoDTO.getIdadeMinima() == null && perfilVacinacaoDTO.getProfissao() == null){
-			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: O perfil deve conter alguma restrição.");
-		}if(perfilVacinacaoDTO.getIdadeMinima() < 0){
-			throw new PerfilVacinacaoInvalidoException("ErroValidaPerfilVacinacao: A idade mínima tem que ser maior que 0.");
-		}
 	}
 
 	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {

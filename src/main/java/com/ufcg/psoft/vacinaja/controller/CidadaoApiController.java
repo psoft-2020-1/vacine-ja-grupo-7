@@ -69,7 +69,7 @@ public class CidadaoApiController {
      *
      * @return cidadões cadastrados.
      */
-    @RequestMapping(value = "/cidadao/listar-cidadaos/", method = RequestMethod.GET)
+    @RequestMapping(value = "/cidadao/listar/", method = RequestMethod.GET)
     public ResponseEntity<?> listarCidadao() {
         ResponseEntity response;
         try {
@@ -86,7 +86,7 @@ public class CidadaoApiController {
      *
      * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do cidadão.
      */
-    @RequestMapping(value = "/cidadao/listar-cidadao/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/cidadao/deletar/", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO) {
         ResponseEntity response;
         try {

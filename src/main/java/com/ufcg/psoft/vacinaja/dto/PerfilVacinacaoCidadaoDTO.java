@@ -44,4 +44,6 @@ public class PerfilVacinacaoCidadaoDTO {
     public void setProfissao(String profissao) {
         this.profissao = profissao;
     }
+
+
 }

@@ -44,13 +44,4 @@ public class RegistroServiceImpl implements RegistroService {
         RegistroVacinacao registroRetorno = registroOptional.get().vacinar(vacinaOptional.get());
         return registroRepository.save(registroRetorno);
     }
-
-    @Override
-    public void deletarRegistro(String cpfCidadao) {
-        Optional<Cidadao> cidadao = cidadaoRepository.findCidadaoByCpf(cpfCidadao);
-        if(!cidadao.isPresent()) {
-            throw new CidadaoInvalidoException("ErroVacinaCidadao: CPF de cidadão não cadastrado.");
-        }
-        cidadaoRepository.delete(cidadao.get());
-    }
 }

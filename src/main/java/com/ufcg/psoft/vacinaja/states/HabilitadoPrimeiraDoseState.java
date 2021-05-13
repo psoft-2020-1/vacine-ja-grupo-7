@@ -24,9 +24,9 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
     public void atualizarEstado(RegistroVacinacao registroVacinacao) {
         if(registroVacinacao.getDataVacinacaoPrimeiraDose() != null) {
             if(registroVacinacao.getVacina().getNumeroDoses() == 1) {
-                registroVacinacao.setEstadoVacinacao(new EsperandoSegundaDoseState());
-            } else {
                 registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
+            } else {
+                registroVacinacao.setEstadoVacinacao(new EsperandoSegundaDoseState());
             }
         }
     }

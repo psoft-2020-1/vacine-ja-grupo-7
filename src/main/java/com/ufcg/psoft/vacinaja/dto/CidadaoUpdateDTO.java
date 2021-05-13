@@ -15,12 +15,13 @@ public class CidadaoUpdateDTO {
     private String telefone;
     private ProfissaoEnum profissao;
     private List<ComorbidadeEnum> comorbidadesEnums;
+    private Long idade;
 
     public CidadaoUpdateDTO (){
 
     }
 
-    public CidadaoUpdateDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums){
+    public CidadaoUpdateDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums, Long idade){
         this.nome = nome;
         this.endereco = endereco;
         this.cpf = cpf;
@@ -28,6 +29,7 @@ public class CidadaoUpdateDTO {
         this.telefone = telefone;
         this.telefone = telefone;
         this.profissao = profissao;
+        this.idade = idade;
     }
 
     public String getNome() {
@@ -84,5 +86,13 @@ public class CidadaoUpdateDTO {
 
     public void setComorbidadesEnums(List<ComorbidadeEnum> comorbidadesEnums) {
         this.comorbidadesEnums = comorbidadesEnums;
+    }
+
+    public Long getIdade() {
+        return idade;
+    }
+
+    public void setIdade(Long idade) {
+        this.idade = idade;
     }
 }

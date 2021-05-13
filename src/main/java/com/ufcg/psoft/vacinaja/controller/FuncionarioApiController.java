@@ -1,7 +1,9 @@
 package com.ufcg.psoft.vacinaja.controller;
 
 import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoDTO;
+import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
 import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,25 +45,21 @@ public class FuncionarioApiController {
 		
 		try {
 			Funcionario funcionarioCadastrado = funcionarioService.cadastrarFuncionario(funcionarioDTO);
-			
 			response = new ResponseEntity<Funcionario>(funcionarioCadastrado, HttpStatus.CREATED);
-		
 		} catch (FuncionarioInvalidoException fIE){
             response = new ResponseEntity<>(fIE.getMessage(), HttpStatus.BAD_REQUEST);
-        
 		} catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/definir-perfil-vacinacao", method = RequestMethod.POST)
-	public ResponseEntity<?> definirPerfilVacinacao(@RequestBody PerfilVacinacaoDTO perfilVacinacaoDTO){
+	@RequestMapping(value = "/funcionario/habilitar-perfil-vacinacao", method = RequestMethod.POST)
+	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody PerfilGovernoEnum perfilGovernoEnum){
 		ResponseEntity<?> response;
 		try {
-			PerfilVacinacao perfilVacinacaoCadastrado = funcionarioService.definirPerfilVacinacao(perfilVacinacaoDTO);
-			response = new ResponseEntity<PerfilVacinacao>(perfilVacinacaoCadastrado, HttpStatus.CREATED);
+			List<Cidadao> pessoasHabilitadas = funcionarioService.habilitarPerfilVacinacao(perfilGovernoEnum);
+			response = new ResponseEntity<List<Cidadao>>(pessoasHabilitadas, HttpStatus.CREATED);
 		} catch (PerfilVacinacaoInvalidoException pvie){
 			response = new ResponseEntity<>(pvie.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {

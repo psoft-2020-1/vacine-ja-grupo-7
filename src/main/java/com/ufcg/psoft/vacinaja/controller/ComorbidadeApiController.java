@@ -27,6 +27,4 @@ public class ComorbidadeApiController {
         return new ResponseEntity<>(comorbidades, HttpStatus.OK);
     }
 
-
-
 }
