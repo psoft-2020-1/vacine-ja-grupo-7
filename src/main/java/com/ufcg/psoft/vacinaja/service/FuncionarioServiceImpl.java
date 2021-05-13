@@ -7,7 +7,6 @@ import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
 import com.ufcg.psoft.vacinaja.states.NaoHabilitadoState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import java.util.PriorityQueue;
 import com.ufcg.psoft.vacinaja.comparators.ComparatorCidadao;
@@ -16,6 +15,12 @@ import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.model.*;
 import com.ufcg.psoft.vacinaja.repository.*;
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
+import com.ufcg.psoft.vacinaja.model.Funcionario;
+import com.ufcg.psoft.vacinaja.model.Lote;
+import com.ufcg.psoft.vacinaja.model.Vacina;
+import com.ufcg.psoft.vacinaja.repository.FuncionarioRepository;
+import com.ufcg.psoft.vacinaja.repository.LoteRepository;
+import com.ufcg.psoft.vacinaja.repository.VacinaRepository;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
 
@@ -38,7 +43,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private JWTService jwtService;
 
 	private VacinaRepository vacinaRepository;
-
+	
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
 	@Override
@@ -102,11 +107,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		}
 		String retorno = "";
 		for(Lote lote : lotes) {
-			retorno += lote.toString();
+			retorno += lote.toString() + "\n";
 		}
 		retorno += "Vacinas sem lote: ";
 		for(Vacina vacina : vacinas) {
-			retorno += vacina;
+			retorno += vacina + "\n";
 		}
 		return retorno;
 	}
