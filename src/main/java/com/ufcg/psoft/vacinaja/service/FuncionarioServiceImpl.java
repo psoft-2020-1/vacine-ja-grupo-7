@@ -57,11 +57,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		}
 		String retorno = "";
 		for(Lote lote : lotes) {
-			retorno += lote.toString();
+			retorno += lote.toString() + "\n";
 		}
 		retorno += "Vacinas sem lote: ";
 		for(Vacina vacina : vacinas) {
-			retorno += vacina;
+			retorno += vacina + "\n";
 		}
 		return retorno;
 	}
