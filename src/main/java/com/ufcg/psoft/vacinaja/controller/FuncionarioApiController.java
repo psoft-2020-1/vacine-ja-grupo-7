@@ -1,9 +1,7 @@
 package com.ufcg.psoft.vacinaja.controller;
 
 import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
-import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
-import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,25 +52,23 @@ public class FuncionarioApiController {
 	}
 
 	@RequestMapping(value = "/funcionario/habilitar-perfil-vacinacao", method = RequestMethod.POST)
-	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody PerfilGovernoEnum perfilGovernoEnum){
+	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody String perfil){
 		ResponseEntity<?> response;
 		try {
-			List<Cidadao> pessoasHabilitadas = funcionarioService.habilitarPerfilVacinacao(perfilGovernoEnum);
+			List<Cidadao> pessoasHabilitadas = funcionarioService.habilitarPerfilVacinacao(PerfilGovernoEnum.valueOf(perfil));
 			response = new ResponseEntity<List<Cidadao>>(pessoasHabilitadas, HttpStatus.CREATED);
-		} catch (PerfilVacinacaoInvalidoException pvie){
-			response = new ResponseEntity<>(pvie.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
+		}catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/get-perfil-vacinacao", method = RequestMethod.GET)
-	public ResponseEntity<?> listarPerfilVacinacao(){
+	@RequestMapping(value = "/funcionario/listar-perfis-governo", method = RequestMethod.GET)
+	public ResponseEntity<?> listarPerfisGoverno(){
 		ResponseEntity<?> response;
 		try {
-			List<PerfilVacinacao> perfilVacinacaoCadastrado = funcionarioService.listarPerfilVacinacao();
-			response = new ResponseEntity<List<PerfilVacinacao>>(perfilVacinacaoCadastrado, HttpStatus.OK);
+			PerfilGovernoEnum [] perfisGoverno = funcionarioService.listarPerfisGoverno();
+			response = new ResponseEntity<PerfilGovernoEnum[]>(perfisGoverno, HttpStatus.OK);
 		} catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

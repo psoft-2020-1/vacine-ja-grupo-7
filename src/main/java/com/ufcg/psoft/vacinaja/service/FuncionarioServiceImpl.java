@@ -30,9 +30,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
-	private PerfilVacinacaoRepository perfilVacinacaoRepository;
-
-	@Autowired
 	private VacinaRepository vacinaRepository;
 
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
@@ -82,8 +79,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	}
 
 	@Override
-	public List<PerfilVacinacao> listarPerfilVacinacao() {
-		return perfilVacinacaoRepository.findAll();
+	public PerfilGovernoEnum [] listarPerfisGoverno() {
+		return PerfilGovernoEnum.values();
 	}
 
 

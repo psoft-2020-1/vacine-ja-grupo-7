@@ -56,7 +56,7 @@ public class CidadaoServiceImpl implements  CidadaoService {
         if (optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
         }
-        validaCidadaoDTOComCpf(cidadaoDTO);
+        validaCidadaoDTO(cidadaoDTO);
         RegistroVacinacao registroVacinacao = cadastraRegistroVacinacao(cidadaoDTO.getNumeroCartaoSus());
 
         Cidadao cidadaoCadastrado = cidadaoRepository.save(this.criarCidadao(cidadaoDTO, registroVacinacao));
@@ -72,7 +72,7 @@ public class CidadaoServiceImpl implements  CidadaoService {
         if (!optionalCidadao.isPresent()) {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão não cadastrado.");
         }
-        validaCidadaoDTOSemCpf(cidadaoUpdateDTO);
+        validaCidadaoUpdateDTO(cidadaoUpdateDTO);
         Optional<RegistroVacinacao> registroVacinacao = registroRepository.findById(optionalCidadao.get().getRegistroVacinacao().getNumeroCartaoSus());
         Cidadao cidadaoAtualizado =  atualizarCidadao(cidadaoUpdateDTO, registroVacinacao.get());
         return cidadaoRepository.save(cidadaoAtualizado);
@@ -159,28 +159,17 @@ public class CidadaoServiceImpl implements  CidadaoService {
         return new Cidadao(cidadaoUpdateDTO, comorbidadeList, registroVacinacao);
     }
 
-    private void validaCidadaoDTOComCpf(CidadaoDTO cidadaoDTO) {
-        this.validaCidadaoDTOSemCpf(cidadaoDTO);
+    private void validaCidadaoDTO(CidadaoDTO cidadaoDTO) {
         if(!cidadaoDTO.getCpf().matches(REGEX_VALIDATE_CPF)){
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
-    }
-
-    private void validaCidadaoDTOSemCpf(CidadaoDTO cidadaoDTO) {
-        if((cidadaoDTO.getIdade() == null || cidadaoDTO.getIdade() <= 0) || (cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
+        if((cidadaoDTO.getCpf() == null || cidadaoDTO.getCpf().equals("")) || (cidadaoDTO.getEndereco() == null || cidadaoDTO.getEndereco().equals("")) || (cidadaoDTO.getNome() == null || cidadaoDTO.getNome().equals("")) || cidadaoDTO.getDataNascimento() == null || (cidadaoDTO.getProfissao() == null || cidadaoDTO.getProfissao().equals("")) || (cidadaoDTO.getTelefone() == null || cidadaoDTO.getTelefone().equals("")) || (cidadaoDTO.getNumeroCartaoSus() == null || cidadaoDTO.getNumeroCartaoSus().equals(""))) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
     }
 
-    private void validaCidadaoDTOComCpf(CidadaoUpdateDTO cidadaoUpdateDTO) {
-        this.validaCidadaoDTOSemCpf(cidadaoUpdateDTO);
-        if(!cidadaoUpdateDTO.getCpf().matches(REGEX_VALIDATE_CPF)){
-            throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
-        }
-    }
-
-    private void validaCidadaoDTOSemCpf(CidadaoUpdateDTO cidadaoUpdateDTO) {
-        if((cidadaoUpdateDTO.getIdade() == null || cidadaoUpdateDTO.getIdade() <= 0) || (cidadaoUpdateDTO.getCpf() == null || cidadaoUpdateDTO.getCpf().equals("")) || (cidadaoUpdateDTO.getEndereco() == null || cidadaoUpdateDTO.getEndereco().equals("")) || (cidadaoUpdateDTO.getNome() == null || cidadaoUpdateDTO.getNome().equals("")) || cidadaoUpdateDTO.getDataNascimento() == null || (cidadaoUpdateDTO.getProfissao() == null || cidadaoUpdateDTO.getProfissao().equals("")) || (cidadaoUpdateDTO.getTelefone() == null || cidadaoUpdateDTO.getTelefone().equals(""))) {
+    private void validaCidadaoUpdateDTO(CidadaoUpdateDTO cidadaoUpdateDTO) {
+        if((cidadaoUpdateDTO.getCpf() == null || cidadaoUpdateDTO.getCpf().equals("")) || (cidadaoUpdateDTO.getEndereco() == null || cidadaoUpdateDTO.getEndereco().equals("")) || (cidadaoUpdateDTO.getNome() == null || cidadaoUpdateDTO.getNome().equals("")) || cidadaoUpdateDTO.getDataNascimento() == null || (cidadaoUpdateDTO.getProfissao() == null || cidadaoUpdateDTO.getProfissao().equals("")) || (cidadaoUpdateDTO.getTelefone() == null || cidadaoUpdateDTO.getTelefone().equals(""))) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
     }
