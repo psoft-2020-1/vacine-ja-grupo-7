@@ -107,10 +107,12 @@ public class CidadaoServiceImpl implements  CidadaoService {
 			registro.setDataAgendamento(data);
 		}
 
-		List<RegistroVacinacao> registrosComMesmaData = registroRepository.findRegistroVacinacaosByDataAgendamento_Date(agendamentoDTO.getData().toLocalDate());
-		for(RegistroVacinacao registroVacinacao : registrosComMesmaData) {
-		    if(registroVacinacao.getDataAgendamento().getHour() == agendamentoDTO.getData().getHour()){
-		        throw new RegistroInvalidoException("Agendamento Inválido, não pode haver agendamento com mesmo horário.");
+		List<RegistroVacinacao> registros = registroRepository.findAll();
+		for(RegistroVacinacao registroVacinacao : registros) {
+		    if(registroVacinacao.getDataAgendamento().toLocalDate().equals(agendamentoDTO.getData().toLocalDate())){
+                if(registroVacinacao.getDataAgendamento().getHour() == agendamentoDTO.getData().getHour()){
+                    throw new RegistroInvalidoException("Agendamento Inválido, não pode haver agendamento com mesmo horário.");
+                }
             }
         }
 		this.registroRepository.save(registro);

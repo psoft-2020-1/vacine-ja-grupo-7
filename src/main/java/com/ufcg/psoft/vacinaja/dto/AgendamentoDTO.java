@@ -1,6 +1,5 @@
 package com.ufcg.psoft.vacinaja.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AgendamentoDTO {
