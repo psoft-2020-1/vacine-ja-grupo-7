@@ -5,9 +5,11 @@ import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.VacinaInvalidaException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
+import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.model.Vacina;
 import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
 import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
+import com.ufcg.psoft.vacinaja.repository.UsuarioRepository;
 import com.ufcg.psoft.vacinaja.repository.VacinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class RegistroServiceImpl implements RegistroService {
     @Autowired
     private RegistroRepository registroRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @Override
     public RegistroVacinacao vacinar(String cpfCidadao, Long vacinaId) {
         Optional<Cidadao> cidadaoOptional = cidadaoRepository.findCidadaoByCpf(cpfCidadao);
@@ -41,7 +46,11 @@ public class RegistroServiceImpl implements RegistroService {
             throw new RegistroInvalidoException("ErroVacinaCidadao: Número de cartão do SUS presente no cidadão é inválido.");
         }
 
-        RegistroVacinacao registroRetorno = registroOptional.get().vacinar(vacinaOptional.get());
+        Optional<Usuario> usuario = usuarioRepository.getUsuarioByCadastroCidadao(cidadaoOptional.get());
+
+        String email = usuario.get().getEmail();
+
+        RegistroVacinacao registroRetorno = registroOptional.get().vacinar(vacinaOptional.get(), email);
         return registroRepository.save(registroRetorno);
     }
 }

@@ -4,21 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
-
 import com.ufcg.psoft.vacinaja.comparators.ComparatorCidadao;
 import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
-import com.ufcg.psoft.vacinaja.model.Cidadao;
-import com.ufcg.psoft.vacinaja.model.Lote;
-import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
-import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
-import com.ufcg.psoft.vacinaja.repository.LoteRepository;
-import com.ufcg.psoft.vacinaja.repository.PerfilVacinacaoRepository;
+import com.ufcg.psoft.vacinaja.model.*;
+import com.ufcg.psoft.vacinaja.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
-import com.ufcg.psoft.vacinaja.model.Funcionario;
-import com.ufcg.psoft.vacinaja.repository.FuncionarioRepository;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
 
@@ -35,9 +27,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private LoteRepository loteRepository;
 
 	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@Autowired
 	private PerfilVacinacaoRepository perfilVacinacaoRepository;
 
-	
+	@Autowired
+	private VacinaRepository vacinaRepository;
+
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
 	@Override
@@ -74,9 +71,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
 		List<Cidadao> cidadaosHabilitados = new ArrayList<>();
 
+		Usuario usuario;
 		for(int i = 0; i < qtdVacinasDisponiveis; i++) {
 			Cidadao cidadao = filaPrioridadeHabilitados.remove();
-			cidadao.getRegistroVacinacao().atualizarEstadoVacinacao();
+			usuario = usuarioRepository.getUsuarioByCadastroCidadao(cidadao).get();
+			cidadao.getRegistroVacinacao().atualizarEstadoVacinacao(usuario.getEmail());
 			cidadaosHabilitados.add(cidadao);
 		}
 		return cidadaosHabilitados;
@@ -85,6 +84,27 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	@Override
 	public List<PerfilVacinacao> listarPerfilVacinacao() {
 		return perfilVacinacaoRepository.findAll();
+	}
+
+
+	@Override
+	public String listarVacinas() {
+		List<Lote> lotes = this.loteRepository.findAll();
+		List<Vacina> vacinas = this.vacinaRepository.findAll();
+		for(Lote lote : lotes) {
+			if(vacinas.contains(lote.getVacina())) {
+				vacinas.remove(lote.getVacina());
+			}
+		}
+		String retorno = "";
+		for(Lote lote : lotes) {
+			retorno += lote.toString();
+		}
+		retorno += "Vacinas sem lote: ";
+		for(Vacina vacina : vacinas) {
+			retorno += vacina;
+		}
+		return retorno;
 	}
 
 	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {
@@ -104,6 +124,4 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
 	}
-
-
 }

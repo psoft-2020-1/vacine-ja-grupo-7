@@ -11,6 +11,7 @@ import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
 public interface FuncionarioService {
 
 	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO);
+	public String listarVacinas();
 
 	public List<Cidadao> habilitarPerfilVacinacao(PerfilGovernoEnum perfilGovernoEnum);
 

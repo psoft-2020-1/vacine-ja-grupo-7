@@ -1,6 +1,7 @@
 package com.ufcg.psoft.vacinaja.states;
 
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
+import com.ufcg.psoft.vacinaja.utils.EmailUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,12 @@ import javax.persistence.Id;
 
 @Entity
 public class NaoHabilitadoState extends VacinacaoState {
+
+    private static final String TITULO_EMAIL =
+            "Você foi selecionado para ser vacinado! Agende a sua vacinação.";
+    private static final String CORPO_EMAIL =
+            "Olá! Sua primeira dose já está disponível para agendamento, por favor," +
+                    "realize seu agendamento e esteje imunizado.";
 
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
@@ -19,8 +26,15 @@ public class NaoHabilitadoState extends VacinacaoState {
     }
 
     @Override
-    public void atualizarEstado(RegistroVacinacao registroVacinacao) {
+    public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         registroVacinacao.setEstadoVacinacao(new HabilitadoPrimeiraDoseState());
+        notificar(email);
+    }
+
+    @Override
+    public void notificar(String email) {
+        EmailUtils.enviarMensagem(email, TITULO_EMAIL, CORPO_EMAIL);
+        System.out.println("Mensagem de SMS enviada!");
     }
 
     public Long getId() {

@@ -1,17 +1,29 @@
 package com.ufcg.psoft.vacinaja.service;
 
+import com.ufcg.psoft.vacinaja.dto.AgendamentoDTO;
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
-import com.ufcg.psoft.vacinaja.model.*;
 import com.ufcg.psoft.vacinaja.repository.*;
-import com.ufcg.psoft.vacinaja.utils.RegistroVacinacaoComparator;
+import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
+import com.ufcg.psoft.vacinaja.model.Cidadao;
+import com.ufcg.psoft.vacinaja.model.Comorbidade;
+import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
+import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
+import com.ufcg.psoft.vacinaja.repository.ComorbidadeRepository;
+import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
+import com.ufcg.psoft.vacinaja.states.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CidadaoServiceImpl implements  CidadaoService {
@@ -24,12 +36,6 @@ public class CidadaoServiceImpl implements  CidadaoService {
 
     @Autowired
     private RegistroRepository registroRepository;
-
-    @Autowired
-    private LoteRepository loteRepository;
-
-    @Autowired
-    private PerfilVacinacaoRepository perfilVacinacaoRepository;
 
     private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 
@@ -74,7 +80,36 @@ public class CidadaoServiceImpl implements  CidadaoService {
         return cidadaoRepository.save(cidadaoAtualizado);
     }
 
+    @Override
+	public LocalDateTime agendarVacinacao(AgendamentoDTO agendamentoDTO) {
+        //TODO Realizar agendamento com dia e horario e verificar choque de horarios
+    	this.validarAgendamentoDTO(agendamentoDTO);
+    	LocalDateTime data = agendamentoDTO.getData();
+    	String cartaoSUS = agendamentoDTO.getCartaoSUS();
+		Optional<RegistroVacinacao> optionalRegistro = this.registroRepository.findById(cartaoSUS);
+		if(!optionalRegistro.isPresent()) {
+			throw new RegistroInvalidoException("Registro de vacinação inexistente.");
+		}
+		RegistroVacinacao registro = this.registroRepository.getOne(cartaoSUS);
+		if(registro.getEstadoVacinacao().getClass().equals(new VacinacaoFinalizadaState().getClass())) {
+			throw new RegistroInvalidoException("Vacinação já finalizada para esse cidadão.");
+		}
+		if(registro.getEstadoVacinacao().getClass().equals(new NaoHabilitadoState().getClass())) {
+			throw new RegistroInvalidoException("Vacinação não habilitada para esse cidadão.");
+		}
+		if(registro.getEstadoVacinacao().getClass().equals(new EsperandoSegundaDoseState().getClass())) {
+			throw new RegistroInvalidoException("Cidadão ainda não habilitado para tomar segunda dose.");
+		}
+		if(data.isBefore(LocalDateTime.now())) {
+			throw new RegistroInvalidoException("Data de agendamento inválida.");
+		}
+		if(registro.getEstadoVacinacao() instanceof HabilitadoPrimeiraDoseState || registro.getEstadoVacinacao() instanceof HabilitadoSegundaDoseState) {
+			registro.setDataAgendamento(data);
+		}
 
+		this.registroRepository.save(registro);
+		return data;
+	}
 
     @Override
     public List<Cidadao> listarCidadao() {
@@ -143,4 +178,11 @@ public class CidadaoServiceImpl implements  CidadaoService {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Todos os campos devem ser preenchidos.");
         }
     }
+
+    private void validarAgendamentoDTO(AgendamentoDTO agendamentoDTO) {
+    	if(agendamentoDTO.getCartaoSUS() == null || agendamentoDTO.getCartaoSUS().equals("") || agendamentoDTO.getData() == null) {
+    		throw new RegistroInvalidoException("Todos os campos do agendamento devem ser preenchidos.");
+    	}
+    }
+
 }
