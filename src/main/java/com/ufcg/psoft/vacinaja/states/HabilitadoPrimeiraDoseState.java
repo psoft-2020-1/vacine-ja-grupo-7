@@ -2,7 +2,6 @@ package com.ufcg.psoft.vacinaja.states;
 
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
-import com.ufcg.psoft.vacinaja.utils.EmailUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -6,7 +6,6 @@ import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
-import com.ufcg.psoft.vacinaja.repository.*;
 import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.Comorbidade;
@@ -19,7 +18,6 @@ import com.ufcg.psoft.vacinaja.states.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

@@ -8,7 +8,6 @@ import com.ufcg.psoft.vacinaja.model.Cidadao;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public interface CidadaoService {

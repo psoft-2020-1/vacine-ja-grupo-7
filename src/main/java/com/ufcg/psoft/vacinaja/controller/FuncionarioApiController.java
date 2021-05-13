@@ -1,6 +1,5 @@
 package com.ufcg.psoft.vacinaja.controller;
 
-import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoDTO;
 import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
 import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
