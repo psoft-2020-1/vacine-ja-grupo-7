@@ -1,10 +1,7 @@
 package com.ufcg.psoft.vacinaja.controller;
 
 
-import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
-import com.ufcg.psoft.vacinaja.dto.ComorbidadeDTO;
-import com.ufcg.psoft.vacinaja.dto.CpfDTO;
-import com.ufcg.psoft.vacinaja.dto.IdDTO;
+import com.ufcg.psoft.vacinaja.dto.*;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ComorbidadeInvalidaException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
@@ -15,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -46,16 +44,16 @@ public class CidadaoApiController {
     }
 
     /**
-     * API para atualziar um cidadão no sistema.
+     * API para atualizar um cidadão no sistema.
      *
-     * @param cidadaoDTO Data Transfer Object do cidadao para a atualização.
-     * @return cidadao atualizada.
+     * @param cidadaoUpdateDTO Data Transfer Object do cidadao para a atualização.
+     * @return cidadão atualizada.
      */
     @RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoDTO cidadaoDTO) {
+    public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoUpdateDTO cidadaoUpdateDTO) {
         ResponseEntity response;
         try {
-            Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoDTO);
+            Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoUpdateDTO);
             response =  new ResponseEntity<>(cidadaoAtualizado, HttpStatus.OK);
         }catch (CidadaoInvalidoException cie){
             response = new ResponseEntity(cie.getMessage(), HttpStatus.BAD_REQUEST);
@@ -65,19 +63,30 @@ public class CidadaoApiController {
         return response;
     }
 
-    @RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.GET)
-    public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO) {
+
+    /**
+     * API para listar os cidadões no sistema.
+     *
+     * @return cidadões cadastrados.
+     */
+    @RequestMapping(value = "/cidadao/listar-cidadaos/", method = RequestMethod.GET)
+    public ResponseEntity<?> listarCidadao() {
         ResponseEntity response;
         try {
-            Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO);
-            response =  new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
+            List<Cidadao> cidadaoList = cidadaoService.listarCidadao();
+            response =  new ResponseEntity<List<Cidadao>>(cidadaoList, HttpStatus.OK);
         }catch (Exception e){
             response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
 
-    @RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.DELETE)
+    /**
+     * API para deletar um cidadão no sistema.
+     *
+     * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do cidadão.
+     */
+    @RequestMapping(value = "/cidadao/listar-cidadao/", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO) {
         ResponseEntity response;
         try {

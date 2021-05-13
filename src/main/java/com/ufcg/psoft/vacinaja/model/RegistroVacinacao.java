@@ -1,8 +1,5 @@
 package com.ufcg.psoft.vacinaja.model;
 
-import com.ufcg.psoft.vacinaja.exceptions.VacinaInvalidaException;
-import com.ufcg.psoft.vacinaja.states.HabilitadoPrimeiraDoseState;
-import com.ufcg.psoft.vacinaja.states.HabilitadoSegundaDoseState;
 import com.ufcg.psoft.vacinaja.states.NaoHabilitadoState;
 import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 
@@ -15,14 +12,13 @@ public class RegistroVacinacao {
     @Id
     private String numeroCartaoSus;
 
-    @OneToOne
-    private Cidadao cidadao;
-
     @ManyToOne(cascade= CascadeType.ALL)
     private VacinacaoState estadoVacinacao;
 
+    @Column
     private LocalDate dataVacinacaoPrimeiraDose;
 
+    @Column
     private LocalDate dataVacinacaoSegundaDose;
 
     @ManyToOne
@@ -30,9 +26,8 @@ public class RegistroVacinacao {
 
     public RegistroVacinacao() { }
 
-    public RegistroVacinacao(Cidadao cidadao) {
-        this.numeroCartaoSus = cidadao.getNumeroCartaoSus();
-        this.cidadao = cidadao;
+    public RegistroVacinacao(String numeroCartaoSus) {
+        this.numeroCartaoSus = numeroCartaoSus;
         this.estadoVacinacao = new NaoHabilitadoState();
     }
 
@@ -51,14 +46,6 @@ public class RegistroVacinacao {
 
     public void setNumeroCartaoSus(String numeroCartaoSus) {
         this.numeroCartaoSus = numeroCartaoSus;
-    }
-
-    public Cidadao getCidadao() {
-        return cidadao;
-    }
-
-    public void setCidadao(Cidadao cidadao) {
-        this.cidadao = cidadao;
     }
 
     public VacinacaoState getEstadoVacinacao() {

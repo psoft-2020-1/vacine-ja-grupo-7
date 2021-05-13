@@ -6,26 +6,24 @@ import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
 import java.time.LocalDate;
 import java.util.List;
 
-public class CidadaoDTO {
+public class CidadaoUpdateDTO {
 
     private String nome;
     private String endereco;
     private String cpf;
-    private String numeroCartaoSus;
     private LocalDate dataNascimento;
     private String telefone;
     private ProfissaoEnum profissao;
     private List<ComorbidadeEnum> comorbidadesEnums;
 
-    public CidadaoDTO (){
+    public CidadaoUpdateDTO (){
 
     }
 
-    public CidadaoDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums){
+    public CidadaoUpdateDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums){
         this.nome = nome;
         this.endereco = endereco;
         this.cpf = cpf;
-        this.numeroCartaoSus = numeroCartaoSus;
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
         this.telefone = telefone;
@@ -54,14 +52,6 @@ public class CidadaoDTO {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public String getNumeroCartaoSus() {
-        return numeroCartaoSus;
-    }
-
-    public void setNumeroCartaoSus(String numeroCartaoSus) {
-        this.numeroCartaoSus = numeroCartaoSus;
     }
 
     public LocalDate getDataNascimento() {
