@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
+import com.ufcg.psoft.vacinaja.states.NaoHabilitadoState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		List<Cidadao> cidadaosCadastrados = cidadaoRepository.findAll();
 		PriorityQueue<Cidadao> filaPrioridadeHabilitados = new PriorityQueue<>(new ComparatorCidadao(perfilGovernoEnum));
 		for(Cidadao cidadao : cidadaosCadastrados) {
-			if(cidadao.getRegistroVacinacao().getDataVacinacaoPrimeiraDose() == null){
+			if(cidadao.getRegistroVacinacao().getDataVacinacaoPrimeiraDose() == null && cidadao.getRegistroVacinacao().getEstadoVacinacao() instanceof NaoHabilitadoState){
 				filaPrioridadeHabilitados.add(cidadao);
 			}
 		}
