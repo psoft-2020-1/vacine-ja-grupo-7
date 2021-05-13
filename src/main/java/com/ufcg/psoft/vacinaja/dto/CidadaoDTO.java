@@ -1,61 +1,108 @@
 package com.ufcg.psoft.vacinaja.dto;
 
-import java.util.Date;
+import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
+import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class CidadaoDTO {
 
-	private String nome;
-	private String endereco;
-	private String cpf;
-	private String numeroCartaoSus;
-	private Date dataNascimento;
-	private String telefone;
-	private String profissao;
-	private List<Long> comorbidades;
+    private String nome;
+    private String endereco;
+    private String cpf;
+    private String numeroCartaoSus;
+    private LocalDate dataNascimento;
+    private String telefone;
+    private ProfissaoEnum profissao;
+    private List<ComorbidadeEnum> comorbidadesEnums;
+    private Long idade;
 
-	public CidadaoDTO(String nome, String endereco, String cpf, String numeroCartaoSus,
-			Date dataNascimento, String telefone, String profissao, List<Long> comorbidades) {
-		this.nome = nome;
-		this.endereco = endereco;
-		this.cpf = cpf;
-		this.numeroCartaoSus = numeroCartaoSus;
-		this.dataNascimento = dataNascimento;
-		this.telefone = telefone;
-		this.telefone = telefone;
-		this.profissao = profissao;
-		this.comorbidades = comorbidades;
-	}
-	
-	public String getNome() {
-		return nome;
-	}
+    public CidadaoDTO (){
 
-	public String getEndereco() {
-		return endereco;
-	}
+    }
 
-	public String getCpf() {
-		return cpf;
-	}
+    public CidadaoDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums, Long idade){
+        this.nome = nome;
+        this.endereco = endereco;
+        this.cpf = cpf;
+        this.numeroCartaoSus = numeroCartaoSus;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.telefone = telefone;
+        this.profissao = profissao;
+        this.idade = idade;
+    }
 
-	public String getNumeroCartaoSus() {
-		return numeroCartaoSus;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public Date getDataNascimento() {
-		return dataNascimento;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getTelefone() {
-		return telefone;
-	}
+    public String getEndereco() {
+        return endereco;
+    }
 
-	public String getProfissao() {
-		return profissao;
-	}
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 
-	public List<Long> getComorbidades() {
-		return comorbidades;
-	}
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getNumeroCartaoSus() {
+        return numeroCartaoSus;
+    }
+
+    public void setNumeroCartaoSus(String numeroCartaoSus) {
+        this.numeroCartaoSus = numeroCartaoSus;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public ProfissaoEnum getProfissao() {
+        return profissao;
+    }
+
+    public void setProfissao(ProfissaoEnum profissao) {
+        this.profissao = profissao;
+    }
+
+    public List<ComorbidadeEnum> getComorbidadesEnums() {
+        return comorbidadesEnums;
+    }
+
+    public void setComorbidadesEnums(List<ComorbidadeEnum> comorbidadesEnums) {
+        this.comorbidadesEnums = comorbidadesEnums;
+    }
+
+    public Long getIdade() {
+        return idade;
+    }
+
+    public void setIdade(Long idade) {
+        this.idade = idade;
+    }
 }

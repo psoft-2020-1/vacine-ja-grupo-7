@@ -4,7 +4,7 @@ package com.ufcg.psoft.vacinaja.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ufcg.psoft.vacinaja.enuns.PermissaoLogin;
+import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.AdministradorInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
 import com.ufcg.psoft.vacinaja.model.Usuario;

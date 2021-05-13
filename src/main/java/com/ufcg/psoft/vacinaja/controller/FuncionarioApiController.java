@@ -1,9 +1,10 @@
 package com.ufcg.psoft.vacinaja.controller;
 
-import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoDTO;
+import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
 import com.ufcg.psoft.vacinaja.exceptions.PerfilVacinacaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
+import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.PerfilVacinacao;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 
@@ -102,7 +103,7 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/listar-funcionario", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/funcionario/deletar-funcionario", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletarFuncionario(@RequestBody CpfDTO cpfDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
@@ -117,13 +118,13 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/definir-perfil-vacinacao", method = RequestMethod.POST)
-	public ResponseEntity<?> definirPerfilVacinacao(@RequestBody PerfilVacinacaoDTO perfilVacinacaoDTO) {
+	@RequestMapping(value = "/funcionario/habilitar-perfil-vacinacao", method = RequestMethod.POST)
+	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody PerfilGovernoEnum perfilGovernoEnum){
 		ResponseEntity<?> response;
 		try {
-			PerfilVacinacao perfilVacinacaoCadastrado = funcionarioService.definirPerfilVacinacao(perfilVacinacaoDTO);
-			response = new ResponseEntity<PerfilVacinacao>(perfilVacinacaoCadastrado, HttpStatus.CREATED);
-		} catch (PerfilVacinacaoInvalidoException pvie) {
+			List<Cidadao> pessoasHabilitadas = funcionarioService.habilitarPerfilVacinacao(perfilGovernoEnum);
+			response = new ResponseEntity<List<Cidadao>>(pessoasHabilitadas, HttpStatus.CREATED);
+		} catch (PerfilVacinacaoInvalidoException pvie){
 			response = new ResponseEntity<>(pvie.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -137,6 +138,23 @@ public class FuncionarioApiController {
 		try {
 			List<PerfilVacinacao> perfilVacinacaoCadastrado = funcionarioService.listarPerfilVacinacao();
 			response = new ResponseEntity<List<PerfilVacinacao>>(perfilVacinacaoCadastrado, HttpStatus.OK);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
+	
+	/**
+	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes associados.
+	 * 
+	 * @return retorna o toString de todos os lotes e paras as vacinas sem lote, somente o toString da vacina.
+	 */
+	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
+	public ResponseEntity<?> listarVacinas() {
+		ResponseEntity<?> response;
+		try {
+			String vacinas = funcionarioService.listarVacinas();
+			response = new ResponseEntity<String>(vacinas, HttpStatus.OK);
 		} catch (Exception e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

@@ -1,4 +1,4 @@
-package com.ufcg.psoft.vacinaja.enuns;
+package com.ufcg.psoft.vacinaja.enums;
 
 public enum PermissaoLogin {
 	

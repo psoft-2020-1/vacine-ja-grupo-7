@@ -5,8 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ufcg.psoft.vacinaja.enuns.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
+import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.security.TokenFilter;

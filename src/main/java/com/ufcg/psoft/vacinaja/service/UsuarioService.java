@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ufcg.psoft.vacinaja.enuns.PermissaoLogin;
+import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
 import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;

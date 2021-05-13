@@ -30,22 +30,6 @@ public class RegistroApiController {
         } catch (Exception e) {
             response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return response;
-    }
-
-    @RequestMapping(value = "/registro-vacinacao/{cpfCidadao}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletarRegistro(@PathVariable("cpfCidadao") String cpfCidadao) {
-        ResponseEntity<?> response;
-        try {
-            registroService.deletarRegistro(cpfCidadao);
-            response = new ResponseEntity<>(HttpStatus.OK);
-        } catch (CidadaoInvalidoException | VacinaInvalidaException | RegistroInvalidoException e) {
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         return response;
     }
 }

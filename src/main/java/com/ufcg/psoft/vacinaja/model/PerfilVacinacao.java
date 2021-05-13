@@ -16,7 +16,6 @@ public class PerfilVacinacao {
     private Comorbidade comorbidade;
     private String profissao;
 
-
     public PerfilVacinacao(){
 
     }

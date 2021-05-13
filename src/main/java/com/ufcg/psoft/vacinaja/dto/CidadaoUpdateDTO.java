@@ -1,48 +1,38 @@
 package com.ufcg.psoft.vacinaja.dto;
 
+import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
+import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
-import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
-import com.ufcg.psoft.vacinaja.model.Usuario;
+public class CidadaoUpdateDTO {
 
-public class CadastroCidadaoDTO {
-	private String emailUsuario;
-	private String senhaUsuario;
-	private String nome;
+    private String nome;
     private String endereco;
     private String cpf;
-    private String numeroCartaoSus;
     private LocalDate dataNascimento;
     private String telefone;
     private ProfissaoEnum profissao;
     private List<ComorbidadeEnum> comorbidadesEnums;
     private Long idade;
 
-	public CadastroCidadaoDTO(String emailUsuario, String senhaUsuario, String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums, Long idade) {
-		this.emailUsuario = emailUsuario;
-		this.senhaUsuario = senhaUsuario;
-		 this.nome = nome;
-	        this.endereco = endereco;
-	        this.cpf = cpf;
-	        this.numeroCartaoSus = numeroCartaoSus;
-	        this.dataNascimento = dataNascimento;
-	        this.telefone = telefone;
-	        this.telefone = telefone;
-	        this.profissao = profissao;
-	        this.idade = idade;
-	}
+    public CidadaoUpdateDTO (){
 
-	public String getEmailUsuario() {
-		return emailUsuario;
-	}
-	
-	public String getSenhaUsuario() {
-		return senhaUsuario;
-	}
-	
-	public String getNome() {
+    }
+
+    public CidadaoUpdateDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums, Long idade){
+        this.nome = nome;
+        this.endereco = endereco;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+        this.telefone = telefone;
+        this.profissao = profissao;
+        this.idade = idade;
+    }
+
+    public String getNome() {
         return nome;
     }
 
@@ -64,14 +54,6 @@ public class CadastroCidadaoDTO {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public String getNumeroCartaoSus() {
-        return numeroCartaoSus;
-    }
-
-    public void setNumeroCartaoSus(String numeroCartaoSus) {
-        this.numeroCartaoSus = numeroCartaoSus;
     }
 
     public LocalDate getDataNascimento() {
@@ -113,12 +95,4 @@ public class CadastroCidadaoDTO {
     public void setIdade(Long idade) {
         this.idade = idade;
     }
-	
-	public CidadaoDTO getCidadaoDTO() {
-		return new CidadaoDTO(nome, endereco, cpf, numeroCartaoSus, dataNascimento, telefone, profissao, comorbidadesEnums, idade);
-	}
-	
-	public Usuario getUsuario() {
-		return new Usuario(emailUsuario, senhaUsuario, false, true, false);
-	}
 }

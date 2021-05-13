@@ -22,7 +22,7 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     }
 
     @Override
-    public void atualizarEstado(RegistroVacinacao registroVacinacao) {
+    public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         if(registroVacinacao.getDataVacinacaoSegundaDose() != null) {
             registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
         }
@@ -36,7 +36,6 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
         }
         registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
         // TODO: DECREMENTAR NÚMERO DE VACINAS NO LOTE.
-        atualizarEstado(registroVacinacao);
     }
 
     public Long getId() {
