@@ -93,6 +93,10 @@ public class Usuario {
 		this.permissaoAdministrador = true;
 	}
 	
+	public boolean isFuncionario() {
+		return cadastroFuncionario != null;
+	}
+	
 	public void adicionaCadastroCidadao(Cidadao cidadao) {
 		this.cadastroCidadao = cidadao;
 		
@@ -137,5 +141,9 @@ public class Usuario {
 	
 	private boolean possuiCadastroDeFuncionario() {
 		return cadastroFuncionario != null;
+	}
+
+	public Funcionario getCadastroFuncionario() {
+		return cadastroFuncionario;
 	}
 }

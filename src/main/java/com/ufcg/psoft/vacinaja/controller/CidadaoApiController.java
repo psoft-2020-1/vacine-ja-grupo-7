@@ -40,7 +40,7 @@ public class CidadaoApiController {
 			Cidadao cidadaoCadastrado = cidadaoService.cadastrarCidadao(cadastroCidadaoDTO.getCidadaoDTO());
 			Usuario usuario = cadastroCidadaoDTO.getUsuario();
 			usuario.adicionaCadastroCidadao(cidadaoCadastrado);
-			Usuario usuarioCadastrado = usuarioService.cadastrarUsuario(usuario);
+			Usuario usuarioCadastrado = usuarioService.salvarUsuario(usuario);
 			response = new ResponseEntity<Usuario>(usuarioCadastrado, HttpStatus.CREATED);
 		} catch (CidadaoInvalidoException cie) {
 			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
@@ -63,7 +63,7 @@ public class CidadaoApiController {
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
-			usuarioService.verificaPermissaoCidadao(cidadaoDTO.getCpf(), header);
+			usuarioService.verificaUsuarioPermissaoCidadao(cidadaoDTO.getCpf(), header);
 			Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoDTO);
 			response = new ResponseEntity<>(cidadaoAtualizado, HttpStatus.OK);
 		} catch (CidadaoInvalidoException cie) {
@@ -80,6 +80,7 @@ public class CidadaoApiController {
 	public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
+			usuarioService.verificaUsuarioPermissaoCidadao(cpfDTO.getCpf(), header);
 			Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO, header);
 			response = new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
 		} catch (UsuarioInvalidoException e) {

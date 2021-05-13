@@ -2,7 +2,6 @@ package com.ufcg.psoft.vacinaja.service;
 
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
-import com.ufcg.psoft.vacinaja.dto.IdDTO;
 import com.ufcg.psoft.vacinaja.enuns.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
@@ -84,16 +83,11 @@ public class CidadaoServiceImpl implements CidadaoService {
 
 	@Override
 	public Cidadao listarCidadao(CpfDTO cpfDTO, String token) {
-		if (jwtService.verificaPermissao(token, PermissaoLogin.FUNCIONARIO)
-				|| jwtService.verificaPermissao(token, PermissaoLogin.ADMINISTRADOR)) {
-			Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cpfDTO.getCpf());
-			if (!optionalCidadao.isPresent()) {
-				throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
-			}
-			return optionalCidadao.get();
+		Optional<Cidadao> optionalCidadao = cidadaoRepository.findCidadaoByCpf(cpfDTO.getCpf());
+		if (!optionalCidadao.isPresent()) {
+			throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
 		}
-		throw new UsuarioInvalidoException(
-				"ErroListarCidadao: Usuario logado não tempermissão para realizar a operação.");
+		return optionalCidadao.get();
 	}
 
 	@Override
