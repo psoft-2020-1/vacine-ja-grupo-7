@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ufcg.psoft.vacinaja.exceptions.LoginException;
 import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
 import com.ufcg.psoft.vacinaja.model.Usuario;
@@ -23,10 +24,7 @@ public class JWTService {
 	private final String TOKEN_KEY = "chave secreta";
 
 	public String autenticar(Usuario usuario) {
-		if (!usuarioService.validarUsuarioSenhaPermissao(usuario)) {
-			throw new IllegalArgumentException("Usuario, senha ou permissao solicitada invalidos.");
-		}
-
+		usuarioService.validarUsuarioSenhaPermissao(usuario);
 		return geraToken(usuario);
 	}
 
@@ -39,7 +37,7 @@ public class JWTService {
 		else if (usuario.isPermissaoAdministrador())
 			permissao = PermissaoLogin.ADMINISTRADOR;
 		else
-			throw new IllegalArgumentException("Nenhuma permissão de usuario encontrada");
+			throw new LoginException("ErroLogin: Nenhuma permissão de usuario selecionada");
 
 		return Jwts.builder().setSubject(usuario.getEmail()).claim("permissao", permissao.getValue())
 				.signWith(SignatureAlgorithm.HS512, TOKEN_KEY)

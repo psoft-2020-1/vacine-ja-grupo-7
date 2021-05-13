@@ -4,7 +4,6 @@ import com.ufcg.psoft.vacinaja.model.Usuario;
 
 public interface AdministradorService {
 	
-	public Usuario cadastrarAdministrador(String loginAdmin);
-	public Usuario aprovaFuncionario(String login);
+	public Usuario aprovaFuncionario(String emailFuncionario, String token);
 
 }

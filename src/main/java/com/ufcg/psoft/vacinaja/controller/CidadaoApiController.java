@@ -1,13 +1,19 @@
 package com.ufcg.psoft.vacinaja.controller;
 
+import com.ufcg.psoft.vacinaja.dto.CadastroCidadaoDTO;
+import com.ufcg.psoft.vacinaja.dto.CpfDTO;
+import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
+import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
+import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
+import com.ufcg.psoft.vacinaja.model.Cidadao;
+import com.ufcg.psoft.vacinaja.model.Usuario;
 
 import com.ufcg.psoft.vacinaja.dto.*;
 import com.ufcg.psoft.vacinaja.dto.AgendamentoDTO;
-import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
-import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
-import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.service.CidadaoService;
+import com.ufcg.psoft.vacinaja.service.UsuarioService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,28 +28,37 @@ import java.util.List;
 @CrossOrigin
 public class CidadaoApiController {
 
-    @Autowired
-    private CidadaoService cidadaoService;
+	@Autowired
+	private CidadaoService cidadaoService;
 
-    /**
-     * API para cadastrar um cidadão no sistema.
-     *
-     * @param cidadaoDTO Data Transfer Object do cidadao para o cadastro.
-     * @return cidadao cadastrado.
-     */
-    @RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
-    public ResponseEntity<?> cadastrarCidadao(@RequestBody CidadaoDTO cidadaoDTO) {
-        ResponseEntity response;
-        try {
-            Cidadao cidadaoCadastrado = cidadaoService.cadastrarCidadao(cidadaoDTO);
-            response = new ResponseEntity<>(cidadaoCadastrado, HttpStatus.CREATED);
-        }catch (CidadaoInvalidoException cie){
-            response = new ResponseEntity(cie.getMessage(), HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return response;
-    }
+	@Autowired
+	private UsuarioService usuarioService;
+
+	/**
+	 * API para cadastrar um cidadão no sistema.
+	 *
+	 * @param cidadaoDTO Data Transfer Object do cidadao para o cadastro.
+	 * @return cidadao cadastrado.
+	 */
+	@RequestMapping(value = "/cadastrarCidadao/", method = RequestMethod.POST)
+	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
+		ResponseEntity<?> response;
+		try {
+			usuarioService.verificaDisponibilidadeEmail(cadastroCidadaoDTO.getEmailUsuario());
+			Cidadao cidadaoCadastrado = cidadaoService.cadastrarCidadao(cadastroCidadaoDTO.getCidadaoDTO());
+			Usuario usuario = cadastroCidadaoDTO.getUsuario();
+			usuario.adicionaCadastroCidadao(cidadaoCadastrado);
+			Usuario usuarioCadastrado = usuarioService.salvarUsuario(usuario);
+			response = new ResponseEntity<Usuario>(usuarioCadastrado, HttpStatus.CREATED);
+		} catch (CidadaoInvalidoException cie) {
+			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (UsuarioInvalidoException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 
     /**
      * API para atualizar um cidadão no sistema.
@@ -52,15 +67,19 @@ public class CidadaoApiController {
      * @return cidadão atualizada.
      */
     @RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
-    public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoUpdateDTO cidadaoUpdateDTO) {
-        ResponseEntity response;
+    public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoUpdateDTO cidadaoUpdateDTO,
+    		@RequestHeader("Authorization") String header) {
+        ResponseEntity<?> response;
         try {
+        	usuarioService.verificaUsuarioPermissaoCidadao(cidadaoUpdateDTO.getCpf(), header);
             Cidadao cidadaoAtualizado = cidadaoService.atualizarCidadao(cidadaoUpdateDTO);
             response =  new ResponseEntity<>(cidadaoAtualizado, HttpStatus.OK);
-        }catch (CidadaoInvalidoException cie){
-            response = new ResponseEntity(cie.getMessage(), HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (CidadaoInvalidoException cie){
+            response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UsuarioInvalidoException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
@@ -72,16 +91,38 @@ public class CidadaoApiController {
      * @return cidadões cadastrados.
      */
     @RequestMapping(value = "/cidadao/listar/", method = RequestMethod.GET)
-    public ResponseEntity<?> listarCidadao() {
-        ResponseEntity response;
+    public ResponseEntity<?> listarCidadaos(@RequestHeader("Authorization") String header) {
+        ResponseEntity<?> response;
         try {
-            List<Cidadao> cidadaoList = cidadaoService.listarCidadao();
+            List<Cidadao> cidadaoList = cidadaoService.listarCidadaos(header);
             response =  new ResponseEntity<List<Cidadao>>(cidadaoList, HttpStatus.OK);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ValidacaoTokenException e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (Exception e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
+    
+    /**
+     * API para listar cidadão pelo cpf no sistema.
+     *
+     * @return cidadão solicitado.
+     */
+    @RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.GET)
+	public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+		ResponseEntity<?> response;
+		try {
+			usuarioService.verificaUsuarioPermissaoCidadao(cpfDTO.getCpf(), header);
+			Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO);
+			response = new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
+		} catch (UsuarioInvalidoException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 
     /**
      * API para deletar um cidadão no sistema.
@@ -89,13 +130,15 @@ public class CidadaoApiController {
      * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do cidadão.
      */
     @RequestMapping(value = "/cidadao/deletar/", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO) {
-        ResponseEntity response;
+    public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+        ResponseEntity<?> response;
         try {
-            cidadaoService.deletarCidadao(cpfDTO);
+            cidadaoService.deletarCidadao(cpfDTO, header);
             response = new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ValidacaoTokenException e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
@@ -109,14 +152,14 @@ public class CidadaoApiController {
      */
     @RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
     public ResponseEntity<?> agendarVacinacao(@RequestBody AgendamentoDTO agendamentoDTO) {
-    	ResponseEntity response;
+    	ResponseEntity<?> response;
     	try {
     		LocalDateTime dataAgendada = this.cidadaoService.agendarVacinacao(agendamentoDTO);
     		response = new ResponseEntity<LocalDateTime>(dataAgendada, HttpStatus.OK);
     	}catch (RegistroInvalidoException rie) {
-    		response = new ResponseEntity(rie.getMessage(), HttpStatus.BAD_REQUEST);
+    		response = new ResponseEntity<>(rie.getMessage(), HttpStatus.BAD_REQUEST);
     	}catch (Exception e){
-            response = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     	return response;
     }

@@ -18,9 +18,11 @@ public interface CidadaoService {
 
     public Cidadao atualizarCidadao(CidadaoUpdateDTO cidadaoUpdateDTO);
 
-    public List<Cidadao> listarCidadao();
+    public Cidadao listarCidadao(CpfDTO cpfDTO);
 
-    public void deletarCidadao(CpfDTO cpfDTO);
+    public List<Cidadao> listarCidadaos(String token);
+
+    public void deletarCidadao(CpfDTO cpfDTO, String token);
 
 
 	LocalDateTime agendarVacinacao(AgendamentoDTO agendamentoDTO);

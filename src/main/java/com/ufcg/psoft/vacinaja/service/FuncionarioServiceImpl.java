@@ -3,13 +3,17 @@ package com.ufcg.psoft.vacinaja.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import java.util.PriorityQueue;
 import com.ufcg.psoft.vacinaja.comparators.ComparatorCidadao;
 import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
+import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.model.*;
 import com.ufcg.psoft.vacinaja.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.FuncionarioInvalidoException;
@@ -30,6 +34,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	private UsuarioRepository usuarioRepository;
 
 	@Autowired
+	private JWTService jwtService;
+
 	private VacinaRepository vacinaRepository;
 
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
@@ -120,5 +126,39 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			(funcionarioDTO.getCpfFuncionario().length() != 11)) {
             throw new CidadaoInvalidoException("ErroValidaCidadão: Cpf inválido.");
         }
+	}
+
+	@Override
+	public Funcionario atualizarFuncionario(FuncionarioDTO funcionarioDTO) {
+		if (funcionarioDTO == null) {
+			throw new FuncionarioInvalidoException("ErroAtualizacaoFuncionario: Funcionario deve conter os dados obrigatórios.");
+		}
+		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(funcionarioDTO.getCpfFuncionario());
+		if (!optionalFuncionario.isPresent()) {
+			throw new FuncionarioInvalidoException("ErroCadastroFuncionario: Funcionario não cadastrado.");
+		}
+		Funcionario funcionarioAtualizado = new Funcionario(funcionarioDTO);
+		return funcionarioRepository.save(funcionarioAtualizado);
+	}
+
+	@Override
+	public Funcionario listarFuncionario(CpfDTO cpfDTO, String token) {
+		Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(cpfDTO.getCpf());
+		if (!optionalFuncionario.isPresent()) {
+			throw new FuncionarioInvalidoException("ErroListarFuncionario: Funcionario com esse cpf não encontrado.");
+		}
+		return optionalFuncionario.get();
+	}
+
+	@Override
+	public void deletarFuncionario(CpfDTO cpfDTO, String token) {
+		if (jwtService.verificaPermissao(token, PermissaoLogin.ADMINISTRADOR)) {
+			Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById(cpfDTO.getCpf());
+			if (!optionalFuncionario.isPresent()) {
+				throw new FuncionarioInvalidoException("ErroListarFuncionario: Funcionario com esse cpf não encontrado.");
+			}
+			funcionarioRepository.delete(optionalFuncionario.get());
+		}
+		throw new UsuarioInvalidoException("ErroListarFuncionario: Funcionario com esse cpf não encontrado.");
 	}
 }

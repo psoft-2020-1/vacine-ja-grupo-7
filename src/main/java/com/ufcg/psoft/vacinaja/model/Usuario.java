@@ -30,10 +30,6 @@ public class Usuario {
 	
 	@OneToOne
 	private Funcionario cadastroFuncionario;
-
-	public Usuario() {
-
-	}
 	
 	public Usuario(String email, String senha) {
 		this.email = email;
@@ -88,9 +84,17 @@ public class Usuario {
 	public String getEmail() {
 		return email;
 	}
+	
+	public Cidadao getCadastroCidadao() {
+		return cadastroCidadao;
+	}
 
 	public void adicionaPermissaoAdministrador() {
 		this.permissaoAdministrador = true;
+	}
+	
+	public boolean isFuncionario() {
+		return cadastroFuncionario != null;
 	}
 	
 	public void adicionaCadastroCidadao(Cidadao cidadao) {
@@ -137,5 +141,9 @@ public class Usuario {
 	
 	private boolean possuiCadastroDeFuncionario() {
 		return cadastroFuncionario != null;
+	}
+
+	public Funcionario getCadastroFuncionario() {
+		return cadastroFuncionario;
 	}
 }
