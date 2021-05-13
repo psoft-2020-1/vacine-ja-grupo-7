@@ -41,16 +41,13 @@ public class RegistroServiceImpl implements RegistroService {
         if(!vacinaOptional.isPresent()) {
             throw new VacinaInvalidaException("ErroVacinaCidadao: Vacina não cadastrado.");
         }
-        Optional<RegistroVacinacao> registroOptional = registroRepository.findById(cidadaoOptional.get().getRegistroVacinacao().getNumeroCartaoSus());
-        if(!registroOptional.isPresent()) {
-            throw new RegistroInvalidoException("ErroVacinaCidadao: Número de cartão do SUS presente no cidadão é inválido.");
-        }
+        RegistroVacinacao registroVacinacao = cidadaoOptional.get().getRegistroVacinacao();
 
         Optional<Usuario> usuario = usuarioRepository.getUsuarioByCadastroCidadao(cidadaoOptional.get());
 
         String email = usuario.get().getEmail();
 
-        RegistroVacinacao registroRetorno = registroOptional.get().vacinar(vacinaOptional.get(), email);
+        RegistroVacinacao registroRetorno = registroVacinacao.vacinar(vacinaOptional.get(), email);
         return registroRepository.save(registroRetorno);
     }
 }
