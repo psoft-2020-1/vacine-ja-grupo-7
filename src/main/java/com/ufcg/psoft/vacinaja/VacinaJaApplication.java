@@ -14,10 +14,11 @@ public class VacinaJaApplication {
 	public FilterRegistrationBean<TokenFilter> filterJwt() {
 		FilterRegistrationBean<TokenFilter> filterRB = new FilterRegistrationBean<TokenFilter>();
 		filterRB.setFilter(new TokenFilter());
-		filterRB.addUrlPatterns("/api/usuario");
+		filterRB.addUrlPatterns("/api/usuario/*", "/api/administrador/*", "/api/cidadao/*", "/api/comorbidade/*",
+				"/api/funcionario/*", "/api/lote/*", "/api/registro-vacinacao/*", "/api/vacina/*", "/api/vacinas/");
 		return filterRB;
 	}
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(VacinaJaApplication.class, args);
 	}
