@@ -22,7 +22,7 @@ public class VacinaApiController {
 	private JWTService jwtService;
 
 	@Autowired
-	VacinaService vacinaService;
+	private VacinaService vacinaService;
 
 	/**
 	 * Cadastra uma vacina a partir de: Nome único de seu fabricante; Número de

@@ -14,7 +14,7 @@ import java.util.List;
 public class ComorbidadeApiController {
 
     @Autowired
-    ComorbidadeService comorbidadeService;
+    private ComorbidadeService comorbidadeService;
 
     /**
      * API para listar as comorbidades cadastradas.
