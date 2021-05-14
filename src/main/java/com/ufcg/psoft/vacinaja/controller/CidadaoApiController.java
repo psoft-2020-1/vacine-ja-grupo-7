@@ -14,6 +14,7 @@ import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
 import com.ufcg.psoft.vacinaja.service.CidadaoService;
 import com.ufcg.psoft.vacinaja.service.UsuarioService;
 
+import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -163,4 +164,24 @@ public class CidadaoApiController {
     	}
     	return response;
     }
+
+	/**
+	 * API para a consulta do estágio vacinação de um determinado cidadão.
+	 *
+	 * @param cpfDTO DTO do cpf do cidadão cujo estágio de vacinação será consultado.
+	 * @return é retornado o estágio de vacinação.
+	 */
+	@RequestMapping(value = "/cidadao/estagio-vacinacao", method = RequestMethod.POST)
+	public ResponseEntity<?> consultarEstagioVacinacao(@RequestBody CpfDTO cpfDTO) {
+		ResponseEntity<?> response;
+		try {
+			String estagioVacinacaoConsulta = this.cidadaoService.consultarEstagioVacinacao(cpfDTO);
+			response = new ResponseEntity<>(estagioVacinacaoConsulta, HttpStatus.OK);
+		} catch (CidadaoInvalidoException cie) {
+			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 }

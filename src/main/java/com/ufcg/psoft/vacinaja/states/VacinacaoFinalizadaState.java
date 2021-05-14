@@ -30,4 +30,9 @@ public class VacinacaoFinalizadaState extends VacinacaoState {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Estado vacinação finalizada";
+    }
 }
