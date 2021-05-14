@@ -1,14 +1,16 @@
 package com.ufcg.psoft.vacinaja.dto;
 
-import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
-import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
-
 import java.time.LocalDate;
 import java.util.List;
 
-public class CidadaoDTO {
+import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
+import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
+import com.ufcg.psoft.vacinaja.model.Usuario;
 
-    private String nome;
+public class CadastroCidadaoDTO {
+	private String emailUsuario;
+	private String senhaUsuario;
+	private String nome;
     private String endereco;
     private String cpf;
     private String numeroCartaoSus;
@@ -17,22 +19,28 @@ public class CidadaoDTO {
     private ProfissaoEnum profissao;
     private List<ComorbidadeEnum> comorbidadesEnums;
 
-    public CidadaoDTO (){
+	public CadastroCidadaoDTO(String emailUsuario, String senhaUsuario, String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums) {
+		this.emailUsuario = emailUsuario;
+		this.senhaUsuario = senhaUsuario;
+		 this.nome = nome;
+	        this.endereco = endereco;
+	        this.cpf = cpf;
+	        this.numeroCartaoSus = numeroCartaoSus;
+	        this.dataNascimento = dataNascimento;
+	        this.telefone = telefone;
+	        this.telefone = telefone;
+	        this.profissao = profissao;
+	}
 
-    }
-
-    public CidadaoDTO (String nome, String endereco, String cpf, String numeroCartaoSus, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<ComorbidadeEnum> comorbidadeEnums){
-        this.nome = nome;
-        this.endereco = endereco;
-        this.cpf = cpf;
-        this.numeroCartaoSus = numeroCartaoSus;
-        this.dataNascimento = dataNascimento;
-        this.telefone = telefone;
-        this.telefone = telefone;
-        this.profissao = profissao;
-    }
-
-    public String getNome() {
+	public String getEmailUsuario() {
+		return emailUsuario;
+	}
+	
+	public String getSenhaUsuario() {
+		return senhaUsuario;
+	}
+	
+	public String getNome() {
         return nome;
     }
 
@@ -95,4 +103,12 @@ public class CidadaoDTO {
     public void setComorbidadesEnums(List<ComorbidadeEnum> comorbidadesEnums) {
         this.comorbidadesEnums = comorbidadesEnums;
     }
+	
+	public CidadaoDTO getCidadaoDTO() {
+		return new CidadaoDTO(nome, endereco, cpf, numeroCartaoSus, dataNascimento, telefone, profissao, comorbidadesEnums);
+	}
+	
+	public Usuario getUsuario() {
+		return new Usuario(emailUsuario, senhaUsuario, false, true, false);
+	}
 }

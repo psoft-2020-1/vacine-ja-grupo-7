@@ -1,13 +1,19 @@
 package com.ufcg.psoft.vacinaja.model;
 
 import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
+import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
+import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoCidadaoDTO;
+import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.*;
+
+import static java.time.Period.between;
 
 @Entity
 public class Cidadao {
@@ -16,11 +22,11 @@ public class Cidadao {
     private String cpf;
     private String nome;
     private String endereco;
-    @Column(unique = true)
-    private String numeroCartaoSus;
-    private Date dataNascimento;
+    @OneToOne(cascade = CascadeType.ALL)
+    private RegistroVacinacao registroVacinacao;
+    private LocalDate dataNascimento;
     private String telefone;
-    private String profissao;
+    private ProfissaoEnum profissao;
     @ManyToMany
     private List<Comorbidade> comorbidades;
 
@@ -28,26 +34,37 @@ public class Cidadao {
 
     }
 
-    public Cidadao (String nome, String endereco, String cpf, String numeroCartaoSus, Date dataNascimento, String telefone, String profissao, List<Comorbidade> comorbidades){
+    public Cidadao (String nome, String endereco, String cpf, RegistroVacinacao registroVacinacao, LocalDate dataNascimento, String telefone, ProfissaoEnum profissao, List<Comorbidade> comorbidades){
         this.nome = nome;
         this.endereco = endereco;
         this.cpf = cpf;
-        this.numeroCartaoSus = numeroCartaoSus;
+        this.registroVacinacao = registroVacinacao;
         this.dataNascimento = dataNascimento;
         this.telefone = telefone;
         this.profissao = profissao;
         this.comorbidades = comorbidades;
     }
 
-    public Cidadao (CidadaoDTO cidadaoDTO, List<Comorbidade> comorbidades){
+    public Cidadao (CidadaoDTO cidadaoDTO, List<Comorbidade> comorbidades, RegistroVacinacao registroVacinacao){
         this.nome = cidadaoDTO.getNome();
         this.endereco = cidadaoDTO.getEndereco();
         this.cpf = cidadaoDTO.getCpf();
-        this.numeroCartaoSus = cidadaoDTO.getNumeroCartaoSus();
         this.dataNascimento = cidadaoDTO.getDataNascimento();
         this.telefone = cidadaoDTO.getTelefone();
         this.profissao = cidadaoDTO.getProfissao();
         this.comorbidades = comorbidades;
+        this.registroVacinacao = registroVacinacao;
+    }
+
+    public Cidadao (CidadaoUpdateDTO cidadaoUpdateDTO, List<Comorbidade> comorbidades, RegistroVacinacao registroVacinacao){
+        this.nome = cidadaoUpdateDTO.getNome();
+        this.endereco = cidadaoUpdateDTO.getEndereco();
+        this.cpf = cidadaoUpdateDTO.getCpf();
+        this.dataNascimento = cidadaoUpdateDTO.getDataNascimento();
+        this.telefone = cidadaoUpdateDTO.getTelefone();
+        this.profissao = cidadaoUpdateDTO.getProfissao();
+        this.comorbidades = comorbidades;
+        this.registroVacinacao = registroVacinacao;
     }
 
     public String getNome() {
@@ -74,19 +91,11 @@ public class Cidadao {
         this.cpf = cpf;
     }
 
-    public String getNumeroCartaoSus() {
-        return numeroCartaoSus;
-    }
-
-    public void setNumeroCartaoSus(String numeroCartaoSus) {
-        this.numeroCartaoSus = numeroCartaoSus;
-    }
-
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
@@ -98,14 +107,6 @@ public class Cidadao {
         this.telefone = telefone;
     }
 
-    public String getProfissao() {
-        return profissao;
-    }
-
-    public void setProfissap(String profissap) {
-        this.profissao = profissao;
-    }
-
     public List<Comorbidade> getComorbidades() {
         return comorbidades;
     }
@@ -114,16 +115,40 @@ public class Cidadao {
         this.comorbidades = comorbidades;
     }
 
+    public ProfissaoEnum getProfissao() {
+        return profissao;
+    }
+
+    public void setProfissao(ProfissaoEnum profissao) {
+        this.profissao = profissao;
+    }
+
+    public RegistroVacinacao getRegistroVacinacao() {
+        return registroVacinacao;
+    }
+
+    public void setRegistroVacinacao(RegistroVacinacao registroVacinacao) {
+        this.registroVacinacao = registroVacinacao;
+    }
+
+    public PerfilVacinacaoCidadaoDTO geraPerfilVacinacao() {
+        return new PerfilVacinacaoCidadaoDTO(this.getIdade(), this.comorbidades, this.profissao.getValue());
+    }
+
+    public Long getIdade() {
+        return Long.valueOf(Period.between(LocalDateTime.now().toLocalDate(), this.dataNascimento).getYears());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cidadao cidadao = (Cidadao) o;
-        return Objects.equals(cpf, cidadao.cpf) && Objects.equals(nome, cidadao.nome) && Objects.equals(endereco, cidadao.endereco) && Objects.equals(numeroCartaoSus, cidadao.numeroCartaoSus) && Objects.equals(dataNascimento, cidadao.dataNascimento) && Objects.equals(telefone, cidadao.telefone) && Objects.equals(profissao, cidadao.profissao) && Objects.equals(comorbidades, cidadao.comorbidades);
+        return Objects.equals(cpf, cidadao.cpf);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cpf, nome, endereco, numeroCartaoSus, dataNascimento, telefone, profissao, comorbidades);
+        return Objects.hash(cpf);
     }
 }

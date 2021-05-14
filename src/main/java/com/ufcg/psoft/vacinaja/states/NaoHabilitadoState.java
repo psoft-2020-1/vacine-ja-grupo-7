@@ -27,8 +27,7 @@ public class NaoHabilitadoState extends VacinacaoState {
 
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
-        // TODO: IMPLEMENTAR LÓGICA COM A LISTA DE COMORBIDADES DO SISTEMA
-        // TODO: IMPLEMENTAR NOTIFICAÇÃO ASSIM QUE HOUVER A TRANISÇÃO DE ESTADO
+        registroVacinacao.setEstadoVacinacao(new HabilitadoPrimeiraDoseState());
         notificar(email);
     }
 

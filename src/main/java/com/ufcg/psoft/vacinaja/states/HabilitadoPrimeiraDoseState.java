@@ -2,13 +2,13 @@ package com.ufcg.psoft.vacinaja.states;
 
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
-import com.ufcg.psoft.vacinaja.utils.EmailUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class HabilitadoPrimeiraDoseState extends VacinacaoState {
@@ -23,19 +23,24 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
 
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
-        if(registroVacinacao.getDataVacinacaoPrimeiraDose() != null) {
-            if(registroVacinacao.getVacina().getNumeroDoses() == 1) {
-                registroVacinacao.setEstadoVacinacao(new EsperandoSegundaDoseState());
-            } else {
-                registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
-            }
-        }
+
     }
 
+
     @Override
-    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
-        registroVacinacao.setDataVacinacaoPrimeiraDose(LocalDate.now());
-        registroVacinacao.setVacina(vacina);
+    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+        if(registroVacinacao.getDataAgendamento() != null && registroVacinacao.getDataAgendamento().toLocalDate().equals(LocalDate.now()) && registroVacinacao.getDataAgendamento().getHour() == LocalDateTime.now().getHour()) {
+            if (registroVacinacao.getVacina().getNumeroDoses() == 1) {
+                registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
+            }else {
+                registroVacinacao.setEstadoVacinacao(new EsperandoSegundaDoseState());
+            }
+            registroVacinacao.setDataAgendamento(null);
+            registroVacinacao.setDataVacinacaoPrimeiraDose(LocalDate.now());
+            registroVacinacao.setVacina(vacina);
+            return true;
+        }
+        return false;
     }
 
     public Long getId() {

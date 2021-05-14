@@ -2,11 +2,10 @@ package com.ufcg.psoft.vacinaja.service;
 
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ufcg.psoft.vacinaja.enuns.PermissaoLogin;
+import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
 import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
@@ -22,7 +21,7 @@ public class UsuarioService {
 	@Autowired
 	private JWTService jwtService;
 
-	public Usuario cadastrarUsuario(Usuario usuario) {
+	public Usuario salvarUsuario(Usuario usuario) {
 		if (usuarioRepository.findById(usuario.getEmail()).isPresent()) {
 			throw new UsuarioInvalidoException("ErroEmailUsuarioJaExistente: Email informado ja em uso.");
 		}
@@ -35,6 +34,10 @@ public class UsuarioService {
 			throw new UsuarioInvalidoException("ErroUsuarioNãoExistente: Usuario informado não cadastrado.");
 		}
 		return optUsuario.get();
+	}
+
+	public Usuario getUsuarioByToken(String token) {
+		return getUsuario(jwtService.getEmailToken(token));
 	}
 
 	public Usuario alterarSenha(String email, String novaSenha, String token) {
@@ -58,15 +61,48 @@ public class UsuarioService {
 		throw new ValidacaoTokenException("ErroValidacaoToken: Usuario nao tem permissao");
 	}
 
-	public boolean validarUsuarioSenhaPermissao(Usuario usuario) {
+	public void validarUsuarioSenhaPermissao(Usuario usuario) {
 		Usuario usuarioConsulta = getUsuario(usuario.getEmail());
-		if (usuarioConsulta.getSenha().equals(usuario.getSenha())) {
-			if ((usuario.isPermissaoAdministrador() && !usuarioConsulta.isPermissaoAdministrador())
-					|| (usuario.isPermissaoFuncionario() && !usuarioConsulta.isPermissaoFuncionario())
-					|| (usuario.isPermissaoCidadao() && !usuarioConsulta.isPermissaoCidadao()))
-				throw new LoginException("ErroLogin: Permissão solicitada não autorizada");
-			return true;
+
+		if (!usuarioConsulta.getSenha().equals(usuario.getSenha()))
+			throw new LoginException("ErroLogin: Usuario ou senha invalodos");
+
+		if ((usuario.isPermissaoAdministrador() && !usuarioConsulta.isPermissaoAdministrador())
+				|| (usuario.isPermissaoFuncionario() && !usuarioConsulta.isPermissaoFuncionario())
+				|| (usuario.isPermissaoCidadao() && !usuarioConsulta.isPermissaoCidadao()))
+			throw new LoginException("ErroLogin: Permissão solicitada não autorizada");
+	}
+
+	public void verificaDisponibilidadeEmail(String email) {
+		if (usuarioRepository.findById(email).isPresent())
+			throw new UsuarioInvalidoException("ErroCadastroUsuario: email já em uso.");
+	}
+
+	public void verificaUsuarioPermissaoCidadao(String cpf, String header) {
+		String email = jwtService.getEmailToken(header);
+		Usuario usuario = getUsuario(email);
+		if (!usuario.getCadastroCidadao().getCpf().equals(cpf)
+				&& !jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
+			throw new UsuarioInvalidoException(
+					"ErroPermissaoUsuarioCidadao: O usuario logado não possui permissão sobre o cidadão informado");
 		}
-		throw new LoginException("ErroLogin: Usuario ou senha invalodos");
+	}
+	
+	public void verificaUsuarioPermissaoFuncionario(String cpf, String header) {
+		String email = jwtService.getEmailToken(header);
+		Usuario usuario = getUsuario(email);
+		if (!usuario.getCadastroFuncionario().getCpf().equals(cpf)
+				&& !jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
+			throw new UsuarioInvalidoException(
+					"ErroPermissaoUsuarioCidadao: O usuario logado não possui permissão sobre o funcionario informado");
+		}
+	}
+
+	public Usuario getUsuarioParaFuncionario(String token) {
+		jwtService.verificaPermissao(token, PermissaoLogin.CIDADAO);
+		Usuario usuario = getUsuario(jwtService.getEmailToken(token));
+		if (usuario.isFuncionario())
+			throw new UsuarioInvalidoException("ErroCadastrarFuncionario: Usuario logado já é um funcionario.");
+		return usuario;
 	}
 }

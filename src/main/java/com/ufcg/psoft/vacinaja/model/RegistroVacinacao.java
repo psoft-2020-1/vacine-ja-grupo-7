@@ -1,22 +1,17 @@
 package com.ufcg.psoft.vacinaja.model;
 
-import com.ufcg.psoft.vacinaja.exceptions.VacinaInvalidaException;
-import com.ufcg.psoft.vacinaja.states.HabilitadoPrimeiraDoseState;
-import com.ufcg.psoft.vacinaja.states.HabilitadoSegundaDoseState;
 import com.ufcg.psoft.vacinaja.states.NaoHabilitadoState;
 import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class RegistroVacinacao {
 
     @Id
     private String numeroCartaoSus;
-
-    @OneToOne
-    private Cidadao cidadao;
 
     @ManyToOne(cascade= CascadeType.ALL)
     private VacinacaoState estadoVacinacao;
@@ -25,15 +20,16 @@ public class RegistroVacinacao {
 
     private LocalDate dataVacinacaoSegundaDose;
 
+    private LocalDateTime dataAgendamento;
+
     @ManyToOne
     private Vacina vacina;
 
     public RegistroVacinacao() { }
 
-    public RegistroVacinacao(Cidadao cidadao) {
-        this.numeroCartaoSus = cidadao.getNumeroCartaoSus();
-        this.cidadao = cidadao;
-        this.estadoVacinacao = new HabilitadoPrimeiraDoseState();
+    public RegistroVacinacao(String numeroCartaoSus) {
+        this.numeroCartaoSus = numeroCartaoSus;
+        this.estadoVacinacao = new NaoHabilitadoState();
     }
 
     public void atualizarEstadoVacinacao(String email) {
@@ -52,14 +48,6 @@ public class RegistroVacinacao {
 
     public void setNumeroCartaoSus(String numeroCartaoSus) {
         this.numeroCartaoSus = numeroCartaoSus;
-    }
-
-    public Cidadao getCidadao() {
-        return cidadao;
-    }
-
-    public void setCidadao(Cidadao cidadao) {
-        this.cidadao = cidadao;
     }
 
     public VacinacaoState getEstadoVacinacao() {
@@ -92,6 +80,14 @@ public class RegistroVacinacao {
 
     public void setDataVacinacaoSegundaDose(LocalDate dataVacinacaoSegundaDose) {
         this.dataVacinacaoSegundaDose = dataVacinacaoSegundaDose;
+    }
+
+    public LocalDateTime getDataAgendamento() {
+        return dataAgendamento;
+    }
+
+    public void setDataAgendamento(LocalDateTime dataAgendamento) {
+        this.dataAgendamento = dataAgendamento;
     }
 }
 

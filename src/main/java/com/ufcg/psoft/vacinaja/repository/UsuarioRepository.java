@@ -8,5 +8,7 @@ import com.ufcg.psoft.vacinaja.model.Usuario;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+
     public Optional<Usuario> getUsuarioByCadastroCidadao(Cidadao cidadao);
+
 }
