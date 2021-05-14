@@ -81,7 +81,28 @@ public class UsuarioService {
 	public void verificaUsuarioPermissaoCidadao(String cpf, String header) {
 		String email = jwtService.getEmailToken(header);
 		Usuario usuario = getUsuario(email);
+		
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO)) {
+			throw new ValidacaoTokenException(
+					"ErroValidacaoToken: O token informado não pertence a um cidadão.");
+		}
+		
 		if (!usuario.getCadastroCidadao().getCpf().equals(cpf)
+				&& !jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
+			throw new UsuarioInvalidoException(
+					"ErroPermissaoUsuarioCidadao: O usuario logado não possui permissão sobre o cidadão informado");
+		}
+	}
+	
+	public void verificaUsuarioPermissaoCidadaoByCartaoSUS(String cartaoSUS, String header) {
+		String email = jwtService.getEmailToken(header);
+		Usuario usuario = getUsuario(email);
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO)) {
+			throw new ValidacaoTokenException(
+					"ErroValidacaoToken: O token informado não pertence a um cidadão.");
+		}
+		
+		if (!usuario.getCadastroCidadao().getRegistroVacinacao().getNumeroCartaoSus().equals(cartaoSUS)
 				&& !jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
 			throw new UsuarioInvalidoException(
 					"ErroPermissaoUsuarioCidadao: O usuario logado não possui permissão sobre o cidadão informado");
@@ -91,6 +112,11 @@ public class UsuarioService {
 	public void verificaUsuarioPermissaoFuncionario(String cpf, String header) {
 		String email = jwtService.getEmailToken(header);
 		Usuario usuario = getUsuario(email);
+		
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
+			throw new ValidacaoTokenException(
+					"ErroValidacaoToken: O token informado não pertence a um funcionario.");
+		}
 		if (!usuario.getCadastroFuncionario().getCpf().equals(cpf)
 				&& !jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
 			throw new UsuarioInvalidoException(

@@ -6,7 +6,6 @@ import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
-import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.ValidacaoTokenException;
 import com.ufcg.psoft.vacinaja.enums.ComorbidadeEnum;
 import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
