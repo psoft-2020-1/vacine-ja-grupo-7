@@ -41,7 +41,7 @@ public class CidadaoApiController {
 	 * @param cidadaoDTO Data Transfer Object do cidadao para o cadastro.
 	 * @return cidadao cadastrado.
 	 */
-	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
+	@RequestMapping(value = "/cadastrar-cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
 		ResponseEntity<?> response;
 		try {
@@ -68,8 +68,8 @@ public class CidadaoApiController {
 	 * @return cidadão atualizada.
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
-	public ResponseEntity<?> atualizarCidadao(@RequestBody CidadaoUpdateDTO cidadaoUpdateDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> atualizarCidadao(@RequestHeader("Authorization") String header,
+											  @RequestBody CidadaoUpdateDTO cidadaoUpdateDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadao(cidadaoUpdateDTO.getCpf(), header);
@@ -110,7 +110,8 @@ public class CidadaoApiController {
 	 * @return cidadão solicitado.
 	 */
 	@RequestMapping(value = "/cidadaos/", method = RequestMethod.GET)
-	public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> listarCidadao(@RequestHeader("Authorization") String header,
+										   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadao(cpfDTO.getCpf(), header);
@@ -131,7 +132,8 @@ public class CidadaoApiController {
 	 *               cidadão.
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> deletarCidadao(@RequestHeader("Authorization") String header,
+											@RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
 		try {
 			cidadaoService.deletarCidadao(cpfDTO, header);
@@ -152,8 +154,8 @@ public class CidadaoApiController {
 	 * @return a data do agendamento.
 	 */
 	@RequestMapping(value = "/cidadao/agendamento/", method = RequestMethod.POST)
-	public ResponseEntity<?> agendarVacinacao(@RequestBody AgendamentoDTO agendamentoDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> agendarVacinacao(@RequestHeader("Authorization") String header,
+											  @RequestBody AgendamentoDTO agendamentoDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadaoByCartaoSUS(agendamentoDTO.getCartaoSUS(), header);
@@ -177,8 +179,8 @@ public class CidadaoApiController {
 	 * @return é retornado o estágio de vacinação.
 	 */
 	@RequestMapping(value = "/cidadao/estagio-vacinacao/", method = RequestMethod.POST)
-	public ResponseEntity<?> consultarEstagioVacinacao(@RequestBody CpfDTO cpfDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> consultarEstagioVacinacao(@RequestHeader("Authorization") String header,
+													   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadao(cpfDTO.getCpf(), header);

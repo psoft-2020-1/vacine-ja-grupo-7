@@ -51,8 +51,8 @@ public class FuncionarioApiController {
 	 *         requisição.
 	 */
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.POST)
-	public ResponseEntity<?> cadastrarFuncionario(@RequestBody FuncionarioDTO funcionarioDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> cadastrarFuncionario(@RequestHeader("Authorization") String header,
+												  @RequestBody FuncionarioDTO funcionarioDTO) {
 		ResponseEntity<?> response;
 
 		try {
@@ -73,8 +73,8 @@ public class FuncionarioApiController {
 	}
 
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.PUT)
-	public ResponseEntity<?> atualizarFuncionario(@RequestBody FuncionarioDTO funcionarioDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> atualizarFuncionario(@RequestHeader("Authorization") String header,
+												  @RequestBody FuncionarioDTO funcionarioDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoFuncionario(funcionarioDTO.getCpfFuncionario(), header);
@@ -91,8 +91,8 @@ public class FuncionarioApiController {
 	}
 
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
-	public ResponseEntity<?> listarFuncionario(@RequestBody CpfDTO cpfDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> listarFuncionario(@RequestHeader("Authorization") String header,
+											   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoFuncionario(cpfDTO.getCpf(), header);
@@ -107,8 +107,8 @@ public class FuncionarioApiController {
 	}
 
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deletarFuncionario(@RequestBody CpfDTO cpfDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> deletarFuncionario(@RequestHeader("Authorization") String header,
+												@RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
 		try {
 			funcionarioService.deletarFuncionario(cpfDTO, header);
@@ -122,8 +122,8 @@ public class FuncionarioApiController {
 	}
 
 	@RequestMapping(value = "/funcionario/perfil-vacinacao/", method = RequestMethod.POST)
-	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody String perfil,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestHeader("Authorization") String header,
+													  @RequestBody String perfil) {
 		ResponseEntity<?> response;
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {

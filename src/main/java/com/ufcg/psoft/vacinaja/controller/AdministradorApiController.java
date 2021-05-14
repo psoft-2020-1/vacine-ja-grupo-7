@@ -31,8 +31,8 @@ public class AdministradorApiController {
 	 * @return o usuario que agora possui direitos de um funcionario no sistema.
 	 */
 	@RequestMapping(value = "/administrador/aprovar/{funcionario}/", method = RequestMethod.POST)
-	public ResponseEntity<?> aprovarFuncionario(@PathVariable("funcionario") String emailFuncionario,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> aprovarFuncionario(@RequestHeader("Authorization") String header,
+												@PathVariable("funcionario") String emailFuncionario) {
 		ResponseEntity<?> response;
 		try {
 			Usuario funcionarioAprovado = this.administradorService.aprovaFuncionario(emailFuncionario, header);

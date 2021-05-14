@@ -38,14 +38,14 @@ public class LoteApiController {
 	 * @return O lote cadastrado e o status da requisição.
 	 */
 	@RequestMapping(value = "/lote/", method = RequestMethod.POST)
-	public ResponseEntity<?> cadastrarLote(@RequestBody LoteDTO loteDTO, @RequestBody CpfDTO cpfDTO,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> cadastrarLote(@RequestHeader("Authorization") String header,
+										   @RequestBody LoteDTO loteDTO) {
 		ResponseEntity<?> response;
 
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
 				Lote loteCadastrado = loteService.cadastrarLote(loteDTO);
-				response = new ResponseEntity<Lote>(loteCadastrado, HttpStatus.CREATED);
+				response = new ResponseEntity<>(loteCadastrado, HttpStatus.CREATED);
 			} else {
 				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
 						HttpStatus.UNAUTHORIZED);

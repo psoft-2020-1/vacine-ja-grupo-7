@@ -150,7 +150,8 @@ public class VacinaApiController {
 	 * @return retorna o status da requisição.
 	 */
 	@RequestMapping(value = "/vacina/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deletarVacina(@PathVariable("id") Long id, @RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> deletarVacina(@RequestHeader("Authorization") String header,
+										   @PathVariable("id") Long id) {
 		ResponseEntity<?> response;
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {

@@ -40,8 +40,8 @@ public class UsuarioController {
 	}
 
 	@RequestMapping(value = "/usuario/{idUsuario}/", method = RequestMethod.DELETE)
-	public ResponseEntity<?> removerUsuario(@PathVariable String idUsuario,
-			@RequestHeader("Authorization") String header) {
+	public ResponseEntity<?> removerUsuario(@RequestHeader("Authorization") String header,
+											@PathVariable String idUsuario) {
 		try {
 			usuarioService.removerUsuario(idUsuario, header);
 		} catch (UsuarioInvalidoException e) {
