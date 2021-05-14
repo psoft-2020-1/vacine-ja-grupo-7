@@ -22,7 +22,7 @@ public abstract class VacinacaoState {
 
     public abstract void atualizarEstado(RegistroVacinacao registroVacinacao, String email);
 
-    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
         throw new VacinaInvalidaException("ErroVacinaCidadao: Cidadão não está habilitado a ser vacinado.");
     }
 
@@ -36,5 +36,12 @@ public abstract class VacinacaoState {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "VacinacaoState {" +
+                "id=" + id +
+                '}';
     }
 }

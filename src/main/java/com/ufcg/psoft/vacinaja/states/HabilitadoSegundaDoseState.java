@@ -1,6 +1,5 @@
 package com.ufcg.psoft.vacinaja.states;
 
-import com.ufcg.psoft.vacinaja.exceptions.VacinaInvalidaException;
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
 
@@ -9,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class HabilitadoSegundaDoseState extends VacinacaoState {
@@ -23,19 +23,18 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
 
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
-        if(registroVacinacao.getDataVacinacaoSegundaDose() != null) {
-            registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
-        }
+
     }
 
     @Override
-    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
-        if(!registroVacinacao.getVacina().equals(vacina)) {
-            throw new VacinaInvalidaException("ErroVacinaCidadao: O cidadão só está habilitada a tomar a segunda" +
-                    "dose do mesmo tipo de vacina da primeira dose.");
+    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+        if(registroVacinacao.getDataAgendamento() != null && registroVacinacao.getDataAgendamento().toLocalDate().equals(LocalDate.now()) && registroVacinacao.getDataAgendamento().getHour() == LocalDateTime.now().getHour()) {
+            registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
+            registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
+            registroVacinacao.setDataAgendamento(null);
+            return true;
         }
-        registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
-        // TODO: DECREMENTAR NÚMERO DE VACINAS NO LOTE.
+        return false;
     }
 
     public Long getId() {
@@ -44,5 +43,10 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Estado habilitado para a segunda dose.";
     }
 }

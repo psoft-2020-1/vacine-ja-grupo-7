@@ -27,13 +27,13 @@ public class EsperandoSegundaDoseState extends VacinacaoState {
 
     }
 
+    //TODO job para verificar se o cidadao já está com a quantidade de dias para ser notificado.
+    //TODO pegar cidadaos que estão com instanceof igual esperando segunda dose e chamar o atualizar estado.
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         LocalDate dataAtual = LocalDate.now();
         LocalDate dataVacinacao = registroVacinacao.getDataVacinacaoPrimeiraDose();
-
         long diferencaDias = Period.between(dataAtual, dataVacinacao).getDays();
-
         if(diferencaDias >= registroVacinacao.getVacina().getTempoEntreDoses()) {
             registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
             registroVacinacao.setEstadoVacinacao(new HabilitadoSegundaDoseState());
@@ -53,5 +53,10 @@ public class EsperandoSegundaDoseState extends VacinacaoState {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Estado aguardando a segunda dose.";
     }
 }
