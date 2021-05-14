@@ -44,4 +44,9 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Estado habilitado para a segunda dose.";
+    }
 }
