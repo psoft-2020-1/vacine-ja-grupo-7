@@ -90,7 +90,7 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/listar-funcionario", method = RequestMethod.GET)
+	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarFuncionario(@RequestBody CpfDTO cpfDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
@@ -106,7 +106,7 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/deletar-funcionario", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/funcionario/", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletarFuncionario(@RequestBody CpfDTO cpfDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
@@ -121,7 +121,7 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/habilitar-perfil-vacinacao", method = RequestMethod.POST)
+	@RequestMapping(value = "/funcionario/perfil-vacinacao/", method = RequestMethod.POST)
 	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestBody String perfil,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
@@ -140,37 +140,13 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/listar-perfis-governo", method = RequestMethod.GET)
+	@RequestMapping(value = "/funcionario/perfis-vacinacao/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarPerfisGoverno(@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
 				PerfilGovernoEnum[] perfisGoverno = funcionarioService.listarPerfisGoverno();
 				response = new ResponseEntity<PerfilGovernoEnum[]>(perfisGoverno, HttpStatus.OK);
-			} else {
-				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
-						HttpStatus.UNAUTHORIZED);
-			}
-		} catch (Exception e) {
-			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return response;
-	}
-
-	/**
-	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes
-	 * associados.
-	 * 
-	 * @return retorna o toString de todos os lotes e paras as vacinas sem lote,
-	 *         somente o toString da vacina.
-	 */
-	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
-	public ResponseEntity<?> listarVacinas(@RequestHeader("Authorization") String header) {
-		ResponseEntity<?> response;
-		try {
-			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
-				String vacinas = funcionarioService.listarVacinas();
-				response = new ResponseEntity<String>(vacinas, HttpStatus.OK);
 			} else {
 				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
 						HttpStatus.UNAUTHORIZED);

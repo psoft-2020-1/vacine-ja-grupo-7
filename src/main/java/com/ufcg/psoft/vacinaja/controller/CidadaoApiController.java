@@ -41,7 +41,7 @@ public class CidadaoApiController {
 	 * @param cidadaoDTO Data Transfer Object do cidadao para o cadastro.
 	 * @return cidadao cadastrado.
 	 */
-	@RequestMapping(value = "/cadastrarCidadao/", method = RequestMethod.POST)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
 		ResponseEntity<?> response;
 		try {
@@ -50,7 +50,7 @@ public class CidadaoApiController {
 			Usuario usuario = cadastroCidadaoDTO.getUsuario();
 			usuario.adicionaCadastroCidadao(cidadaoCadastrado);
 			Usuario usuarioCadastrado = usuarioService.salvarUsuario(usuario);
-			response = new ResponseEntity<Usuario>(usuarioCadastrado, HttpStatus.CREATED);
+			response = new ResponseEntity<>(usuarioCadastrado, HttpStatus.CREATED);
 		} catch (CidadaoInvalidoException cie) {
 			response = new ResponseEntity<>(cie.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (UsuarioInvalidoException e) {
@@ -90,12 +90,12 @@ public class CidadaoApiController {
 	 *
 	 * @return cidadões cadastrados.
 	 */
-	@RequestMapping(value = "/cidadao/listar/", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarCidadaos(@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
 			List<Cidadao> cidadaoList = cidadaoService.listarCidadaos(header);
-			response = new ResponseEntity<List<Cidadao>>(cidadaoList, HttpStatus.OK);
+			response = new ResponseEntity<>(cidadaoList, HttpStatus.OK);
 		} catch (ValidacaoTokenException e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -109,13 +109,13 @@ public class CidadaoApiController {
 	 *
 	 * @return cidadão solicitado.
 	 */
-	@RequestMapping(value = "/cidadao/listar-cidadao", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadaos/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadao(cpfDTO.getCpf(), header);
 			Cidadao cidadao = cidadaoService.listarCidadao(cpfDTO);
-			response = new ResponseEntity<Cidadao>(cidadao, HttpStatus.OK);
+			response = new ResponseEntity<>(cidadao, HttpStatus.OK);
 		} catch (UsuarioInvalidoException e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -130,7 +130,7 @@ public class CidadaoApiController {
 	 * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do
 	 *               cidadão.
 	 */
-	@RequestMapping(value = "/cidadao/deletar/", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletarCidadao(@RequestBody CpfDTO cpfDTO, @RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
@@ -151,7 +151,7 @@ public class CidadaoApiController {
 	 * @param agendamentoDTO Data Transfer Object de um agendamento.
 	 * @return a data do agendamento.
 	 */
-	@RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadao/agendamento/", method = RequestMethod.POST)
 	public ResponseEntity<?> agendarVacinacao(@RequestBody AgendamentoDTO agendamentoDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
@@ -176,7 +176,7 @@ public class CidadaoApiController {
 	 *               consultado.
 	 * @return é retornado o estágio de vacinação.
 	 */
-	@RequestMapping(value = "/cidadao/estagio-vacinacao", method = RequestMethod.POST)
+	@RequestMapping(value = "/cidadao/estagio-vacinacao/", method = RequestMethod.POST)
 	public ResponseEntity<?> consultarEstagioVacinacao(@RequestBody CpfDTO cpfDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;

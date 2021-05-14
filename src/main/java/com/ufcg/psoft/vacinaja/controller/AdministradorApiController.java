@@ -30,7 +30,7 @@ public class AdministradorApiController {
 	 * @param funcionario login do funcionário que será aprovado.
 	 * @return o usuario que agora possui direitos de um funcionario no sistema.
 	 */
-	@RequestMapping(value = "/administrador/{funcionario}", method = RequestMethod.POST)
+	@RequestMapping(value = "/administrador/aprovar/{funcionario}/", method = RequestMethod.POST)
 	public ResponseEntity<?> aprovarFuncionario(@PathVariable("funcionario") String emailFuncionario,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;

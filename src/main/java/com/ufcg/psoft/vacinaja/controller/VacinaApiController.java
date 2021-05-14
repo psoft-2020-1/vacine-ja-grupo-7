@@ -170,4 +170,28 @@ public class VacinaApiController {
 
 		return response;
 	}
+
+	/**
+	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes
+	 * associados.
+	 *
+	 * @return retorna o toString de todos os lotes e paras as vacinas sem lote,
+	 *         somente o toString da vacina.
+	 */
+	@RequestMapping(value = "/vacinas/lotes/", method = RequestMethod.GET)
+	public ResponseEntity<?> listarVacinasLotes(@RequestHeader("Authorization") String header) {
+		ResponseEntity<?> response;
+		try {
+			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
+				String vacinas = vacinaService.listarVacinas();
+				response = new ResponseEntity<String>(vacinas, HttpStatus.OK);
+			} else {
+				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
+						HttpStatus.UNAUTHORIZED);
+			}
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return response;
+	}
 }

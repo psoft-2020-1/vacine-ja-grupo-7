@@ -21,7 +21,7 @@ public class ComorbidadeApiController {
      *
      * @return comorbidades cadastradas.
      */
-    @RequestMapping(value = "/comorbidade", method = RequestMethod.GET)
+    @RequestMapping(value = "/comorbidades/", method = RequestMethod.GET)
     public ResponseEntity<?> listarComorbidades() {
         List<Comorbidade> comorbidades = comorbidadeService.listarComorbidades();
         return new ResponseEntity<>(comorbidades, HttpStatus.OK);

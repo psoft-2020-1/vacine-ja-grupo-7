@@ -23,8 +23,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 			throw new AdministradorInvalidoException("Login inválido");
 		}
 	}
-
-
+	
 	@Override
 	public Usuario aprovaFuncionario(String emailFuncionario, String token) {
 		this.validaString(emailFuncionario);

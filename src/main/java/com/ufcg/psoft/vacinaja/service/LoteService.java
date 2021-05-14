@@ -5,6 +5,6 @@ import com.ufcg.psoft.vacinaja.model.Lote;
 
 public interface LoteService {
 	
-	public Lote cadastrarLote(LoteDTO loteDTO);
+	Lote cadastrarLote(LoteDTO loteDTO);
 
 }

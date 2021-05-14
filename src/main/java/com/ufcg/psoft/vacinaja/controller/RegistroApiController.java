@@ -24,7 +24,7 @@ public class RegistroApiController {
 	@Autowired
 	private RegistroService registroService;
 
-	@RequestMapping(value = "/registro-vacinacao/{cpfCidadao}", method = RequestMethod.POST)
+	@RequestMapping(value = "/registro-vacinacao/vacinar/{cpfCidadao}", method = RequestMethod.POST)
 	public ResponseEntity<?> vacinar(@PathVariable("cpfCidadao") String cpfCidadao, @RequestBody IdDTO vacinaIdDTO,
 			@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
