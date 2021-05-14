@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.LoginDTO;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
-import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.JWTService;
 
 @RestController
