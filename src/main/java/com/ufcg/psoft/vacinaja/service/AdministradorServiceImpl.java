@@ -31,7 +31,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 		if (jwtService.verificaPermissao(token, PermissaoLogin.ADMINISTRADOR)) {
 			Usuario usuario = usuarioService.getUsuario(emailFuncionario);
 			usuario.adicionaPermissaoFuncionario();
-			return usuarioService.salvarUsuario(usuario);
+			return usuarioService.atualizarUsuario(usuario);
 		}
 		throw new ValidacaoTokenException("ErroPermissaoToken: Token passado não tem permissão para a operação.");
 	}
