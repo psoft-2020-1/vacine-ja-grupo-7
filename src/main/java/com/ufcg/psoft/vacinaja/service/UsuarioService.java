@@ -27,6 +27,13 @@ public class UsuarioService {
 		}
 		return usuarioRepository.save(usuario);
 	}
+	
+	public Usuario atualizarUsuario(Usuario usuario) {
+		if (!usuarioRepository.findById(usuario.getEmail()).isPresent()) {
+			throw new UsuarioInvalidoException("ErroEmailUsuarioNaoExistente: Usuario com email informado não existe.");
+		}
+		return usuarioRepository.save(usuario);
+	}
 
 	public Usuario getUsuario(String email) {
 		Optional<Usuario> optUsuario = usuarioRepository.findById(email);
