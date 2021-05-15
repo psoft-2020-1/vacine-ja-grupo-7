@@ -130,11 +130,11 @@ public class Cidadao {
     }
 
     public PerfilVacinacaoCidadaoDTO geraPerfilVacinacao() {
-        return new PerfilVacinacaoCidadaoDTO(this.getIdade(), this.comorbidades, this.profissao.getValue());
+    	return new PerfilVacinacaoCidadaoDTO(this.getIdade(), this.comorbidades, this.profissao);
     }
 
     public Long getIdade() {
-        return Long.valueOf(Period.between(LocalDateTime.now().toLocalDate(), this.dataNascimento).getYears());
+        return Long.valueOf(Period.between(this.dataNascimento, LocalDateTime.now().toLocalDate()).getYears());
     }
 
     @Override

@@ -18,7 +18,7 @@ public class NaoHabilitadoState extends VacinacaoState {
                     "realize seu agendamento e esteje imunizado.";
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     public NaoHabilitadoState() {

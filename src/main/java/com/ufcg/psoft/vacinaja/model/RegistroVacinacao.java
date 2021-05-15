@@ -36,8 +36,8 @@ public class RegistroVacinacao {
         this.estadoVacinacao.atualizarEstado(this, email);
     }
 
-    public RegistroVacinacao vacinar(Vacina vacina, String email) {
-        estadoVacinacao.vacinar(this, vacina);
+    public RegistroVacinacao vacinar(Vacina vacina, String email, Lote lote) {
+        estadoVacinacao.vacinar(this, vacina, lote);
         estadoVacinacao.atualizarEstado(this, email);
         return this;
     }

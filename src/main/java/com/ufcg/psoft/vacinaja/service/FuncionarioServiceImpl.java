@@ -79,7 +79,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		}
 
 		List<Cidadao> cidadaosHabilitados = new ArrayList<>();
-
+		
 		Usuario usuario;
 		for(int i = 0; i < qtdVacinasDisponiveis; i++) {
 			Cidadao cidadao = filaPrioridadeHabilitados.remove();
@@ -87,6 +87,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			cidadao.getRegistroVacinacao().atualizarEstadoVacinacao(usuario.getEmail());
 			cidadaosHabilitados.add(cidadao);
 		}
+		
 		return cidadaosHabilitados;
 	}
 

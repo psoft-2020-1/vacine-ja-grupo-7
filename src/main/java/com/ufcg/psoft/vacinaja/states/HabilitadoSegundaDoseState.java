@@ -1,5 +1,6 @@
 package com.ufcg.psoft.vacinaja.states;
 
+import com.ufcg.psoft.vacinaja.model.Lote;
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class HabilitadoSegundaDoseState extends VacinacaoState {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     public HabilitadoSegundaDoseState() {
@@ -27,11 +28,13 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     }
 
     @Override
-    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina, Lote lote) {
         if(registroVacinacao.getDataAgendamento() != null && registroVacinacao.getDataAgendamento().toLocalDate().equals(LocalDate.now()) && registroVacinacao.getDataAgendamento().getHour() == LocalDateTime.now().getHour()) {
             registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
             registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
             registroVacinacao.setDataAgendamento(null);
+            lote.removerVacinaSegundaDose();
+            
             return true;
         }
         return false;

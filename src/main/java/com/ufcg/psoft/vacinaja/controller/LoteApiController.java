@@ -1,5 +1,7 @@
 package com.ufcg.psoft.vacinaja.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,15 @@ public class LoteApiController {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
+		return response;
+	}
+	
+	@RequestMapping(value = "/lotes/", method = RequestMethod.GET)
+	public ResponseEntity<?> listarLotes() {
+		ResponseEntity<?> response;
+		
+		response = new ResponseEntity<>(loteService.listarLotes(), HttpStatus.OK);
+		
 		return response;
 	}
 }

@@ -1,6 +1,7 @@
 package com.ufcg.psoft.vacinaja.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class LoteServiceImpl implements LoteService {
 		loteRepository.save(novoLote);
 		
 		return novoLote;
+	}
+	
+	@Override
+	public List<Lote> listarLotes() {
+		return loteRepository.findAll();
 	}
 	
 	private void validaLoteDTO(LoteDTO loteDTO) {
