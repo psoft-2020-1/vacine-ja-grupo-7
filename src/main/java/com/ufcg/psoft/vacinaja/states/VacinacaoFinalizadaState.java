@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class VacinacaoFinalizadaState extends VacinacaoState {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     public VacinacaoFinalizadaState() {

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class HabilitadoPrimeiraDoseState extends VacinacaoState {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
     public HabilitadoPrimeiraDoseState() {

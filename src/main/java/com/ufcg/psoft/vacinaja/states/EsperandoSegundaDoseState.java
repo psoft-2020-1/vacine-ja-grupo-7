@@ -14,7 +14,7 @@ import java.time.Period;
 public class EsperandoSegundaDoseState extends VacinacaoState {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     private static final String TITULO_EMAIL =
