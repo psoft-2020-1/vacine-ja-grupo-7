@@ -1,5 +1,6 @@
 package com.ufcg.psoft.vacinaja.dto;
 
+import com.ufcg.psoft.vacinaja.enums.ProfissaoEnum;
 import com.ufcg.psoft.vacinaja.model.Comorbidade;
 
 import java.util.List;
@@ -8,14 +9,11 @@ public class PerfilVacinacaoCidadaoDTO {
 
     private Long idade;
     private List<Comorbidade> comorbidades;
-    private String profissao;
+    private ProfissaoEnum profissao;
 
+    public PerfilVacinacaoCidadaoDTO() {}
 
-    public PerfilVacinacaoCidadaoDTO(){
-
-    }
-
-    public PerfilVacinacaoCidadaoDTO(Long idade, List<Comorbidade> comorbidades, String profissao){
+    public PerfilVacinacaoCidadaoDTO(Long idade, List<Comorbidade> comorbidades, ProfissaoEnum profissao) {
         this.idade = idade;
         this.comorbidades = comorbidades;
         this.profissao = profissao;
@@ -37,13 +35,11 @@ public class PerfilVacinacaoCidadaoDTO {
         this.comorbidades = comorbidades;
     }
 
-    public String getProfissao() {
-        return profissao;
-    }
+	public ProfissaoEnum getProfissao() {
+		return profissao;
+	}
 
-    public void setProfissao(String profissao) {
-        this.profissao = profissao;
-    }
-
-
+	public void setProfissao(ProfissaoEnum profissao) {
+		this.profissao = profissao;
+	}
 }
