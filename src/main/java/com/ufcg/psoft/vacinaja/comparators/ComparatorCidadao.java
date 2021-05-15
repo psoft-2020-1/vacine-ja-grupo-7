@@ -3,6 +3,7 @@ package com.ufcg.psoft.vacinaja.comparators;
 import com.ufcg.psoft.vacinaja.dto.PerfilVacinacaoCidadaoDTO;
 import com.ufcg.psoft.vacinaja.enums.PerfilGovernoEnum;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
+import com.ufcg.psoft.vacinaja.utils.ComorbidadeEnumToComorbidade;
 
 import java.util.Comparator;
 
@@ -20,7 +21,7 @@ public class ComparatorCidadao implements Comparator<Cidadao> {
         PerfilVacinacaoCidadaoDTO perfilCidadao2 = cidadao2.geraPerfilVacinacao();
 
         int scoreCidadao1 = 0;
-        if(perfilCidadao1.getComorbidades().contains(this.perfilGovernoEnum.getComorbidade())) {
+        if(perfilCidadao1.getComorbidades().contains(ComorbidadeEnumToComorbidade.toComorbidade(this.perfilGovernoEnum.getComorbidade()))) {
             scoreCidadao1 += 1;
         }
         if(perfilCidadao1.getProfissao().equals(this.perfilGovernoEnum.getProfissao())) {
@@ -28,7 +29,7 @@ public class ComparatorCidadao implements Comparator<Cidadao> {
         }
 
         int scoreCidadao2 = 0;
-        if(perfilCidadao2.getComorbidades().contains(this.perfilGovernoEnum.getComorbidade())) {
+        if(perfilCidadao2.getComorbidades().contains(ComorbidadeEnumToComorbidade.toComorbidade(this.perfilGovernoEnum.getComorbidade()))) {
             scoreCidadao2 += 1;
         }
         if(perfilCidadao2.getProfissao().equals(this.perfilGovernoEnum.getProfissao())) {
@@ -36,8 +37,9 @@ public class ComparatorCidadao implements Comparator<Cidadao> {
         }
 
         if(scoreCidadao1 != scoreCidadao2) {
-            return scoreCidadao1 - scoreCidadao2;
+            return scoreCidadao2 - scoreCidadao1;
         }
-        return (cidadao1.getIdade().intValue()) - (cidadao2.getIdade().intValue());
+        
+        return (cidadao2.getIdade().intValue()) - (cidadao1.getIdade().intValue());
     }
 }
