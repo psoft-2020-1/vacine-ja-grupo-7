@@ -13,19 +13,19 @@ import java.util.Optional;
 
 public interface CidadaoService {
 
-    public Optional<Cidadao> buscarCidadaoPeloCpf(String cpf);
+    Optional<Cidadao> buscarCidadaoPeloCpf(String cpf);
 
-    public Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO);
+    Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO);
 
-    public Cidadao atualizarCidadao(CidadaoUpdateDTO cidadaoUpdateDTO);
+    Cidadao atualizarCidadao(CidadaoUpdateDTO cidadaoUpdateDTO);
 
-    public Cidadao listarCidadao(CpfDTO cpfDTO);
+    Cidadao listarCidadao(CpfDTO cpfDTO);
 
-    public List<Cidadao> listarCidadaos(String token);
+    List<Cidadao> listarCidadaos(String token);
 
-    public void deletarCidadao(CpfDTO cpfDTO, String token);
+    void deletarCidadao(CpfDTO cpfDTO, String token);
 
-    public String consultarEstagioVacinacao(CpfDTO cpfDTO);
+    String consultarEstagioVacinacao(CpfDTO cpfDTO);
 
 	LocalDateTime agendarVacinacao(AgendamentoDTO agendamentoDTO);
 

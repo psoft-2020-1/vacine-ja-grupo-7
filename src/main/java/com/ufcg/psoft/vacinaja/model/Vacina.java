@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Vacina {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(unique = true)
     private String nomeFabricante;

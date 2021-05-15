@@ -21,7 +21,7 @@ public class LoginController {
 	@Autowired
 	private JWTService jwtService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 		try {
 			return new ResponseEntity<String>(jwtService.autenticar(loginDTO.getUsuario()), HttpStatus.OK);

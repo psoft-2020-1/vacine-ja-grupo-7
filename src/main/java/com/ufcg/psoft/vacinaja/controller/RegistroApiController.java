@@ -24,9 +24,10 @@ public class RegistroApiController {
 	@Autowired
 	private RegistroService registroService;
 
-	@RequestMapping(value = "/registro-vacinacao/{cpfCidadao}", method = RequestMethod.POST)
-	public ResponseEntity<?> vacinar(@PathVariable("cpfCidadao") String cpfCidadao, @RequestBody IdDTO vacinaIdDTO,
-			@RequestHeader("Authorization") String header) {
+	@RequestMapping(value = "/registro-vacinacao/vacinar/{cpfCidadao}", method = RequestMethod.POST)
+	public ResponseEntity<?> vacinar(@RequestHeader("Authorization") String header,
+									 @PathVariable("cpfCidadao") String cpfCidadao,
+									 @RequestBody IdDTO vacinaIdDTO) {
 		ResponseEntity<?> response;
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
