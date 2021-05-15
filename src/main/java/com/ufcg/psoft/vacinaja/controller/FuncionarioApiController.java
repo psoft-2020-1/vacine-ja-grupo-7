@@ -59,7 +59,7 @@ public class FuncionarioApiController {
 			Usuario usuario = usuarioService.getUsuarioParaFuncionario(header);
 			Funcionario funcionarioCadastrado = funcionarioService.cadastrarFuncionario(funcionarioDTO);
 			usuario.adicionaCadastroFuncionario(funcionarioCadastrado);
-			usuarioService.salvarUsuario(usuario);
+			usuarioService.atualizarUsuario(usuario);
 			response = new ResponseEntity<Funcionario>(funcionarioCadastrado, HttpStatus.CREATED);
 		} catch (FuncionarioInvalidoException fIE) {
 			response = new ResponseEntity<>(fIE.getMessage(), HttpStatus.BAD_REQUEST);
