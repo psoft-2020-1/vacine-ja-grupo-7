@@ -8,7 +8,7 @@ import java.util.Properties;
 public class EmailUtils {
 
     private final static String EMAIL_REMETENTE = "noreply.test.psoft@gmail.com";
-    private final static String SENHA_REMETENTE = "noreply.test.psoft@gmail.com";
+    private final static String SENHA_REMETENTE = "Test-psoft1";
 
     public static void enviarMensagem(String destinatario, String titulo, String corpoTexto) {
         Properties propriedades = new Properties();
