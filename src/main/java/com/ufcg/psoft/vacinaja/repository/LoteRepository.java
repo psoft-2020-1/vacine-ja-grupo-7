@@ -8,8 +8,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ufcg.psoft.vacinaja.comparators.LoteValidadeComparator;
 import com.ufcg.psoft.vacinaja.model.Lote;
 import com.ufcg.psoft.vacinaja.model.Vacina;
+import com.ufcg.psoft.vacinaja.states.HabilitadoPrimeiraDoseState;
+import com.ufcg.psoft.vacinaja.states.HabilitadoSegundaDoseState;
+import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 
 public interface LoteRepository extends JpaRepository<Lote, Long> {
+	
+	default Optional<Lote> proximoLoteByState(VacinacaoState estadoVacinacao, Vacina vacina) {
+		Optional<Lote> optionalLote = Optional.empty();
+		
+		if (estadoVacinacao instanceof HabilitadoPrimeiraDoseState) {
+			optionalLote = proximoLotePrimeiraDose(vacina);
+		
+		} else if (estadoVacinacao instanceof HabilitadoSegundaDoseState) {
+			optionalLote = proximoLoteSegundaDose(vacina);
+		}
+		
+		return optionalLote;
+	}
 	
 	/**
 	 * Busca, entre os lotes associados a uma vacina específica, 

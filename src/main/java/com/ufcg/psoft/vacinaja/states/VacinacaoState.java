@@ -1,6 +1,7 @@
 package com.ufcg.psoft.vacinaja.states;
 
 import com.ufcg.psoft.vacinaja.exceptions.VacinaInvalidaException;
+import com.ufcg.psoft.vacinaja.model.Lote;
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 import com.ufcg.psoft.vacinaja.model.Vacina;
 
@@ -22,7 +23,7 @@ public abstract class VacinacaoState {
 
     public abstract void atualizarEstado(RegistroVacinacao registroVacinacao, String email);
 
-    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina, Lote lote) {
         throw new VacinaInvalidaException("ErroVacinaCidadao: Cidadão não está habilitado a ser vacinado.");
     }
 
