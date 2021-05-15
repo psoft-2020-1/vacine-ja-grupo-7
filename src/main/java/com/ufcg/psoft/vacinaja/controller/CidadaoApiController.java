@@ -90,7 +90,7 @@ public class CidadaoApiController {
 	 *
 	 * @return cidadões cadastrados.
 	 */
-	@RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadaos/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarCidadaos(@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
 		try {
@@ -109,7 +109,7 @@ public class CidadaoApiController {
 	 *
 	 * @return cidadão solicitado.
 	 */
-	@RequestMapping(value = "/cidadaos/", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarCidadao(@RequestHeader("Authorization") String header,
 										   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;
