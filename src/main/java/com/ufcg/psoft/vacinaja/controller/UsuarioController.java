@@ -24,7 +24,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(value = "/usuario/{idUsuario}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/usuario/{idUsuario}/", method = RequestMethod.PUT)
 	public ResponseEntity<?> alterarSenhaUsuario(@PathVariable String idUsuario, @RequestBody String novaSenha,
 			@RequestHeader("Authorization") String header) {
 		Usuario usuario;
@@ -39,9 +39,9 @@ public class UsuarioController {
 		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/usuario/{idUsuario}", method = RequestMethod.DELETE)
-	public ResponseEntity<?> removerUsuario(@PathVariable String idUsuario,
-			@RequestHeader("Authorization") String header) {
+	@RequestMapping(value = "/usuario/{idUsuario}/", method = RequestMethod.DELETE)
+	public ResponseEntity<?> removerUsuario(@RequestHeader("Authorization") String header,
+											@PathVariable String idUsuario) {
 		try {
 			usuarioService.removerUsuario(idUsuario, header);
 		} catch (UsuarioInvalidoException e) {

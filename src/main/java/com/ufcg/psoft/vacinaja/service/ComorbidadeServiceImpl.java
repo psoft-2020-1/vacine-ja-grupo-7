@@ -10,7 +10,7 @@ import java.util.List;
 public class ComorbidadeServiceImpl implements ComorbidadeService{
 
     @Autowired
-    ComorbidadeRepository comorbidadeRepository;
+    private ComorbidadeRepository comorbidadeRepository;
 
     @Override
     public List<Comorbidade> listarComorbidades() {

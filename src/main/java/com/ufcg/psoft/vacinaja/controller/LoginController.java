@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ufcg.psoft.vacinaja.dto.LoginDTO;
 import com.ufcg.psoft.vacinaja.exceptions.LoginException;
-import com.ufcg.psoft.vacinaja.model.Usuario;
 import com.ufcg.psoft.vacinaja.service.JWTService;
 
 @RestController
@@ -22,7 +21,7 @@ public class LoginController {
 	@Autowired
 	private JWTService jwtService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 		try {
 			return new ResponseEntity<String>(jwtService.autenticar(loginDTO.getUsuario()), HttpStatus.OK);

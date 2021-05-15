@@ -10,14 +10,13 @@ import com.ufcg.psoft.vacinaja.model.Funcionario;
 
 public interface FuncionarioService {
 
-	public Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO);
-	public String listarVacinas();
+	Funcionario cadastrarFuncionario(FuncionarioDTO funcionarioDTO);
 
-	public List<Cidadao> habilitarPerfilVacinacao(PerfilGovernoEnum perfilGovernoEnum);
+	List<Cidadao> habilitarPerfilVacinacao(PerfilGovernoEnum perfilGovernoEnum);
 
-	public PerfilGovernoEnum [] listarPerfisGoverno();
+	PerfilGovernoEnum [] listarPerfisGoverno();
 
-	public Funcionario atualizarFuncionario(FuncionarioDTO funcionarioDTO);
+	Funcionario atualizarFuncionario(FuncionarioDTO funcionarioDTO);
 
 	void deletarFuncionario(CpfDTO cpfDTO, String token);
 

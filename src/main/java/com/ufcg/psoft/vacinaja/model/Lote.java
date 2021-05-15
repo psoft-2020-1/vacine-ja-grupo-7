@@ -21,7 +21,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Lote {
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 	
 	private Date dataDeValidade;

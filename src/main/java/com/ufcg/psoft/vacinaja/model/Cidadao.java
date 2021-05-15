@@ -13,8 +13,6 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
-import static java.time.Period.between;
-
 @Entity
 public class Cidadao {
 

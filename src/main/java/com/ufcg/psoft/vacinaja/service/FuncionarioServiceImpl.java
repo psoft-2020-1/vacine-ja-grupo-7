@@ -17,7 +17,6 @@ import com.ufcg.psoft.vacinaja.repository.*;
 import com.ufcg.psoft.vacinaja.dto.FuncionarioDTO;
 import com.ufcg.psoft.vacinaja.model.Funcionario;
 import com.ufcg.psoft.vacinaja.model.Lote;
-import com.ufcg.psoft.vacinaja.model.Vacina;
 import com.ufcg.psoft.vacinaja.repository.FuncionarioRepository;
 import com.ufcg.psoft.vacinaja.repository.LoteRepository;
 import com.ufcg.psoft.vacinaja.repository.VacinaRepository;
@@ -42,6 +41,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	@Autowired
 	private JWTService jwtService;
 
+	@Autowired
 	private VacinaRepository vacinaRepository;
 	
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
@@ -94,27 +94,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 	@Override
 	public PerfilGovernoEnum [] listarPerfisGoverno() {
 		return PerfilGovernoEnum.values();
-	}
-
-
-	@Override
-	public String listarVacinas() {
-		List<Lote> lotes = this.loteRepository.findAll();
-		List<Vacina> vacinas = this.vacinaRepository.findAll();
-		for(Lote lote : lotes) {
-			if(vacinas.contains(lote.getVacina())) {
-				vacinas.remove(lote.getVacina());
-			}
-		}
-		String retorno = "";
-		for(Lote lote : lotes) {
-			retorno += lote.toString() + "\n";
-		}
-		retorno += "Vacinas sem lote: ";
-		for(Vacina vacina : vacinas) {
-			retorno += vacina + "\n";
-		}
-		return retorno;
 	}
 
 	private void validaFuncionarioDTO(FuncionarioDTO funcionarioDTO) {

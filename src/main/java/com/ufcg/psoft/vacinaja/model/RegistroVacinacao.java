@@ -13,7 +13,7 @@ public class RegistroVacinacao {
     @Id
     private String numeroCartaoSus;
 
-    @ManyToOne(cascade= CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private VacinacaoState estadoVacinacao;
 
     private LocalDate dataVacinacaoPrimeiraDose;

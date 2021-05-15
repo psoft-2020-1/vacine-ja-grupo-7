@@ -14,7 +14,7 @@ import java.time.Period;
 public class EsperandoSegundaDoseState extends VacinacaoState {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private static final String TITULO_EMAIL =
@@ -27,8 +27,6 @@ public class EsperandoSegundaDoseState extends VacinacaoState {
 
     }
 
-    //TODO job para verificar se o cidadao já está com a quantidade de dias para ser notificado.
-    //TODO pegar cidadaos que estão com instanceof igual esperando segunda dose e chamar o atualizar estado.
     @Override
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         LocalDate dataAtual = LocalDate.now();
@@ -53,5 +51,10 @@ public class EsperandoSegundaDoseState extends VacinacaoState {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Estado aguardando a segunda dose.";
     }
 }

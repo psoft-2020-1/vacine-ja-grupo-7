@@ -5,6 +5,7 @@ import com.ufcg.psoft.vacinaja.dto.CidadaoDTO;
 import com.ufcg.psoft.vacinaja.dto.CidadaoUpdateDTO;
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
+import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,18 +13,19 @@ import java.util.Optional;
 
 public interface CidadaoService {
 
-    public Optional<Cidadao> buscarCidadaoPeloCpf(String cpf);
+    Optional<Cidadao> buscarCidadaoPeloCpf(String cpf);
 
-    public Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO);
+    Cidadao cadastrarCidadao(CidadaoDTO cidadaoDTO);
 
-    public Cidadao atualizarCidadao(CidadaoUpdateDTO cidadaoUpdateDTO);
+    Cidadao atualizarCidadao(CidadaoUpdateDTO cidadaoUpdateDTO);
 
-    public Cidadao listarCidadao(CpfDTO cpfDTO);
+    Cidadao listarCidadao(CpfDTO cpfDTO);
 
-    public List<Cidadao> listarCidadaos(String token);
+    List<Cidadao> listarCidadaos(String token);
 
-    public void deletarCidadao(CpfDTO cpfDTO, String token);
+    void deletarCidadao(CpfDTO cpfDTO, String token);
 
+    String consultarEstagioVacinacao(CpfDTO cpfDTO);
 
 	LocalDateTime agendarVacinacao(AgendamentoDTO agendamentoDTO);
 

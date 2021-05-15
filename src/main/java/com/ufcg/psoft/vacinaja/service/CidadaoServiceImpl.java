@@ -41,6 +41,7 @@ public class CidadaoServiceImpl implements CidadaoService {
 	private RegistroRepository registroRepository;
 
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
+	private static final String MENSAGEM_CONSULTA_ESTAGIO = "O seu estágio de vacinação é: ";
 
 	@Override
 	public Optional<Cidadao> buscarCidadaoPeloCpf(String cpf) {
@@ -94,7 +95,6 @@ public class CidadaoServiceImpl implements CidadaoService {
 
 	@Override
 	public LocalDateTime agendarVacinacao(AgendamentoDTO agendamentoDTO) {
-		// TODO Realizar agendamento com dia e horario e verificar choque de horarios
 		this.validarAgendamentoDTO(agendamentoDTO);
 		LocalDateTime data = agendamentoDTO.getData();
 		String cartaoSUS = agendamentoDTO.getCartaoSUS();
@@ -151,6 +151,16 @@ public class CidadaoServiceImpl implements CidadaoService {
 			cidadaoRepository.delete(optionalCidadao.get());
 		}
 		throw new ValidacaoTokenException("ErroValidacaoToken: Token informado não tem permissão para a alteração.");
+	}
+
+	@Override
+	public String consultarEstagioVacinacao(CpfDTO cpfDTO) {
+		Optional<Cidadao> cidadao = cidadaoRepository.findCidadaoByCpf(cpfDTO.getCpf());
+		if(!cidadao.isPresent()) {
+			throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
+		}
+
+		return MENSAGEM_CONSULTA_ESTAGIO + cidadao.get().getRegistroVacinacao().getEstadoVacinacao() + "\n";
 	}
 
 	private Cidadao criarCidadao(CidadaoDTO cidadaoDTO, RegistroVacinacao registroVacinacao) {

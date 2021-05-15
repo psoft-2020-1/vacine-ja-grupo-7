@@ -4,6 +4,6 @@ import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
 
 public interface RegistroService {
 
-    public RegistroVacinacao vacinar(String cpfCidadao, Long vacinaId);
+    RegistroVacinacao vacinar(String cpfCidadao, Long vacinaId);
 
 }
