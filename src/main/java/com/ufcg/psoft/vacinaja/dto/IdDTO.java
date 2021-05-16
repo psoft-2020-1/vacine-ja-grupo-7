@@ -1,6 +1,7 @@
 package com.ufcg.psoft.vacinaja.dto;
 
 public class IdDTO {
+
     private Long id;
 
     public IdDTO () {

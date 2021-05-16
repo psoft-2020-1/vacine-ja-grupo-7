@@ -17,10 +17,10 @@ import com.ufcg.psoft.vacinaja.exceptions.UsuarioInvalidoException;
  */
 @Entity
 public class Usuario {
+
 	@Id
 	private String email;
 	private String senha;
-	
 	private boolean permissaoAdministrador;
 	private boolean permissaoCidadao;
 	private boolean permissaoFuncionario;

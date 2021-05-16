@@ -46,7 +46,7 @@ public class FuncionarioApiController {
 	 * funcionário; Local de trabalho do funcionário.
 	 *
 	 * @param funcionarioDTO carrega as informações de cadastro do funcionário.
-	 *
+	 * @param header token de autenticação.
 	 * @return É retornado o funcionário cadastrado no banco de dados e o status da
 	 *         requisição.
 	 */
@@ -72,6 +72,14 @@ public class FuncionarioApiController {
 		return response;
 	}
 
+	/**
+	 * Atualiza uma funcionário a partir de: Cpf do funcionário; Cargo do
+	 * funcionário; Local de trabalho do funcionário.
+	 *
+	 * @param funcionarioDTO carrega as informações de atualização do funcionário.
+	 * @param header token de autenticação.
+	 * @return É retornado o funcionário atualizado no banco de dados e o status da requisição.
+	 */
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.PUT)
 	public ResponseEntity<?> atualizarFuncionario(@RequestHeader("Authorization") String header,
 												  @RequestBody FuncionarioDTO funcionarioDTO) {
@@ -90,6 +98,13 @@ public class FuncionarioApiController {
 		return response;
 	}
 
+	/**
+	 * Lista um funcionário a partir de: Cpf do funcionário.
+	 *
+	 * @param cpfDTO carrega o cpf do funcionário.
+	 * @param header token de autenticação.
+	 * @return É retornado o funcionário desse cpf cadastrado no banco de dados e o status da requisição.
+	 */
 	@RequestMapping(value = "/funcionario/listar/", method = RequestMethod.POST)
 	public ResponseEntity<?> listarFuncionario(@RequestHeader("Authorization") String header,
 											   @RequestBody CpfDTO cpfDTO) {
@@ -106,6 +121,13 @@ public class FuncionarioApiController {
 		return response;
 	}
 
+	/**
+	 * Deleta um funcionário a partir de: Cpf do funcionário.
+	 *
+	 * @param cpfDTO carrega o cpf do funcionário.
+	 * @param header token de autenticação.
+	 * @return É retornado o status da requisição.
+	 */
 	@RequestMapping(value = "/funcionario/", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletarFuncionario(@RequestHeader("Authorization") String header,
 												@RequestBody CpfDTO cpfDTO) {
@@ -121,6 +143,14 @@ public class FuncionarioApiController {
 		return response;
 	}
 
+	/**
+	 * Habilita o perfil de vacinação passado por um funcionário para para o sistema
+	 * fazer a habilitação de cidadãos para a primeira dose de acordo com esse perfil.
+	 *
+	 * @param perfil perfil selecionado pelo funcionário.
+	 * @param header token de autenticação.
+	 * @return Pessoas que foram habilitadas de acordo com esse perfil.
+	 */
 	@RequestMapping(value = "/funcionario/perfil-vacinacao/", method = RequestMethod.POST)
 	public ResponseEntity<?> habilitarPerfilVacinacao(@RequestHeader("Authorization") String header,
 													  @RequestBody String perfil) {
@@ -140,6 +170,11 @@ public class FuncionarioApiController {
 		return response;
 	}
 
+	/**
+	 * Lista os perfis de vacinação cadastrados no sistema.
+	 * @param header token de autenticação.
+	 * @return Perfis de vacinação cadastrados no sistema.
+	 */
 	@RequestMapping(value = "/funcionario/perfis-vacinacao/", method = RequestMethod.GET)
 	public ResponseEntity<?> listarPerfisGoverno(@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;

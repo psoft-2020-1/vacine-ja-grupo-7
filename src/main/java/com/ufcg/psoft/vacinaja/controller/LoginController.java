@@ -21,6 +21,15 @@ public class LoginController {
 	@Autowired
 	private JWTService jwtService;
 
+	/**
+	 * Realiza o login no sistema
+	 *
+	 * @param loginDTO Data Transfer Object do login, contem o email e senha e a flag
+	 * que indica que tipo de login está sendo realizado.
+	 *
+	 * @return o token que sera usado para o usuario que fez login acessar os outros
+	 * endpoints do sistema.
+	 */
 	@RequestMapping(value = "/login/", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
 		try {

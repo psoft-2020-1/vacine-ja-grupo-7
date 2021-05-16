@@ -24,30 +24,45 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@RequestMapping(value = "/usuario/{idUsuario}/", method = RequestMethod.PUT)
-	public ResponseEntity<?> alterarSenhaUsuario(@PathVariable String idUsuario, @RequestBody String novaSenha,
+	/**
+	 * Altera a senha do usuario cadastrado no sistema.
+	 *
+	 * @param header token de autenticação.
+	 * @param emailUsuario email do usuario.
+	 * @param novaSenha nova senha.
+	 * @return O lote cadastrado e o status da requisição.
+	 */
+	@RequestMapping(value = "/usuario/{emailUsuario}/", method = RequestMethod.PUT)
+	public ResponseEntity<?> alterarSenhaUsuario(@PathVariable String emailUsuario, @RequestBody String novaSenha,
 			@RequestHeader("Authorization") String header) {
 		Usuario usuario;
 		try {
-			usuario = usuarioService.alterarSenha(idUsuario, novaSenha, header);
+			usuario = usuarioService.alterarSenha(emailUsuario, novaSenha, header);
 		} catch (UsuarioInvalidoException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (ValidacaoTokenException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 
 		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/usuario/{idUsuario}/", method = RequestMethod.DELETE)
+	/**
+	 * Remove o usuário do sistema
+	 *
+	 * @param header token de autenticação.
+	 * @param emailUsuario email do usuario.
+	 * @return o status da requisição.
+	 */
+	@RequestMapping(value = "/usuario/{emailUsuario}/", method = RequestMethod.DELETE)
 	public ResponseEntity<?> removerUsuario(@RequestHeader("Authorization") String header,
-											@PathVariable String idUsuario) {
+											@PathVariable String emailUsuario) {
 		try {
-			usuarioService.removerUsuario(idUsuario, header);
+			usuarioService.removerUsuario(emailUsuario, header);
 		} catch (UsuarioInvalidoException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (ValidacaoTokenException e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		}
 
 		return new ResponseEntity<Usuario>(HttpStatus.OK);
