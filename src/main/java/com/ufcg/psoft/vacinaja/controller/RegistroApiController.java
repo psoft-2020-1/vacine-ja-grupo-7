@@ -1,6 +1,7 @@
 package com.ufcg.psoft.vacinaja.controller;
 
 import com.ufcg.psoft.vacinaja.dto.CpfDTO;
+import com.ufcg.psoft.vacinaja.dto.RegistroVacinacaoDTO;
 import com.ufcg.psoft.vacinaja.enums.PermissaoLogin;
 import com.ufcg.psoft.vacinaja.exceptions.CidadaoInvalidoException;
 import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
@@ -28,19 +29,17 @@ public class RegistroApiController {
 	 * Realiza a vacinação da primeira dose ou segunda dose em um cidadão.
 	 *
 	 * @param header token de autenticação.
-	 * @param idVacina id da vacina.
-	 * @param cpfDTO Data Transfer Object do cpf do cidadãp,
+	 * @param registroVacinacaoDTO contém informações referentes a vacinação deste cidadão, como
 	 * armazena o identificador único do cidadão.
 	 * @return O registro do cidadão atualizado após a vacinação.
 	 */
-	@RequestMapping(value = "/registro-vacinacao/vacinar/{idVacina}", method = RequestMethod.POST)
+	@RequestMapping(value = "/registro-vacinacao/vacinar/", method = RequestMethod.POST)
 	public ResponseEntity<?> vacinar(@RequestHeader("Authorization") String header,
-									 @PathVariable("idVacina") Long idVacina,
-									 @RequestBody CpfDTO cpfDTO) {
+									 @RequestBody RegistroVacinacaoDTO registroVacinacaoDTO) {
 		ResponseEntity<?> response;
 		try {
 			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
-				RegistroVacinacao registro = registroService.vacinar(cpfDTO.getCpf(), idVacina);
+				RegistroVacinacao registro = registroService.vacinar(registroVacinacaoDTO);
 				response = new ResponseEntity<>(registro, HttpStatus.OK);
 			} else {
 				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
