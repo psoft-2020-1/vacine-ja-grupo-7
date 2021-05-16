@@ -66,9 +66,22 @@ public class LoteApiController {
 	 * @return Os lotes cadastrados no sistema.
 	 */
 	@RequestMapping(value = "/lotes/", method = RequestMethod.GET)
-	public ResponseEntity<?> listarLotes() {
+	public ResponseEntity<?> listarLotes(@RequestHeader("Authorization") String header) {
 		ResponseEntity<?> response;
-		response = new ResponseEntity<>(loteService.listarLotes(), HttpStatus.OK);
+		try {
+			if (jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
+				response = new ResponseEntity<>(loteService.listarLotes(), HttpStatus.OK);
+			} else {
+				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
+						HttpStatus.UNAUTHORIZED);
+			}
+		} catch (LoteInvalidoException lIE) {
+			response = new ResponseEntity<>(lIE.getMessage(), HttpStatus.BAD_REQUEST);
+
+		} catch (Exception e) {
+			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 		return response;
 	}
 }

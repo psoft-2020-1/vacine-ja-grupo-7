@@ -28,9 +28,9 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     }
 
     @Override
-    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina, LocalDate dataVacinacao) {
         registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
-        registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
+        registroVacinacao.setDataVacinacaoSegundaDose(dataVacinacao);
         registroVacinacao.setDataAgendamento(null);
     }
 

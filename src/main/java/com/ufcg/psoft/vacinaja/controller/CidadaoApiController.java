@@ -41,7 +41,7 @@ public class CidadaoApiController {
 	 * @param cadastroCidadaoDTO Data Transfer Object do cidadao para o cadastro.
 	 * @return cidadao cadastrado.
 	 */
-	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
+	@RequestMapping(value = "/cadastrar-cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
 		ResponseEntity<?> response;
 		try {

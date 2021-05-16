@@ -29,7 +29,7 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
 
 
     @Override
-    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina, LocalDate dataVacinacao) {
         if (vacina.getNumeroDoses() == 1) {
             registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
         } else {
@@ -37,7 +37,7 @@ public class HabilitadoPrimeiraDoseState extends VacinacaoState {
         }
 
         registroVacinacao.setDataAgendamento(null);
-        registroVacinacao.setDataVacinacaoPrimeiraDose(LocalDate.now());
+        registroVacinacao.setDataVacinacaoPrimeiraDose(dataVacinacao);
         registroVacinacao.setVacina(vacina);
     }
 
