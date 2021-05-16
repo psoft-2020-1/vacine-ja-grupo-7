@@ -43,9 +43,6 @@ public class ScheduledHabilitaSegundaDose {
                 cidadaoRepository.save(cidadao);
             }
         }
-        System.out.println("Ei!");
     }
-
-
 
 }
