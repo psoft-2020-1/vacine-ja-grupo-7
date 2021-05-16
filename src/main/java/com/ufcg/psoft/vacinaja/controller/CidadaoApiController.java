@@ -38,10 +38,10 @@ public class CidadaoApiController {
 	/**
 	 * API para cadastrar um cidadão no sistema.
 	 *
-	 * @param cidadaoDTO Data Transfer Object do cidadao para o cadastro.
+	 * @param cadastroCidadaoDTO Data Transfer Object do cidadao para o cadastro.
 	 * @return cidadao cadastrado.
 	 */
-	@RequestMapping(value = "/cadastrar-cidadao/", method = RequestMethod.POST)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> cadastrarCidadao(@RequestBody CadastroCidadaoDTO cadastroCidadaoDTO) {
 		ResponseEntity<?> response;
 		try {
@@ -65,6 +65,7 @@ public class CidadaoApiController {
 	 * API para atualizar um cidadão no sistema.
 	 *
 	 * @param cidadaoUpdateDTO Data Transfer Object do cidadao para a atualização.
+	 * @param header token de autenticação.
 	 * @return cidadão atualizada.
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.PUT)
@@ -87,7 +88,7 @@ public class CidadaoApiController {
 
 	/**
 	 * API para listar os cidadões no sistema.
-	 *
+	 * @param header token de autenticação.
 	 * @return cidadões cadastrados.
 	 */
 	@RequestMapping(value = "/cidadaos/", method = RequestMethod.GET)
@@ -106,7 +107,7 @@ public class CidadaoApiController {
 
 	/**
 	 * API para listar cidadão pelo cpf no sistema.
-	 *
+	 * @param header token de autenticação.
 	 * @return cidadão solicitado.
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
@@ -127,9 +128,9 @@ public class CidadaoApiController {
 
 	/**
 	 * API para deletar um cidadão no sistema.
-	 *
-	 * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do
-	 *               cidadão.
+	 * @param header token de autenticação.
+	 * @param cpfDTO Data Transfer Object do cpf do cidadão para a exclusão do cidadão.
+	 * @return  Status da requisição.
 	 */
 	@RequestMapping(value = "/cidadao/", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deletarCidadao(@RequestHeader("Authorization") String header,
@@ -147,9 +148,8 @@ public class CidadaoApiController {
 	}
 
 	/**
-	 * API para o agendamento da vacinação de um cidadão seja a primeira ou a
-	 * segunda dose.
-	 *
+	 * API para o agendamento da vacinação de um cidadão seja a primeira ou segunda dose.
+	 * @param header token de autenticação.
 	 * @param agendamentoDTO Data Transfer Object de um agendamento.
 	 * @return a data do agendamento.
 	 */
@@ -160,7 +160,7 @@ public class CidadaoApiController {
 		try {
 			usuarioService.verificaUsuarioPermissaoCidadaoByCartaoSUS(agendamentoDTO.getCartaoSUS(), header);
 			LocalDateTime dataAgendada = this.cidadaoService.agendarVacinacao(agendamentoDTO);
-			response = new ResponseEntity<LocalDateTime>(dataAgendada, HttpStatus.OK);
+			response = new ResponseEntity<>(dataAgendada, HttpStatus.OK);
 		} catch (ValidacaoTokenException e) {
 			response = new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
 		} catch (RegistroInvalidoException rie) {
@@ -174,8 +174,8 @@ public class CidadaoApiController {
 	/**
 	 * API para a consulta do estágio vacinação de um determinado cidadão.
 	 *
-	 * @param cpfDTO DTO do cpf do cidadão cujo estágio de vacinação será
-	 *               consultado.
+	 * @param cpfDTO DTO do cpf do cidadão cujo estágio de vacinação será consultado.
+	 * @param header token de autenticação.
 	 * @return é retornado o estágio de vacinação.
 	 */
 	@RequestMapping(value = "/cidadao/estagio-vacinacao/", method = RequestMethod.POST)

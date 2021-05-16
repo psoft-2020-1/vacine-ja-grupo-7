@@ -12,9 +12,7 @@ import com.ufcg.psoft.vacinaja.exceptions.RegistroInvalidoException;
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.model.Comorbidade;
 import com.ufcg.psoft.vacinaja.model.RegistroVacinacao;
-import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
-import com.ufcg.psoft.vacinaja.repository.ComorbidadeRepository;
-import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
+import com.ufcg.psoft.vacinaja.repository.*;
 import com.ufcg.psoft.vacinaja.states.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,12 @@ public class CidadaoServiceImpl implements CidadaoService {
 
 	@Autowired
 	private RegistroRepository registroRepository;
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private FuncionarioRepository funcionarioRepository;
 
 	private static final String REGEX_VALIDATE_CPF = "(?=(?:[0-9]){11}).*";
 	private static final String MENSAGEM_CONSULTA_ESTAGIO = "O seu estágio de vacinação é: ";
@@ -154,7 +158,11 @@ public class CidadaoServiceImpl implements CidadaoService {
 			if (!optionalCidadao.isPresent()) {
 				throw new CidadaoInvalidoException("ErroListarCidadao: Cidadão com esse cpf não encontrado.");
 			}
+			if(funcionarioRepository.findById(cpfDTO.getCpf()).isPresent()){
+				throw new CidadaoInvalidoException("ErroDeletarCidadao: Cidadão possui cadastrao como funcionário.");
+			}
 			cidadaoRepository.delete(optionalCidadao.get());
+			usuarioRepository.delete(usuarioRepository.getUsuarioByCadastroCidadao(optionalCidadao.get()).get());
 		}
 		throw new ValidacaoTokenException("ErroValidacaoToken: Token informado não tem permissão para a alteração.");
 	}

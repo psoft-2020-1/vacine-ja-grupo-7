@@ -27,7 +27,8 @@ public class AdministradorApiController {
 	/**
 	 * Api para realizar a aprovação de um funcionário cadastrado.
 	 * 
-	 * @param funcionario login do funcionário que será aprovado.
+	 * @param emailFuncionario login do funcionário que será aprovado.
+	 * @param header token de autenticação.
 	 * @return o usuario que agora possui direitos de um funcionario no sistema.
 	 */
 	@RequestMapping(value = "/administrador/aprovar/{funcionario}/", method = RequestMethod.POST)

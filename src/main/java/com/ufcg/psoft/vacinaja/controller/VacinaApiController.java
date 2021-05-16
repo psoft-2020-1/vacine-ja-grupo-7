@@ -34,6 +34,7 @@ public class VacinaApiController {
 	 *
 	 * @param vacinaDTO DTO que possui informações referentes ao fabricante, número
 	 *                  de doses da vacina e número de dias entre as dozes.
+	 * @param header token de autenticação.
 	 * @return É retornado a vacina cadastrada no banco e o status da requisição.
 	 */
 	@RequestMapping(value = "/vacina/", method = RequestMethod.POST)
@@ -62,6 +63,7 @@ public class VacinaApiController {
 	 * Pesquisa e retorna uma vacina pelo id.
 	 *
 	 * @param id id referente a vacina.
+	 * @param header token de autenticação.
 	 * @return retorna a vacina com o id especificado e o status da requisição.
 	 */
 	@RequestMapping(value = "/vacina/{id}", method = RequestMethod.GET)
@@ -88,6 +90,7 @@ public class VacinaApiController {
 	/**
 	 * Retorna todas as vacinas cadastradas.
 	 *
+	 * @param header token de autenticação.
 	 * @return retorna todas as vacinas e o status da requisição.
 	 */
 	@RequestMapping(value = "/vacinas/", method = RequestMethod.GET)
@@ -119,6 +122,7 @@ public class VacinaApiController {
 	 * @param id        o id referente a vacina a ser editada.
 	 * @param vacinaDTO DTO que possui informações referentes ao fabricante, número
 	 *                  de doses da vacina e número de dias entre as dozes.
+	 * @param header token de autenticação.
 	 * @return retorna a vacina editada e o status da requisição.
 	 */
 	@RequestMapping(value = "/vacina/{id}", method = RequestMethod.PUT)
@@ -147,6 +151,7 @@ public class VacinaApiController {
 	 * Deleta uma vacina a partir de um id.
 	 *
 	 * @param id id referente a vacina a ser deletada.
+	 * @param header token de autenticação.
 	 * @return retorna o status da requisição.
 	 */
 	@RequestMapping(value = "/vacina/{id}", method = RequestMethod.DELETE)
@@ -176,6 +181,7 @@ public class VacinaApiController {
 	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes
 	 * associados.
 	 *
+	 * @param header token de autenticação.
 	 * @return retorna o toString de todos os lotes e paras as vacinas sem lote,
 	 *         somente o toString da vacina.
 	 */
