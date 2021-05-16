@@ -2,6 +2,7 @@ package com.ufcg.psoft.vacinaja.scheduled;
 
 import com.ufcg.psoft.vacinaja.model.Cidadao;
 import com.ufcg.psoft.vacinaja.repository.CidadaoRepository;
+import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
 import com.ufcg.psoft.vacinaja.repository.UsuarioRepository;
 import com.ufcg.psoft.vacinaja.states.EsperandoSegundaDoseState;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class ScheduledHabilitaSegundaDose {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private RegistroRepository registroRepository;
+
     @Scheduled(fixedDelay = DIA)
     void reportCurrentTime() {
         List<Cidadao> cidadaos = cidadaoRepository.findAll();
@@ -35,8 +39,11 @@ public class ScheduledHabilitaSegundaDose {
             if(cidadao.getRegistroVacinacao().getEstadoVacinacao() instanceof EsperandoSegundaDoseState) {
                 String email = usuarioRepository.getUsuarioByCadastroCidadao(cidadao).get().getEmail();
                 cidadao.getRegistroVacinacao().getEstadoVacinacao().atualizarEstado(cidadao.getRegistroVacinacao(), email);
+                registroRepository.save(cidadao.getRegistroVacinacao());
+                cidadaoRepository.save(cidadao);
             }
         }
+        System.out.println("Ei!");
     }
 
 

@@ -89,7 +89,8 @@ public class UsuarioService {
 		String email = jwtService.getEmailToken(header);
 		Usuario usuario = getUsuario(email);
 		
-		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO)) {
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO) &&
+				!jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
 			throw new ValidacaoTokenException(
 					"ErroValidacaoToken: O token informado não pertence a um cidadão.");
 		}
@@ -104,7 +105,8 @@ public class UsuarioService {
 	public void verificaUsuarioPermissaoCidadaoByCartaoSUS(String cartaoSUS, String header) {
 		String email = jwtService.getEmailToken(header);
 		Usuario usuario = getUsuario(email);
-		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO)) {
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.CIDADAO) &&
+				!jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
 			throw new ValidacaoTokenException(
 					"ErroValidacaoToken: O token informado não pertence a um cidadão.");
 		}
@@ -120,7 +122,8 @@ public class UsuarioService {
 		String email = jwtService.getEmailToken(header);
 		Usuario usuario = getUsuario(email);
 		
-		if (!jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO)) {
+		if (!jwtService.verificaPermissao(header, PermissaoLogin.FUNCIONARIO) &&
+				!jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
 			throw new ValidacaoTokenException(
 					"ErroValidacaoToken: O token informado não pertence a um funcionario.");
 		}

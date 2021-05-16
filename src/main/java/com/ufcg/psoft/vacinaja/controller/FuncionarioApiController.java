@@ -90,7 +90,7 @@ public class FuncionarioApiController {
 		return response;
 	}
 
-	@RequestMapping(value = "/funcionario/", method = RequestMethod.GET)
+	@RequestMapping(value = "/funcionario/listar/", method = RequestMethod.POST)
 	public ResponseEntity<?> listarFuncionario(@RequestHeader("Authorization") String header,
 											   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;

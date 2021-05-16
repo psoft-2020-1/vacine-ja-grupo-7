@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 import java.time.Period;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Entity
 public class EsperandoSegundaDoseState extends VacinacaoState {
 
@@ -31,7 +33,7 @@ public class EsperandoSegundaDoseState extends VacinacaoState {
     public void atualizarEstado(RegistroVacinacao registroVacinacao, String email) {
         LocalDate dataAtual = LocalDate.now();
         LocalDate dataVacinacao = registroVacinacao.getDataVacinacaoPrimeiraDose();
-        long diferencaDias = Period.between(dataAtual, dataVacinacao).getDays();
+        long diferencaDias = DAYS.between(dataVacinacao, dataAtual);
         if(diferencaDias >= registroVacinacao.getVacina().getTempoEntreDoses()) {
             registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
             registroVacinacao.setEstadoVacinacao(new HabilitadoSegundaDoseState());

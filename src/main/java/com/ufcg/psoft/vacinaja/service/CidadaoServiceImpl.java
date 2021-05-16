@@ -63,6 +63,10 @@ public class CidadaoServiceImpl implements CidadaoService {
             throw new CidadaoInvalidoException("ErroCadastroCidadão: Cidadão já cadastrado.");
         }
         validaCidadaoDTO(cidadaoDTO);
+		Optional<RegistroVacinacao> registro = registroRepository.findById(cidadaoDTO.getNumeroCartaoSus());
+		if(registro.isPresent()) {
+			throw new CidadaoInvalidoException("ErroCadastroCidadão: Cartão do SUS deve ser único.");
+		}
         RegistroVacinacao registroVacinacao = cadastraRegistroVacinacao(cidadaoDTO.getNumeroCartaoSus());
 
 		Cidadao cidadaoCadastrado = cidadaoRepository.save(this.criarCidadao(cidadaoDTO, registroVacinacao));
@@ -122,10 +126,12 @@ public class CidadaoServiceImpl implements CidadaoService {
 
 		List<RegistroVacinacao> registros = registroRepository.findAll();
 		for (RegistroVacinacao registroVacinacao : registros) {
-			if (registroVacinacao.getDataAgendamento().toLocalDate().equals(agendamentoDTO.getData().toLocalDate())) {
-				if (registroVacinacao.getDataAgendamento().getHour() == agendamentoDTO.getData().getHour()) {
-					throw new RegistroInvalidoException(
-							"Agendamento Inválido, não pode haver agendamento com mesmo horário.");
+			if(!agendamentoDTO.getCartaoSUS().equals(registro.getNumeroCartaoSus())){
+				if (registroVacinacao.getDataAgendamento().toLocalDate().equals(agendamentoDTO.getData().toLocalDate())) {
+					if (registroVacinacao.getDataAgendamento().getHour() == agendamentoDTO.getData().getHour()) {
+						throw new RegistroInvalidoException(
+								"Agendamento Inválido, não pode haver agendamento com mesmo horário.");
+					}
 				}
 			}
 		}

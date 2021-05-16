@@ -28,16 +28,10 @@ public class HabilitadoSegundaDoseState extends VacinacaoState {
     }
 
     @Override
-    public boolean vacinar(RegistroVacinacao registroVacinacao, Vacina vacina, Lote lote) {
-        if(registroVacinacao.getDataAgendamento() != null && registroVacinacao.getDataAgendamento().toLocalDate().equals(LocalDate.now()) && registroVacinacao.getDataAgendamento().getHour() == LocalDateTime.now().getHour()) {
-            registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
-            registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
-            registroVacinacao.setDataAgendamento(null);
-            lote.removerVacinaSegundaDose();
-            
-            return true;
-        }
-        return false;
+    public void vacinar(RegistroVacinacao registroVacinacao, Vacina vacina) {
+        registroVacinacao.setEstadoVacinacao(new VacinacaoFinalizadaState());
+        registroVacinacao.setDataVacinacaoSegundaDose(LocalDate.now());
+        registroVacinacao.setDataAgendamento(null);
     }
 
     public Long getId() {
