@@ -115,39 +115,6 @@ public class VacinaApiController {
 	}
 
 	/**
-	 * Edita uma vacina previamente cadastrada modificando os atributos: Nome único
-	 * de seu fabricante; Número de telefone de 10 digitos (DDD + número); Número de
-	 * doses da vacina (1 ou 2); Número de dias entre as doses.
-	 *
-	 * @param id        o id referente a vacina a ser editada.
-	 * @param vacinaDTO DTO que possui informações referentes ao fabricante, número
-	 *                  de doses da vacina e número de dias entre as doses.
-	 * @param header token de autenticação.
-	 * @return retorna a vacina editada e o status da requisição.
-	 */
-	@RequestMapping(value = "/vacina/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> editarVacina(@PathVariable("id") Long id, @RequestBody VacinaDTO vacinaDTO,
-			@RequestHeader("Authorization") String header) {
-		ResponseEntity<?> response;
-		try {
-			if (jwtService.verificaPermissao(header, PermissaoLogin.ADMINISTRADOR)) {
-				response = new ResponseEntity<Vacina>(vacinaService.editarVacina(vacinaDTO, id), HttpStatus.OK);
-			} else {
-				response = new ResponseEntity<>("ErroValidacaoToken: Usuario não tem permissão para a operação.",
-						HttpStatus.UNAUTHORIZED);
-			}
-		} catch (VacinaInvalidaException vie) {
-			System.out.println(vie.getMessage());
-			response = new ResponseEntity<>(vie.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			response = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		return response;
-	}
-
-	/**
 	 * Retorna todas as vacinas do sistema e para os que possuem, seus lotes
 	 * associados.
 	 *

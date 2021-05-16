@@ -51,31 +51,6 @@ public class VacinaServiceImpl implements VacinaService {
     }
 
     @Override
-    public Vacina editarVacina(VacinaDTO vacinaDTO, Long vacinaId) {
-        Optional<Vacina> vacinaCadastrada = vacinaRepository.findById(vacinaId);
-        if(!vacinaCadastrada.isPresent()) {
-            throw new VacinaInvalidaException("ErroEditarVacina: Vacina não existe.");
-        }
-        validarVacina(vacinaDTO);
-        Vacina vacina = vacinaCadastrada.get();
-        vacina.setNomeFabricante(vacinaDTO.getNomeFabricante());
-        vacina.setTelefoneFabricante(vacinaDTO.getTelefoneFabricante());
-        vacina.setTempoEntreDoses(vacinaDTO.getTempoEntreDoses());
-        vacina.setNumeroDoses(vacinaDTO.getNumeroDoses());
-
-        return vacinaRepository.save(vacina);
-    }
-
-    @Override
-    public void deletarVacina(Long vacinaId) {
-        Optional<Vacina> vacina = vacinaRepository.findById(vacinaId);
-        if(!vacina.isPresent()) {
-            throw new VacinaInvalidaException("ErroDeletarVacina: Vacina não existe.");
-        }
-        vacinaRepository.delete(vacina.get());
-    }
-
-    @Override
     public Vacina getVacina(Long vacinaId) {
         Optional<Vacina> vacina = vacinaRepository.findById(vacinaId);
         if(!vacina.isPresent()) {

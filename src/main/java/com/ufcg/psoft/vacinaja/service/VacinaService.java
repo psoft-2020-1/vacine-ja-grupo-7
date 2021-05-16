@@ -9,10 +9,6 @@ public interface VacinaService {
 
     Vacina cadastrarVacina(VacinaDTO vacinaDTO);
 
-    Vacina editarVacina(VacinaDTO vacinaDTO, Long vacinaId);
-
-    void deletarVacina(Long vacinaId);
-
     Vacina getVacina(Long vacinaId);
 
     List<Vacina> getVacinas();
