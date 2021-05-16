@@ -16,6 +16,7 @@ Documentação e requisição à API [swagger](https://mvnrepository.com/artifac
 - Swagger
 
 ## URLs importantes
-
+- [URL](https://psoft-vacinaja.herokuapp.com/swagger-ui/) do swagger do deploy (Heroku)
+- [URL](https://psoft-vacinaja.herokuapp.com/h2/) do h2 do deploy (Heroku)
 - [http://localhost:8081/swagger-ui/](http://localhost:8081/swagger-ui/)
 - [http://localhost:8081/h2](http://localhost:8081/h2)
