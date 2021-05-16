@@ -13,6 +13,7 @@ import com.ufcg.psoft.vacinaja.repository.LoteRepository;
 import com.ufcg.psoft.vacinaja.repository.RegistroRepository;
 import com.ufcg.psoft.vacinaja.repository.UsuarioRepository;
 import com.ufcg.psoft.vacinaja.repository.VacinaRepository;
+import com.ufcg.psoft.vacinaja.states.EsperandoSegundaDoseState;
 import com.ufcg.psoft.vacinaja.states.VacinacaoState;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +60,18 @@ public class RegistroServiceImpl implements RegistroService {
         
         Optional<Lote> optionalLote = loteRepository.proximoLoteByState(estadoVacinacao, vacina);
         Lote lote = optionalLote.get();
-        
-        //SE O LOTE VIER VAZIO É PQ NÃO TEM DOSES OU O STATE NÃO É O CERTO PARA VACINAR
-        
-        RegistroVacinacao registroRetorno = registroVacinacao.vacinar(vacinaOptional.get(), email, lote);
+
+        RegistroVacinacao registroRetorno = registroVacinacao.vacinar(vacinaOptional.get(), email);
+        Optional<Cidadao> cidadaoAntesModificacao = cidadaoRepository.findCidadaoByCpf(cpfCidadao);
+        RegistroVacinacao registroAnterior = cidadaoAntesModificacao.get().getRegistroVacinacao();
+        if(!registroAnterior.getEstadoVacinacao().equals(registroRetorno.getEstadoVacinacao())) {
+            if(registroRetorno.getEstadoVacinacao() instanceof EsperandoSegundaDoseState) {
+                lote.removerVacinaPrimeiraDose();
+            } else {
+                lote.removerVacinaSegundaDose();
+            }
+        }
+        loteRepository.save(lote);
         return registroRepository.save(registroRetorno);
     }
 }

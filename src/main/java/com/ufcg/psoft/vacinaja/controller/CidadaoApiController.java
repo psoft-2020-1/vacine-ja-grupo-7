@@ -109,7 +109,7 @@ public class CidadaoApiController {
 	 *
 	 * @return cidadão solicitado.
 	 */
-	@RequestMapping(value = "/cidadao/", method = RequestMethod.GET)
+	@RequestMapping(value = "/cidadao/", method = RequestMethod.POST)
 	public ResponseEntity<?> listarCidadao(@RequestHeader("Authorization") String header,
 										   @RequestBody CpfDTO cpfDTO) {
 		ResponseEntity<?> response;

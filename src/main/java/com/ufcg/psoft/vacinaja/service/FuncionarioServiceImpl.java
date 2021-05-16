@@ -86,6 +86,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 			usuario = usuarioRepository.getUsuarioByCadastroCidadao(cidadao).get();
 			cidadao.getRegistroVacinacao().atualizarEstadoVacinacao(usuario.getEmail());
 			cidadaosHabilitados.add(cidadao);
+			cidadaoRepository.save(cidadao);
 		}
 		
 		return cidadaosHabilitados;
